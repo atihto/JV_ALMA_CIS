@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jv_alma_cis/config.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
+//import '../config.dart';
+import 'dart:developer' as developer;
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -21,29 +24,40 @@ class _FooterState extends State<Footer> {
   }
 
   void _handleNavigation(BuildContext context, String route, {String? url}) async {
-    _toggleClick(route); // Use route as buttonKey for consistency
+    _toggleClick(route);
     if (url != null) {
       try {
         final uri = Uri.parse(url);
         if (await canLaunchUrl(uri)) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
+          developer.log('Footer: Launched URL: $url', name: 'Footer');
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Could not launch $url')),
-          );
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Could not launch $url')),
+            );
+          }
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
+        developer.log('Footer: URL launch error: $e', name: 'Footer');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $e')),
+          );
+        }
       }
     } else {
-      Navigator.pushNamed(context, route).catchError((e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigation error: $e')),
-        );
-        return null;
-      });
+      if (context.mounted) {
+        Navigator.pushNamed(context, route).catchError((e) {
+          developer.log('Footer: Navigation error to $route: $e', name: 'Footer');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Navigation error: $e')),
+            );
+          }
+          return null;
+        });
+      }
     }
   }
 
@@ -54,378 +68,373 @@ class _FooterState extends State<Footer> {
     final isMobile = screenWidth < 600;
 
     return Material(
-      color: const Color(0xFF111827),
+      color: const Color(0xFF0F172A),
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: isMobile ? 24 : 16,
-          horizontal: isMobile ? 8 : 16,
+          vertical: isMobile ? 32 : 48,
+          horizontal: isMobile ? 16 : 24,
         ),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: Column(
-            children: [
-              Wrap(
-                spacing: isMobile ? 16 : 32,
-                runSpacing: 24,
-                alignment: WrapAlignment.start,
-                children: [
-                  SizedBox(
-                    width: isLargeScreen ? 300 : screenWidth,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () => Navigator.pushNamed(context, '/').catchError((e) {
-                                debugPrint('Footer: Navigation error to /: $e');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Navigation error: $e')),
-                                );
-                                return null;
-                              }),
-                              child: Container(
-                                width: 150,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Center(
-                                  child: Image.asset(
-                                    'assets/images/clients/jv.jpg',
-                                    fit: BoxFit.contain,
-                                    width: 150,
-                                    height: 150,
-                                  ),
-                                ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: Column(
+              children: [
+                Wrap(
+                  spacing: isMobile ? 24 : 48,
+                  runSpacing: 32,
+                  alignment: WrapAlignment.start,
+                  children: [
+                    // Company Info
+                    SizedBox(
+                      width: isLargeScreen ? 300 : screenWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (context.mounted) {
+                                Navigator.pushNamed(context, '/').catchError((e) {
+                                  developer.log('Footer: Navigation error to /: $e', name: 'Footer');
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Navigation error: $e')),
+                                    );
+                                  }
+                                  return null;
+                                });
+                              }
+                            },
+                            child: Container(
+                              width: 150,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Image.asset(
+                                'assets/images/clients/jv.jpg',
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF1E293B),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'JV ALMA CIS',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(LucideIcons.mapPin, size: 16, color: Color(0xFF3B82F6)),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Nairobi, Kenya',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: isMobile ? 12 : 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            _buildContactLink(
-                              context,
-                              icon: LucideIcons.phone,
-                              text: '+254 123 456 789',
-                              uri: 'tel:+254123456789',
-                              isMobile: isMobile,
-                              buttonKey: 'phone',
-                            ),
-                            _buildContactLink(
-                              context,
-                              icon: LucideIcons.mail,
-                              text: 'info@jvalmacis.co.ke',
-                              uri: 'mailto:info@jvalmacis.co.ke',
-                              isMobile: isMobile,
-                              buttonKey: 'email',
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: isLargeScreen ? 200 : screenWidth,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Our Business Units',
-                          style: TextStyle(
-                            fontSize: isMobile ? 16 : 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFooterLink(
-                          context,
-                          text: 'Construction',
-                          route: '/construction-detail',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'constructionDetail',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'Agribusiness',
-                          route: '/agribusiness',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'agribusiness',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'Oil & Gas Services',
-                          route: '/oil-gas',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'oilGasServices',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'IT Division',
-                          route: '/it-division',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'itDivision',
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: isLargeScreen ? 200 : screenWidth,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Quick Links',
-                          style: TextStyle(
-                            fontSize: isMobile ? 16 : 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'About Us',
-                          route: '/about',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'aboutUs',
-                        ),
-                        const SizedBox(width: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'Certificates',
-                          route: '/certificates',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'certificates',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'Partners',
-                          route: '/references',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'partnersQuickLink',
-                        ),
-                        
-                      ],
-                    ),
-                  ),
-                  /* SizedBox(
-                    width: isLargeScreen ? 200 : screenWidth,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Our Partners',
-                          style: TextStyle(
-                            fontSize: isMobile ? 16 : 18,
-                            fontWeight: Weight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFooterLink(
-                          context,
-                          text: 'KALRO',
-                          route: null,
-                          url: 'https://kalro.org',
-                          isMobile: isMobile,
-                          buttonKey: 'kalro',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'TIC',
-                          route: null,
-                          url: 'https://tic-inspectiongroup.com/en/',
-                          isMobile: isMobile,
-                          buttonKey: 'tic',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'Brisma Africa',
-                          route: null,
-                          url: 'https://brisma-africa.com',
-                          isMobile: isMobile,
-                          buttonKey: 'brismaAfrica',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'Alma CIS',
-                          route: null,
-                          url: 'https://almacis.it/',
-                          isMobile: isMobile,
-                          buttonKey: 'almaCIS',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'KENAFF',
-                          route: null,
-                          url: 'https://www.kenaff.org',
-                          isMobile: isMobile,
-                          buttonKey: 'kenaff',
-                        ),
-                        const SizedBox(height: 8),
-                        _buildFooterLink(
-                          context,
-                          text: 'Moi University',
-                          route: null,
-                          url: 'https://mu.ac.ke',
-                          isMobile: isMobile,
-                          buttonKey: 'moiUniversity',
-                        ),
-                      ],
-                    ),
-                  */ // Moved closing comment here
-                  SizedBox(
-                    width: isLargeScreen ? 200 : screenWidth,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Follow Us',
-                          style: TextStyle(
-                            fontSize: isMobile ? 14 : 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            /* _buildFooterLink(
-                              context,
-                              text: '',
-                              route: null,
-                              url: 'https://facebook.com/jvalmacis',
-                              isMobile: isMobile,
-                              buttonKey: 'facebook',
-                              icon: LucideIcons.facebook,
-                            ),*/
-                            const SizedBox(width: 12),
-                            _buildFooterLink(
-                              context,
-                              text: '',
-                              route: null,
-                              url: 'https://twitter.com/jvalmacis',
-                              isMobile: isMobile,
-                              buttonKey: 'twitter',
-                              icon: LucideIcons.twitter,
+                          const SizedBox(height: 16),
+                          Text(
+                            'Leading provider of construction, agribusiness, oil & gas, and IT solutions across East Africa.',
+                            style: TextStyle(
+                              color: const Color(0xFF94A3B8),
+                              fontSize: isMobile ? 14 : 16,
+                              height: 1.5,
                             ),
-                            const SizedBox(width: 12),
-                            _buildFooterLink(
-                              context,
-                              text: '',
-                              route: null,
-                              url: 'https://linkedin.com/company/jvalmacis',
-                              isMobile: isMobile,
-                              buttonKey: 'linkedin',
-                              icon: LucideIcons.linkedin,
-                            ),
-                            const SizedBox(width: 12),
-                            _buildFooterLink(
-                              context,
-                              text: '',
-                              route: null,
-                              url: 'https://instagram.com/jvalmacis/jval',
-                              isMobile: isMobile,
-                              buttonKey: 'instagram',
-                              icon: LucideIcons.instagram,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 24),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Color(0xFF374151)),
-                  ),
-                ),
-                padding: const EdgeInsets.only(top: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '© 2025 Copyright JV Alma CIS Kenya.',
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: isMobile ? 12 : 14,
+                          ),
+                          const SizedBox(height: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildContactInfo(
+                                icon: LucideIcons.mapPin,
+                                text: Config.companyAddress,
+                                isMobile: isMobile,
+                              ),
+                              const SizedBox(height: 8),
+                              _buildContactLink(
+                                context,
+                                icon: LucideIcons.phone,
+                                text: Config.companyPhone,
+                                uri: 'tel:${Config.companyPhone.replaceAll(' ', '')}',
+                                isMobile: isMobile,
+                                buttonKey: 'phone',
+                              ),
+                              const SizedBox(height: 8),
+                              _buildContactLink(
+                                context,
+                                icon: LucideIcons.mail,
+                                text: Config.companyEmail,
+                                uri: 'mailto:${Config.companyEmail}',
+                                isMobile: isMobile,
+                                buttonKey: 'email',
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 32), // Increased from 16 to 32
-                    Row(
-                      children: [
-                        _buildFooterLink(
-                          context,
-                          text: 'Privacy Policy',
-                          route: '/privacy-policy',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'privacyPolicy',
-                        ),
-                        const SizedBox(width: 16),
-                        _buildFooterLink(
-                          context,
-                          text: 'Cookies Policy',
-                          route: '/cookies',
-                          url: null,
-                          isMobile: isMobile,
-                          buttonKey: 'cookiesPolicy',
-                        ),
-                        const SizedBox(width: 16),
-                        IconButton(
-                          icon: const Icon(LucideIcons.arrowUp, color: Colors.white, size: 20),
-                          onPressed: () {
-                            Scrollable.of(context).position.animateTo(
-                              0.0,
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                            );
-                          },
-                          tooltip: 'Back to Top',
-                        ),
-                      ],
+                    
+                    // Business Units
+                    SizedBox(
+                      width: isLargeScreen ? 200 : screenWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Our Business Units',
+                            style: TextStyle(
+                              fontSize: isMobile ? 18 : 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildFooterLink(
+                            context,
+                            text: 'Construction',
+                            route: '/construction-detail',
+                            isMobile: isMobile,
+                            buttonKey: 'constructionDetail',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildFooterLink(
+                            context,
+                            text: 'Agribusiness',
+                            route: '/agribusiness',
+                            isMobile: isMobile,
+                            buttonKey: 'agribusiness',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildFooterLink(
+                            context,
+                            text: 'Oil & Gas Services',
+                            route: '/oil-gas',
+                            isMobile: isMobile,
+                            buttonKey: 'oilGasServices',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildFooterLink(
+                            context,
+                            text: 'IT Division',
+                            route: '/it-division',
+                            isMobile: isMobile,
+                            buttonKey: 'itDivision',
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Quick Links
+                    SizedBox(
+                      width: isLargeScreen ? 200 : screenWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Quick Links',
+                            style: TextStyle(
+                              fontSize: isMobile ? 18 : 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildFooterLink(
+                            context,
+                            text: 'About Us',
+                            route: '/about',
+                            isMobile: isMobile,
+                            buttonKey: 'aboutUs',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildFooterLink(
+                            context,
+                            text: 'Projects',
+                            route: '/projects',
+                            isMobile: isMobile,
+                            buttonKey: 'projects',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildFooterLink(
+                            context,
+                            text: 'Certificates',
+                            route: '/certificates',
+                            isMobile: isMobile,
+                            buttonKey: 'certificates',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildFooterLink(
+                            context,
+                            text: 'Partners',
+                            route: '/references',
+                            isMobile: isMobile,
+                            buttonKey: 'partnersQuickLink',
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Social Media
+                    SizedBox(
+                      width: isLargeScreen ? 200 : screenWidth,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Follow Us',
+                            style: TextStyle(
+                              fontSize: isMobile ? 18 : 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              _buildSocialLink(
+                                context,
+                                icon: LucideIcons.twitter,
+                                url: Config.twitterUrl,
+                                buttonKey: 'twitter',
+                              ),
+                              const SizedBox(width: 16),
+                              _buildSocialLink(
+                                context,
+                                icon: LucideIcons.linkedin,
+                                url: Config.linkedinUrl,
+                                buttonKey: 'linkedin',
+                              ),
+                              const SizedBox(width: 16),
+                              _buildSocialLink(
+                                context,
+                                icon: LucideIcons.instagram,
+                                url: Config.instagramUrl,
+                                buttonKey: 'instagram',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                
+                // Bottom Section
+                Container(
+                  margin: const EdgeInsets.only(top: 32),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: Color(0xFF334155)),
+                    ),
+                  ),
+                  padding: const EdgeInsets.only(top: 24),
+                  child: Column(
+                    children: [
+                      if (isMobile) ...[
+                        Text(
+                          '© 2025 Copyright JV Alma CIS Kenya.',
+                          style: TextStyle(
+                            color: const Color(0xFF94A3B8),
+                            fontSize: isMobile ? 12 : 14,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        Wrap(
+                          spacing: 16,
+                          runSpacing: 8,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            _buildFooterLink(
+                              context,
+                              text: 'Privacy Policy',
+                              route: '/privacy-policy',
+                              isMobile: isMobile,
+                              buttonKey: 'privacyPolicy',
+                            ),
+                            _buildFooterLink(
+                              context,
+                              text: 'Cookies Policy',
+                              route: '/cookies',
+                              isMobile: isMobile,
+                              buttonKey: 'cookiesPolicy',
+                            ),
+                          ],
+                        ),
+                      ] else
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '© 2025 Copyright JV Alma CIS Kenya.',
+                              style: TextStyle(
+                                color: const Color(0xFF94A3B8),
+                                fontSize: isMobile ? 12 : 14,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                _buildFooterLink(
+                                  context,
+                                  text: 'Privacy Policy',
+                                  route: '/privacy-policy',
+                                  isMobile: isMobile,
+                                  buttonKey: 'privacyPolicy',
+                                ),
+                                const SizedBox(width: 24),
+                                _buildFooterLink(
+                                  context,
+                                  text: 'Cookies Policy',
+                                  route: '/cookies',
+                                  isMobile: isMobile,
+                                  buttonKey: 'cookiesPolicy',
+                                ),
+                                const SizedBox(width: 24),
+                                IconButton(
+                                  icon: const Icon(LucideIcons.arrowUp, color: Colors.white, size: 20),
+                                  onPressed: () {
+                                    Scrollable.of(context).position.animateTo(
+                                      0.0,
+                                      duration: const Duration(milliseconds: 500),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  },
+                                  tooltip: 'Back to Top',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildContactInfo({
+    required IconData icon,
+    required String text,
+    required bool isMobile,
+  }) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: const Color(0xFF64748B)),
+        const SizedBox(width: 8),
+        Text(
+          text,
+          style: TextStyle(
+            color: const Color(0xFF94A3B8),
+            fontSize: isMobile ? 14 : 16,
+          ),
+        ),
+      ],
     );
   }
 
@@ -440,31 +449,25 @@ class _FooterState extends State<Footer> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
-      transformAlignment: Alignment.center,
-      child: SizedBox(
-        height: 24,
-        child: InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () => _handleNavigation(context, buttonKey, url: uri),
-          onHover: (isHovering) {
-            setState(() {
-              _isHovered[buttonKey] = isHovering;
-            });
-          },
-          child: Row(
-            children: [
-              Icon(icon, size: 16, color: _isClicked[buttonKey] ?? false ? Colors.white : const Color(0xFF3B82F6)),
-              const SizedBox(width: 8),
-              Text(
-                text,
-                style: TextStyle(
-                  color: _isClicked[buttonKey] ?? false ? Colors.white : Colors.white,
-                  fontSize: isMobile ? 12 : 14,
-                ),
+      child: InkWell(
+        onTap: () => _handleNavigation(context, buttonKey, url: uri),
+        onHover: (isHovering) {
+          setState(() {
+            _isHovered[buttonKey] = isHovering;
+          });
+        },
+        child: Row(
+          children: [
+            Icon(icon, size: 16, color: const Color(0xFF64748B)),
+            const SizedBox(width: 8),
+            Text(
+              text,
+              style: TextStyle(
+                color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
+                fontSize: isMobile ? 14 : 16,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -473,41 +476,57 @@ class _FooterState extends State<Footer> {
   Widget _buildFooterLink(
     BuildContext context, {
     required String text,
-    required String? route,
-    required String? url,
-    IconData? icon,
+    required String route,
     required bool isMobile,
     required String buttonKey,
   }) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
-      transformAlignment: Alignment.center,
-      child: SizedBox(
-        height: 24,
-        child: InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () => _handleNavigation(context, route ?? buttonKey, url: url),
-          onHover: (isHovering) {
-            setState(() {
-              _isHovered[buttonKey] = isHovering;
-            });
-          },
-          child: Row(
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 16, color: _isClicked[buttonKey] ?? false ? Colors.white : Colors.grey[400]),
-                const SizedBox(width: 8),
-              ],
-              Text(
-                text,
-                style: TextStyle(
-                  color: _isClicked[buttonKey] ?? false ? Colors.white : Colors.grey[400],
-                  fontSize: isMobile ? 12 : 14,
-                ),
-              ),
-            ],
+      child: InkWell(
+        onTap: () => _handleNavigation(context, route),
+        onHover: (isHovering) {
+          setState(() {
+            _isHovered[buttonKey] = isHovering;
+          });
+        },
+        child: Text(
+          text,
+          style: TextStyle(
+            color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
+            fontSize: isMobile ? 14 : 16,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialLink(
+    BuildContext context, {
+    required IconData icon,
+    required String url,
+    required String buttonKey,
+  }) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
+      child: InkWell(
+        onTap: () => _handleNavigation(context, buttonKey, url: url),
+        onHover: (isHovering) {
+          setState(() {
+            _isHovered[buttonKey] = isHovering;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: _isHovered[buttonKey] ?? false ? const Color(0xFF1E293B) : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF64748B),
           ),
         ),
       ),
