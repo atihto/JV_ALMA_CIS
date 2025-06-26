@@ -1,51 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'pages/home_page.dart';
 import 'pages/about_page.dart';
 import 'pages/business_units_page.dart';
+import 'pages/contact_page.dart';
+import 'pages/news_page.dart';
+import 'pages/projects_page.dart';
+//import 'pages/references_page.dart';
 import 'pages/careers_page.dart';
 import 'pages/certificates_page.dart';
-import 'pages/contact_page.dart';
-import 'pages/cookies_page.dart';
-import 'pages/home_page.dart';
-import 'pages/news_page.dart';
 import 'pages/privacy_policy_page.dart';
-import 'pages/projects_page.dart';
-import 'pages/references_page.dart';
+import 'pages/map_page.dart';
 import 'detail/construction/construction_detail.dart';
 import 'detail/agribusiness/agribusiness_detail.dart';
 import 'detail/oil/oil_gas_services_detail.dart';
 import 'detail/it/it_division_detail.dart';
-import 'detail/construction/construction_page.dart';
-import 'detail/construction/facility_management_page.dart';
-import 'detail/agribusiness/infrastructure.dart';
-import 'detail/agribusiness/community_empowerment_page.dart';
-import 'detail/agribusiness/digitization_in_agriculture_page.dart';
 import 'detail/it/cmms_page.dart';
 import 'detail/it/coffee_core_page.dart';
 import 'detail/it/kilimo_mkononi_page.dart';
-
-class DownloadPage extends StatelessWidget {
-  const DownloadPage({super.key});
-
-  @override
-  Widget build(BuildContext context) => const Center(child: Text('Download page coming soon!'));
-}
-
-class JobsPage extends StatelessWidget {
-  const JobsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) => const Center(
-        child: Text(
-          'No current job openings. Please check back later or contact us for opportunities.',
-          style: TextStyle(fontSize: 18, color: Color(0xFF4B5563)),
-          textAlign: TextAlign.center,
-        ),
-      );
-}
+import 'dart:developer' as developer;
 
 void main() {
-  usePathUrlStrategy(); 
+  usePathUrlStrategy();
   runApp(const MyApp());
 }
 
@@ -56,129 +32,161 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'JV Alma CIS Kenya',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: TextTheme(
-          headlineLarge: TextStyle(
-            fontSize: MediaQuery.of(context).size.width < 600 ? 24 : 32,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1E293B),
+          brightness: Brightness.light,
+        ),
+        useMaterial3: true,
+        fontFamily: 'Inter',
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 32,
             fontWeight: FontWeight.bold,
-            color: const Color(0xFF1F2937),
+            color: Color(0xFF0F172A),
+          ),
+          displayMedium: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF0F172A),
+          ),
+          displaySmall: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF0F172A),
+          ),
+          headlineLarge: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1E293B),
           ),
           headlineMedium: TextStyle(
-            fontSize: MediaQuery.of(context).size.width < 600 ? 18 : 24,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xFF1F2937),
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1E293B),
+          ),
+          headlineSmall: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1E293B),
           ),
           titleLarge: TextStyle(
-            fontSize: MediaQuery.of(context).size.width < 600 ? 16 : 20,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xFF1F2937),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF1E293B),
+          ),
+          titleMedium: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF1E293B),
+          ),
+          titleSmall: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF1E293B),
           ),
           bodyLarge: TextStyle(
-            fontSize: MediaQuery.of(context).size.width < 600 ? 14 : 16,
-            color: const Color(0xFF4B5563),
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF374151),
           ),
           bodyMedium: TextStyle(
-            fontSize: MediaQuery.of(context).size.width < 600 ? 12 : 14,
-            color: const Color(0xFF4B5563),
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF374151),
           ),
           bodySmall: TextStyle(
-            fontSize: MediaQuery.of(context).size.width < 600 ? 10 : 12,
-            color: const Color(0xFF4B5563),
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF6B7280),
           ),
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1E293B),
+            foregroundColor: Colors.white,
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: const Color(0xFF1E293B),
+            side: const BorderSide(color: Color(0xFF1E293B), width: 2),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        cardTheme: CardThemeData(
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          color: Colors.white,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Color(0xFF1E293B),
+          elevation: 0,
+          centerTitle: false,
+        ),
       ),
-      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       onGenerateRoute: (settings) {
-        WidgetBuilder builder;
+        developer.log('Navigating to: ${settings.name}', name: 'MyApp');
+        
         switch (settings.name) {
           case '/':
-            builder = (_) => const HomePage();
-            break;
+            return MaterialPageRoute(builder: (_) => const HomePage());
           case '/about':
-            builder = (_) => const AboutPage();
-            break;
+            return MaterialPageRoute(builder: (_) => const AboutPage());
           case '/business-units':
-            builder = (_) => const BusinessUnitsPage();
-            break;
-          case '/careers':
-            builder = (_) => const CareersPage();
-            break;
-          case '/jobs':
-            builder = (_) => const JobsPage();
-            break;
-          case '/certificates':
-            builder = (_) => const CertificatesPage();
-            break;
+            return MaterialPageRoute(builder: (_) => const BusinessUnitsPage());
           case '/contact':
-            builder = (_) => const ContactPage();
-            break;
-          case '/cookies':
-            builder = (_) => const CookiesPage();
-            break;
+            return MaterialPageRoute(builder: (_) => const ContactPage());
           case '/news':
-            builder = (_) => const NewsPage();
-            break;
-          case '/privacy-policy':
-            builder = (_) => const PrivacyPolicyPage();
-            break;
+            return MaterialPageRoute(builder: (_) => const NewsPage());
           case '/projects':
-            builder = (_) => const ProjectsPage();
-            break;
-          case '/references':
-            builder = (_) => const ReferencesPage();
-            break;
-          case '/construction':
-            builder = (_) => const ConstructionPage();
-            break;
+            return MaterialPageRoute(builder: (_) => const ProjectsPage());
+          /*case '/references':
+            return MaterialPageRoute(builder: (_) => const ReferencesPage());*/
+          case '/careers':
+          return MaterialPageRoute(builder: (_) => const CareersPage());
+          case '/certificates':
+            return MaterialPageRoute(builder: (_) => const CertificatesPage());
+          case '/privacy-policy':
+            return MaterialPageRoute(builder: (_) => const PrivacyPolicyPage());
+          case '/map':
+            return MaterialPageRoute(builder: (_) => const MapPage(address: '',));
           case '/construction-detail':
-            builder = (_) => const ConstructionDetail();
-            break;
+            return MaterialPageRoute(builder: (_) => const ConstructionDetail());
           case '/agribusiness':
-            builder = (_) => const AgribusinessDetail();
-            break;
+            return MaterialPageRoute(builder: (_) => const AgribusinessDetail());
           case '/oil-gas':
-            builder = (_) => const OilAndGasServicesDetail();
-            break;
+            return MaterialPageRoute(builder: (_) => const OilAndGasServicesDetail());
           case '/it-division':
-            builder = (_) => const ITDivisionDetail();
-            break;
-          case '/facility':
-            builder = (_) => const FacilityManagementPage();
-            break;
-          case '/infrastructure':
-            builder = (_) => const InfrastructurePage();
-            break;
-          case '/community-empowerment':
-            builder = (_) => const CommunityEmpowermentPage();
-            break;
-          case '/digitization-in-agriculture':
-            builder = (_) => const DigitizationInAgriculturePage();
-            break;
-          case '/cmms':
-            builder = (_) => const CmmsPage();
-            break;
-          case '/coffee-core':
-            builder = (_) => const CoffeeCorePage();
-            break;
-          case '/kilimo-mkononi':
-            builder = (_) => const KilimoMkononiPage();
-            break;
-          case '/download':
-            builder = (_) => const DownloadPage();
-            break;
+            return MaterialPageRoute(builder: (_) => const ITDivisionDetail());
+            case '/cmms':
+            return MaterialPageRoute(builder: (_) => const CmmsPage());
+            case '/coffee-core':
+            return MaterialPageRoute(builder: (_) => const CoffeeCorePage());
+            case '/kilimo-mkononi':
+            return MaterialPageRoute(builder: (_) => const KilimoMkononiPage());
           default:
-            debugPrint('MyApp: Unknown route: ${settings.name}');
-            builder = (_) => const Scaffold(
-                  body: Center(child: Text('Page not found')),
-                );
+            developer.log('Unknown route: ${settings.name}', name: 'MyApp');
+            return MaterialPageRoute(
+              builder: (_) => Scaffold(
+                appBar: AppBar(title: const Text('Page Not Found')),
+                body: const Center(
+                  child: Text('404 - Page Not Found'),
+                ),
+              ),
+            );
         }
-        return MaterialPageRoute(
-          builder: builder,
-          settings: settings,
-        );
       },
     );
   }

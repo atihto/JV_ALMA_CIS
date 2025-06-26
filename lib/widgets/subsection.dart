@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'dart:developer' as developer;
 
 const Map<String, String> sectionRoutes = {
   'construction': '/construction',
@@ -46,16 +47,16 @@ class Subsection extends StatelessWidget {
     final isMobile = screenWidth < 600;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 32),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.all(isMobile ? 16 : 20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.grey.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -64,24 +65,24 @@ class Subsection extends StatelessWidget {
         children: [
           if (badges != null || badge != null) ...[
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.only(bottom: 12.0),
               child: Wrap(
-                spacing: 4.0,
-                runSpacing: 4.0,
+                spacing: 8.0,
+                runSpacing: 8.0,
                 crossAxisAlignment: WrapCrossAlignment.start,
                 children: [
                   ...?badges?.map((b) => Chip(
                         label: Text(b,
-                            style: TextStyle(fontSize: isMobile ? 10 : 12)),
+                            style: TextStyle(fontSize: isMobile ? 11 : 13)),
                         backgroundColor: const Color(0xFFE0E7FF),
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       )),
                   if (badge != null)
                     Chip(
                       label: Text(badge!,
-                          style: TextStyle(fontSize: isMobile ? 10 : 12)),
+                          style: TextStyle(fontSize: isMobile ? 11 : 13)),
                       backgroundColor: const Color(0xFFE0E7FF),
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     ),
                 ],
               ),
@@ -89,51 +90,70 @@ class Subsection extends StatelessWidget {
           ],
           Row(
             children: [
-              Icon(icon, color: Theme.of(context).primaryColor, size: isMobile ? 20 : 24),
-              const SizedBox(width: 8),
+              Icon(icon, color: const Color(0xFF1E293B), size: isMobile ? 24 : 28),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: isMobile ? 16 : 20,
+                        fontSize: isMobile ? 18 : 22,
+                        color: const Color(0xFF1E293B),
                       ),
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+                  maxLines: 2,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             description,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: isMobile ? 12 : 14,
+                  fontSize: isMobile ? 14 : 16,
                   color: const Color(0xFF4B5563),
+                  height: 1.5,
                 ),
           ),
           if (features != null) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: features!
-                  .map((f) => Row(
-                        children: [
-                          const Icon(LucideIcons.checkCircle, size: 14, color: Color(0xFF22C55E)),
-                          const SizedBox(width: 6),
-                          Expanded(child: Text(f)),
-                        ],
+                  .map((f) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(LucideIcons.checkCircle, size: 16, color: Color(0xFF22C55E)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                f,
+                                style: TextStyle(
+                                  fontSize: isMobile ? 14 : 16,
+                                  color: const Color(0xFF374151),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ))
                   .toList(),
             ),
           ],
           if (projects != null) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: projects!
-                  .map((p) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
+                  .map((p) => Container(
+                        margin: const EdgeInsets.only(bottom: 12.0),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -141,55 +161,68 @@ class Subsection extends StatelessWidget {
                               p.title,
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: isMobile ? 12 : 14,
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF1E293B),
                                   ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
-                            if (p.year != null)
+                            if (p.year != null) ...[
+                              const SizedBox(height: 4),
                               Text(
                                 p.year!,
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Colors.grey[600],
-                                      fontSize: isMobile ? 10 : 12,
+                                      color: const Color(0xFF64748B),
+                                      fontSize: isMobile ? 12 : 14,
                                     ),
                               ),
-                            if (p.description != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: Text(
-                                  p.description!,
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: isMobile ? 12 : 14,
-                                      ),
-                                ),
+                            ],
+                            if (p.description != null) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                p.description!,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF374151),
+                                    ),
                               ),
-                            if (p.scope != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: Text(
-                                  'Scope: ${p.scope!}',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: isMobile ? 12 : 14,
-                                      ),
-                                ),
+                            ],
+                            if (p.scope != null) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                'Scope: ${p.scope!}',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF374151),
+                                      fontWeight: FontWeight.w500,
+                                    ),
                               ),
-                            if (p.features != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: p.features!
-                                      .map((f) => Row(
+                            ],
+                            if (p.features != null) ...[
+                              const SizedBox(height: 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: p.features!
+                                    .map((f) => Padding(
+                                          padding: const EdgeInsets.only(bottom: 4.0),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const Icon(Icons.check_circle, size: 12, color: Color(0xFF22C55E)),
-                                              const SizedBox(width: 4),
-                                              Expanded(child: Text(f)),
+                                              const Icon(Icons.check_circle, size: 14, color: Color(0xFF22C55E)),
+                                              const SizedBox(width: 6),
+                                              Expanded(
+                                                child: Text(
+                                                  f,
+                                                  style: TextStyle(
+                                                    fontSize: isMobile ? 13 : 15,
+                                                    color: const Color(0xFF374151),
+                                                  ),
+                                                ),
+                                              ),
                                             ],
-                                          ))
-                                      .toList(),
-                                ),
+                                          ),
+                                        ))
+                                    .toList(),
                               ),
+                            ],
                           ],
                         ),
                       ))
@@ -197,12 +230,17 @@ class Subsection extends StatelessWidget {
             ),
           ],
           if (partnerships != null) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: partnerships!
-                  .map((p) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
+                  .map((p) => Container(
+                        margin: const EdgeInsets.only(bottom: 12.0),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -210,17 +248,17 @@ class Subsection extends StatelessWidget {
                               p.name,
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: isMobile ? 12 : 14,
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF1E293B),
                                   ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2.0),
-                              child: Text(
-                                p.details,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      fontSize: isMobile ? 12 : 14,
-                                    ),
-                              ),
+                            const SizedBox(height: 8),
+                            Text(
+                              p.details,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF374151),
+                                  ),
                             ),
                           ],
                         ),
@@ -229,29 +267,37 @@ class Subsection extends StatelessWidget {
             ),
           ],
           if (extraContent != null) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             extraContent!,
           ],
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
                 final route = sectionRoutes[sectionKey];
                 if (route != null) {
-                  debugPrint('Subsection: Navigating to $route');
-                  Navigator.pushNamed(context, route).catchError((e) {
-                    debugPrint('Navigation error to $route: $e');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to navigate: $e')),
-                    );
-                    return null;
-                  });
+                  developer.log('Subsection: Navigating to $route', name: 'Subsection');
+                  if (context.mounted) {
+                    Navigator.pushNamed(context, route).catchError((e) {
+                      developer.log('Navigation error to $route: $e', name: 'Subsection');
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Failed to navigate: $e')),
+                        );
+                      }
+                      return null;
+                    });
+                  }
                 } else {
-                  debugPrint('Subsection: No route defined for sectionKey: $sectionKey');
+                  developer.log('Subsection: No route defined for sectionKey: $sectionKey', name: 'Subsection');
                 }
               },
-              child: const Text('Learn More'),
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF1E293B),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              ),
+              child: const Text('Learn More', style: TextStyle(fontWeight: FontWeight.w600)),
             ),
           ),
         ],
@@ -305,11 +351,12 @@ class CmmsFeatures extends StatelessWidget {
     ];
 
     return Container(
-      margin: const EdgeInsets.only(top: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB),
-        borderRadius: BorderRadius.circular(8),
+        color: const Color(0xFFF1F5F9),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,23 +365,28 @@ class CmmsFeatures extends StatelessWidget {
             'CMMS Software Features',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
+                  fontSize: isMobile ? 16 : 18,
+                  color: const Color(0xFF1E293B),
                 ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Wrap(
-            spacing: isMobile ? 8 : 16,
-            runSpacing: 8,
+            spacing: isMobile ? 12 : 20,
+            runSpacing: 12,
             children: featuresList
                 .map((feature) => SizedBox(
-                      width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.45 : screenWidth * 0.3,
+                      width: isMobile ? screenWidth * 0.8 : isTablet ? screenWidth * 0.4 : screenWidth * 0.25,
                       child: Row(
                         children: [
-                          const Icon(Icons.check_circle_outline, size: 12, color: Color(0xFF22C55E)),
+                          const Icon(Icons.check_circle_outline, size: 16, color: Color(0xFF22C55E)),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               feature,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                fontSize: isMobile ? 14 : 16,
+                                color: const Color(0xFF374151),
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),

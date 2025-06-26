@@ -71,7 +71,10 @@ class CertificatesPage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                    colors: [
+                       Color(0xFF0F172A),
+                       Color(0xFF1E293B),
+                    ],
                   ),
                 ),
                 padding: EdgeInsets.all(isMobile ? 16 : 24),
@@ -94,7 +97,7 @@ class CertificatesPage extends StatelessWidget {
                         ),
                         SizedBox(height: screenHeight * 0.015),
                         Text(
-                          'JV ALMA CIS maintains high standards of compliance.',
+                          'JV ALMA C.I.S maintains high standards of compliance.',
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 color: const Color(0xFFBFDBFE),
                                 fontSize: isMobile ? 14 : 16,

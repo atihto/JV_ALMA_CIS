@@ -23,7 +23,10 @@ class ITDivisionDetail extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                  colors: [
+                    Color(0xFF0F172A),
+                    Color(0xFF1E293B),
+                 ],
                 ),
               ),
               padding: EdgeInsets.symmetric(
@@ -94,10 +97,10 @@ class ITDivisionDetail extends StatelessWidget {
                           'Our in-house IT division develops cutting-edge software solutions that power our operations across all business units. From facility management systems to agricultural mobile applications, we create technology that drives efficiency and innovation.',
                       children: [
                         Subsection(
-                          title: 'Nyumba Smart - CMMS Software/App',
+                          title: 'NyumbaSmart - CMMS Software/App',
                           icon: LucideIcons.database,
                           description:
-                              'Nyumba Smart, Proprietary facility management software, designed for sensitive building management operations.',
+                              'NyumbaSmart, Proprietary facility management software, designed for sensitive building management operations.',
                           sectionKey: 'cmms',
                           badge: 'Building Solution',
                           features: [

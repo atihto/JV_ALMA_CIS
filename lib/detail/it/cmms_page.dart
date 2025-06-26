@@ -89,7 +89,10 @@ class CmmsPage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                     colors: [
+                    Color(0xFF0F172A),
+                    Color(0xFF1E293B),
+                 ],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
@@ -102,7 +105,7 @@ class CmmsPage extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          'Nyumba Smart - CMMS Software',
+                          'NyumbaSmart - CMMS Software',
                           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                 fontSize: isMobile ? 24 : 32,
                                 color: Colors.white,
@@ -159,7 +162,7 @@ class CmmsPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Contact us to learn how our Nyumba Smart - CMMS software can enhance your operations.',
+                        'Contact us to learn how our NyumbaSmart - CMMS software can enhance your operations.',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontSize: isMobile ? 12 : 14,
                               color: Colors.white,
@@ -301,7 +304,7 @@ class CmmsPage extends StatelessWidget {
           tooltip: 'Back to IT Division',
         ),
         Text(
-          'Nyumba Smart - CMMS Software',
+          'NyumbaSmart - CMMS Software',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontSize: isMobile ? 20 : 24,
                 color: const Color(0xFF1F2937),
@@ -309,7 +312,7 @@ class CmmsPage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Our proprietary Nyumba Smart - Computerized Maintenance Management System (CMMS) software, designed for construction and facility management, streamlines operations within facilities.',
+          'Our proprietary NyumbaSmart - Computerized Maintenance Management System (CMMS) software, designed for construction and facility management, streamlines operations within facilities.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),

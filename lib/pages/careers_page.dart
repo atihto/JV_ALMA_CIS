@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_card.dart';
-import '../widgets/footer.dart';
-import '../widgets/header.dart';
+
+import 'package:jv_alma_cis/widgets/header.dart';
+import 'package:jv_alma_cis/widgets/custom_button.dart';
+import 'package:jv_alma_cis/widgets/custom_card.dart';
+import 'package:jv_alma_cis/widgets/footer.dart';
+import 'package:jv_alma_cis/routing/router.dart';
 
 class CareersPage extends StatelessWidget {
-  const CareersPage({super.key});
+  const CareersPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,30 +16,8 @@ class CareersPage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    void navigate(String route) {
-      debugPrint('CareersPage: Navigating to $route');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        try {
-          Navigator.pushNamed(context, route);
-          debugPrint('CareersPage: Navigation to $route successful');
-        } catch (e) {
-          debugPrint('CareersPage: Navigation error to $route: $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Navigation error: $e')),
-          );
-        }
-      });
-    }
-
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: const Drawer(), // Replace with AppDrawer if available
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: Header(onMenuPressed: () => scaffoldKey.currentState?.openDrawer()),
-      ),
+    return AppScaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -53,7 +33,10 @@ class CareersPage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                    colors: [
+                       Color(0xFF0F172A),
+                       Color(0xFF1E293B),
+                    ],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
@@ -67,7 +50,7 @@ class CareersPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Careers at JV AlmaCIS',
+                          'Careers at JV ALMA C.I.S',
                           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                 color: Colors.white,
                                 fontSize: isMobile ? 24 : 32,
@@ -106,6 +89,7 @@ class CareersPage extends StatelessWidget {
                 ),
               ),
             ),
+            // Rest of the content remains the same...
             // Intro Section
             Container(
               padding: EdgeInsets.symmetric(
@@ -117,7 +101,7 @@ class CareersPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Careers at JV ALMA CIS',
+                      'Careers at JV ALMA C.I.S',
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             color: const Color(0xFF111827),
                             fontSize: isMobile ? 24 : 32,
@@ -127,7 +111,7 @@ class CareersPage extends StatelessWidget {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      'Join us at JV ALMA CIS and become part of a leading global team in Construction, Agribusiness, and Technology Solutions.',
+                      'Join us at JV ALMA C.I.S and become part of a leading global team in Construction, Agribusiness,Oil & Gas Services and Technology Solutions.',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: const Color(0xFF4B5563),
                             fontSize: isMobile ? 14 : 16,
@@ -159,16 +143,6 @@ class CareersPage extends StatelessWidget {
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    /*SizedBox(height: screenHeight * 0.02),
-                    Text(
-                      'JV ALMA CIS Team',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: const Color(0xFF111827),
-                            fontSize: isMobile ? 20 : 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),*/
                   ],
                 ),
               ),
@@ -272,7 +246,7 @@ class CareersPage extends StatelessWidget {
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         Text(
-                          'We’re always looking for talent',
+                          "We're always looking for talent",
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 color: const Color(0xFF4B5563),
                                 fontSize: isMobile ? 14 : 16,
@@ -384,7 +358,7 @@ class CareersPage extends StatelessWidget {
                     SizedBox(height: screenHeight * 0.03),
                     CustomButton(
                       text: 'Get in Touch',
-                      onPressed: () => navigate('/contact'),
+                      onPressed: () => Navigator.of(context).pushNamed('/contact'),
                       isLarge: isMobile || isTablet,
                     ),
                   ],
@@ -401,13 +375,6 @@ class CareersPage extends StatelessWidget {
 }
 
 class _ValueCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
-  final Color iconColor;
-  final double fontSize;
-  final bool isMobile;
-
   const _ValueCard({
     required this.icon,
     required this.title,
@@ -417,11 +384,21 @@ class _ValueCard extends StatelessWidget {
     required this.isMobile,
   });
 
+  final IconData icon;
+  final String title;
+  final String description;
+  final Color iconColor;
+  final double fontSize;
+  final bool isMobile;
+
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return CustomCard(
+      hoverEffect: false,
       content: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(isMobile ? 12 : 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -438,26 +415,30 @@ class _ValueCard extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Icon(icon, size: 32, color: iconColor),
+              child: Icon(
+                icon,
+                size: 32,
+                color: iconColor,
+              ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenHeight * 0.015),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
                     color: const Color(0xFF1F2937),
                     fontSize: fontSize,
-                    fontWeight: FontWeight.w600,
                   ),
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: screenHeight * 0.01),
             Text(
               description,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: const Color(0xFF4B5563),
-                    fontSize: fontSize * 0.8,
+                    fontSize: fontSize - 2,
                   ),
               textAlign: TextAlign.center,
               maxLines: 2,

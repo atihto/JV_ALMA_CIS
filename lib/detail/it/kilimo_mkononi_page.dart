@@ -102,7 +102,10 @@ class KilimoMkononiPage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                     colors: [
+                    Color(0xFF0F172A),
+                    Color(0xFF1E293B),
+                   ],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(

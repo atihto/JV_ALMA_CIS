@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_card.dart';
-import '../widgets/footer.dart';
 import '../widgets/header.dart';
+import '../widgets/footer.dart';
+import '../widgets/custom_widgets.dart';
+import '../config.dart';
+import 'dart:developer' as developer;
 
 class ContactPage extends StatefulWidget {
   const ContactPage({super.key});
@@ -14,363 +15,124 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _companyController = TextEditingController();
-  final TextEditingController _contactNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _messageController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isTermsAccepted = false;
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _messageController = TextEditingController();
   bool _isSubmitting = false;
 
   @override
   void dispose() {
-    _companyController.dispose();
-    _contactNameController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _subjectController.dispose();
     _messageController.dispose();
     super.dispose();
   }
 
-  void _submitForm() async {
-    if (!_isTermsAccepted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please accept the Privacy Policy')),
-      );
-      return;
-    }
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isSubmitting = true;
       });
+
+      // Simulate form submission
       await Future.delayed(const Duration(seconds: 2));
+
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Form submitted successfully!')),
-        );
         setState(() {
-          _companyController.clear();
-          _contactNameController.clear();
-          _emailController.clear();
-          _phoneController.clear();
-          _messageController.clear();
-          _isTermsAccepted = false;
           _isSubmitting = false;
         });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Message sent successfully! We will get back to you soon.'),
+              backgroundColor: Color(0xFF059669),
+            ),
+          );
+        }
+
+        // Clear form
+        _nameController.clear();
+        _emailController.clear();
+        _phoneController.clear();
+        _subjectController.clear();
+        _messageController.clear();
       }
     }
   }
 
-  void _openMap(String address) async {
-    final url = Uri.parse('https://maps.google.com/?q=${Uri.encodeComponent(address)}');
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
+  Future<void> _launchURL(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+        developer.log('ContactPage: Launched URL: $url', name: 'ContactPage');
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Could not launch $url')),
+          );
+        }
+      }
+    } catch (e) {
+      developer.log('ContactPage: URL launch error: $e', name: 'ContactPage');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not open map')),
+          SnackBar(content: Text('Error: $e')),
         );
       }
     }
   }
 
-
-  Widget _buildForm(BuildContext context, double screenWidth, double screenHeight, bool isMobile, bool isTablet) {
-    return CustomCard(
-      content: Padding(
-        padding: EdgeInsets.all(isMobile ? 16 : 24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Get in Touch',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontSize: isMobile ? 20 : 24,
-                      color: const Color(0xFF111827),
-                      fontWeight: FontWeight.bold,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              TextFormField(
-                controller: _companyController,
-                decoration: InputDecoration(
-                  labelText: 'Company Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your company name';
-                  }
-                  return null;
-                },
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                    ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              TextFormField(
-                controller: _contactNameController,
-                decoration: InputDecoration(
-                  labelText: 'Contact Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your contact name';
-                  }
-                  return null;
-                },
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                    ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your email address';
-                  }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(value)) {
-                    return 'Please enter a valid email address';
-                  }
-                  return null;
-                },
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                    ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              TextFormField(
-                controller: _phoneController,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your phone number';
-                  }
-                  return null;
-                },
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                    ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              TextFormField(
-                controller: _messageController,
-                decoration: InputDecoration(
-                  labelText: 'Message',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                maxLines: 5,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your message';
-                  }
-                  return null;
-                },
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                    ),
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _isTermsAccepted,
-                    onChanged: (value) {
-                      setState(() {
-                        _isTermsAccepted = value ?? false;
-                      });
-                    },
-                  ),
-                  Expanded(
-                    child: Text(
-                      'I accept the Privacy Policy',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 12 : 14,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: screenHeight * 0.02),
-              CustomButton(
-                text: _isSubmitting ? 'Submitting...' : 'Submit',
-                onPressed: _isSubmitting ? () {} : _submitForm,
-                isLarge: isMobile || isTablet,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  Future<void> _launchPhone() async {
+    try {
+      final uri = Uri.parse('tel:${Config.companyPhone.replaceAll(' ', '')}');
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+        developer.log('ContactPage: Launched phone: ${Config.companyPhone}', name: 'ContactPage');
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Could not launch phone: ${Config.companyPhone}')),
+          );
+        }
+      }
+    } catch (e) {
+      developer.log('ContactPage: Phone launch error: $e', name: 'ContactPage');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
   }
 
-  Widget _buildContactInfo(BuildContext context, double screenWidth, double screenHeight, bool isMobile, bool isTablet) {
-    return CustomCard(
-      content: Padding(
-        padding: EdgeInsets.all(isMobile ? 16 : 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Contact Information',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontSize: isMobile ? 20 : 24,
-                    color: const Color(0xFF111827),
-                    fontWeight: FontWeight.bold,
-                  ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(height: screenHeight * 0.02),
-            ListTile(
-              leading: Icon(
-                LucideIcons.mail,
-                size: isMobile ? 20 : 24,
-                color: const Color(0xFF2563EB),
-              ),
-              title: Text(
-                'Email',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                      fontWeight: FontWeight.w600,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text(
-                'info@jvalmacis.co.ke',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 12 : 14,
-                      color: const Color(0xFF4B5563),
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              onTap: () async {
-                final url = Uri.parse('mailto:info@jvalmacis.co.ke');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Could not open email client')),
-                  );
-                }
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                LucideIcons.phone,
-                size: isMobile ? 20 : 24,
-                color: const Color(0xFF2563EB),
-              ),
-              title: Text(
-                'Phone',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                      fontWeight: FontWeight.w600,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text(
-                '+254 20 440 1400',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 12 : 14,
-                      color: const Color(0xFF4B5563),
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              onTap: () async {
-                final url = Uri.parse('tel:+254204401400');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Could not make call')),
-                  );
-                }
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                LucideIcons.globe,
-                size: isMobile ? 20 : 24,
-                color: const Color(0xFF2563EB),
-              ),
-              title: Text(
-                'Website',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      color: const Color(0xFF111827),
-                      fontWeight: FontWeight.w600,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text(
-                'www.jvalmacis.co.ke',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 12 : 14,
-                      color: const Color(0xFF4B5563),
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              onTap: () async {
-                final url = Uri.parse('https://www.jvalmacis.co.ke');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url, mode: LaunchMode.externalApplication);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Could not open website')),
-                  );
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+  Future<void> _launchEmail() async {
+    try {
+      final uri = Uri.parse('mailto:${Config.companyEmail}');
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+        developer.log('ContactPage: Launched email: ${Config.companyEmail}', name: 'ContactPage');
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Could not launch email: ${Config.companyEmail}')),
+          );
+        }
+      }
+    } catch (e) {
+      developer.log('ContactPage: Email launch error: $e', name: 'ContactPage');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -380,13 +142,7 @@ class _ContactPageState extends State<ContactPage> {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
 
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: const Drawer(), // Replace with AppDrawer if available
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: Header(onMenuPressed: () => _scaffoldKey.currentState?.openDrawer()),
-      ),
+    return AppScaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -400,7 +156,10 @@ class _ContactPageState extends State<ContactPage> {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                    colors: [
+                      Color(0xFF0F172A),
+                      Color(0xFF1E293B),
+                    ],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
@@ -417,17 +176,6 @@ class _ContactPageState extends State<ContactPage> {
                               fontSize: isMobile ? 24 : 32,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                            ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Text(
-                        'We would love to hear from you.',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: isMobile ? 14 : 16,
-                              color: const Color(0xFFBFDBFE),
                             ),
                         textAlign: TextAlign.center,
                         maxLines: 2,
@@ -452,7 +200,7 @@ class _ContactPageState extends State<ContactPage> {
                         children: [
                           _buildForm(context, screenWidth, screenHeight, isMobile, isTablet),
                           SizedBox(height: screenHeight * 0.03),
-                          _buildContactInfo(context, screenWidth, screenHeight, isMobile, isTablet),
+                          _buildContactInfo(context, isMobile),
                         ],
                       )
                     : Row(
@@ -463,7 +211,7 @@ class _ContactPageState extends State<ContactPage> {
                           ),
                           SizedBox(width: screenWidth * 0.03),
                           Expanded(
-                            child: _buildContactInfo(context, screenWidth, screenHeight, isMobile, isTablet),
+                            child: _buildContactInfo(context, isMobile),
                           ),
                         ],
                       ),
@@ -586,5 +334,321 @@ class _ContactPageState extends State<ContactPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildContactInfo(BuildContext context, bool isMobile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Get in Touch',
+          style: TextStyle(
+            fontSize: isMobile ? 24 : 28,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Connect with us to explore how our construction, agribusiness, oil & gas services, and IT solutions can support your goals. We’ll get back to you promptly.',
+          style: TextStyle(
+            fontSize: isMobile ? 16 : 18,
+            color: const Color(0xFF374151),
+            height: 1.6,
+          ),
+        ),
+        const SizedBox(height: 32),
+        // Contact Information Cards
+        _buildContactInfoCard(
+          icon: LucideIcons.mapPin,
+          title: 'Address',
+          content: Config.companyAddress,
+          onTap: null,
+        ),
+        const SizedBox(height: 16),
+        _buildContactInfoCard(
+          icon: LucideIcons.phone,
+          title: 'Phone',
+          content: Config.companyPhone,
+          onTap: _launchPhone,
+        ),
+        const SizedBox(height: 16),
+        _buildContactInfoCard(
+          icon: LucideIcons.mail,
+          title: 'Email',
+          content: Config.companyEmail,
+          onTap: _launchEmail,
+        ),
+        const SizedBox(height: 32),
+        // Social Media Links
+        Text(
+          'Follow Us',
+          style: TextStyle(
+            fontSize: isMobile ? 18 : 20,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            _buildSocialButton(
+              icon: LucideIcons.twitter,
+              onTap: () => _launchURL(Config.twitterUrl),
+            ),
+            const SizedBox(width: 16),
+            _buildSocialButton(
+              icon: LucideIcons.linkedin,
+              onTap: () => _launchURL(Config.linkedinUrl),
+            ),
+            const SizedBox(width: 16),
+            _buildSocialButton(
+              icon: LucideIcons.instagram,
+              onTap: () => _launchURL(Config.instagramUrl),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactInfoCard({
+    required IconData icon,
+    required String title,
+    required String content,
+    required VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E293B),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF64748B),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    content,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF0F172A),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (onTap != null)
+              const Icon(
+                LucideIcons.externalLink,
+                size: 16,
+                color: Color(0xFF64748B),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E293B),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(
+          icon,
+          color: Colors.white,
+          size: 20,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildForm(BuildContext context, double screenWidth, double screenHeight, bool isMobile, bool isTablet) {
+    return Card(
+      elevation: 4,
+      surfaceTintColor: Colors.white,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: screenHeight * 0.03,
+          horizontal: screenWidth * 0.03,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Send us a message',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontSize: isMobile ? 18 : 20,
+                      color: const Color(0xFF111827),
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: screenHeight * 0.03),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Full Name',
+                  hintText: 'Enter your full name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your full name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email Address',
+                  hintText: 'Enter your email address',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email address';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              TextFormField(
+                controller: _phoneController,
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  hintText: 'Enter your phone number',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your phone number';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              TextFormField(
+                controller: _subjectController,
+                decoration: InputDecoration(
+                  labelText: 'Subject',
+                  hintText: 'Enter the subject',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a subject';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: screenHeight * 0.02),
+              TextFormField(
+                controller: _messageController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  labelText: 'Message',
+                  hintText: 'Enter your message',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your message';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: screenHeight * 0.03),
+              SizedBox(
+                width: double.infinity,
+                child: CustomButton(
+                  text: _isSubmitting ? 'Sending...' : 'Send Message',
+                  onPressed: _isSubmitting
+                      ? () {}
+                      : () {
+                          if (_formKey.currentState!.validate()) {
+                            _submitForm();
+                          }
+                        },
+                  isLarge: true,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openMap(String address) async {
+    String query = Uri.encodeComponent(address);
+    String googleUrl = "https://www.google.com/maps/search/?api=1&query=$query";
+    _launchURL(googleUrl);
   }
 }

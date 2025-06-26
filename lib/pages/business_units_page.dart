@@ -1,257 +1,421 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/footer.dart';
 import '../widgets/header.dart';
-import '../widgets/home_page_helper_widgets.dart';
+import '../widgets/footer.dart';
+import '../widgets/custom_widgets.dart';
+import 'dart:developer' as developer;
 
-class BusinessUnitsPage extends StatelessWidget {
+class BusinessUnitsPage extends StatefulWidget {
   const BusinessUnitsPage({super.key});
 
-  void _navigate(BuildContext context, String route) {
-    debugPrint('BusinessUnitsPage: Navigating to $route');
-    Navigator.pushNamed(context, route).catchError((e) {
-      debugPrint('BusinessUnitsPage: Navigation error to $route: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Navigation error: $e')),
-      );
-      return null;
+  @override
+  State<BusinessUnitsPage> createState() => _BusinessUnitsPageState();
+}
+
+class _BusinessUnitsPageState extends State<BusinessUnitsPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        developer.log('BusinessUnitsPage: Page loaded successfully', name: 'BusinessUnitsPage');
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final isMobile = screenWidth < 600;
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    final isTablet = screenWidth >= 600 && screenWidth < 1024;
 
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: const AppDrawer(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: Header(onMenuPressed: () => scaffoldKey.currentState?.openDrawer()),
+    return AppScaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildHeroSection(context, isMobile, isTablet),
+            _buildBusinessUnitsGrid(context, isMobile, isTablet),
+            _buildWhyChooseUsSection(context, isMobile, isTablet),
+            const Footer(),
+          ],
+        ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
+    );
+  }
+
+  Widget _buildHeroSection(BuildContext context, bool isMobile, bool isTablet) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF0F172A),
+            Color(0xFF1E293B),
+          ],
+        ),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : isTablet ? 32 : 48,
+        vertical: isMobile ? 48 : isTablet ? 64 : 80,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
-                  ),
+              Text(
+                'Our Business Units',
+                style: TextStyle(
+                  fontSize: isMobile ? 28 : isTablet ? 36 : 48,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 60 : 80,
-                  horizontal: 16,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Comprehensive solutions across construction, agribusiness, oil & gas services, and information technology sectors.',
+                style: TextStyle(
+                  fontSize: isMobile ? 16 : isTablet ? 18 : 20,
+                  color: Colors.white.withValues(alpha: 0.9),
+                  height: 1.6,
                 ),
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 896),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Our Business Units',
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                color: Colors.white,
-                                fontSize: isMobile ? 24 : 32,
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Delivering specialized solutions in construction, agribusiness, oil & gas, and IT.',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: const Color(0xFFBFDBFE),
-                                fontSize: isMobile ? 14 : 16,
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBusinessUnitsGrid(BuildContext context, bool isMobile, bool isTablet) {
+    final businessUnits = [
+      {
+        'icon': LucideIcons.building2,
+        'title': 'Construction',
+        'description': 'Comprehensive construction services including residential, commercial, and infrastructure development projects.',
+        'features': [
+          'Residential Construction',
+          'Commercial Buildings',
+          'Infrastructure Development',
+          'Project Management',
+          'Quality Assurance',
+        ],
+        'route': '/construction-detail',
+        'color': const Color(0xFF1E293B),
+      },
+      {
+        'icon': LucideIcons.sprout,
+        'title': 'Agribusiness',
+        'description': 'Modern agricultural solutions, irrigation, training, and digital farming technologies.',
+        'features': [
+          'Capacity Building and Community Empowerment Programs',
+          'Digital Agriculture Solutions',
+          'Kilimo Mkononi Platform',
+          'Coffee Core Platform'
+          'Sustainable Farming, Irrigation Systems',
+          'Agricultural Consulting',
+        ],
+        'route': '/agribusiness',
+        'color': const Color(0xFF059669),
+      },
+      {
+        'icon': LucideIcons.droplets,
+        'title': 'Oil & Gas Services',
+        'description': 'Professional inspection services and strategic partnerships in the energy sector.',
+        'features': [
+          'Oil Inspection Services',
+          'Quality Control',
+          'Strategic Partnerships',
+          'Energy Consulting',
+          'Compliance Management',
+        ],
+        'route': '/oil-gas',
+        'color': const Color(0xFFDC2626),
+      },
+      {
+        'icon': LucideIcons.monitor,
+        'title': 'IT Division',
+        'description': 'Cutting-edge software solutions including NyumbaSmart - CMMS software, Coffee Core and Kilimo Mkononi management systems.',
+        'features': [
+          'NyumbaSmart - CMMS Software',
+          'Coffee Core Platform',
+          'Kilimo Mkononi Platform'
+          'Custom Software Development',
+          'System Integration',
+          'Technical Support',
+        ],
+        'route': '/it-division',
+        'color': const Color(0xFF7C3AED),
+      },
+    ];
+
+    return Container(
+      width: double.infinity,
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : isTablet ? 32 : 48,
+        vertical: isMobile ? 48 : isTablet ? 64 : 80,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              int crossAxisCount;
+              double childAspectRatio;
+              
+              if (isMobile) {
+                crossAxisCount = 1;
+                childAspectRatio = 0.8;
+              } else if (isTablet) {
+                crossAxisCount = 2;
+                childAspectRatio = 0.9;
+              } else {
+                crossAxisCount = 2;
+                childAspectRatio = 1.0;
+              }
+
+              return GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: childAspectRatio,
+                crossAxisSpacing: 32,
+                mainAxisSpacing: 32,
+                children: businessUnits.map((unit) {
+                  return _buildBusinessUnitCard(
+                    context,
+                    unit,
+                    isMobile,
+                  );
+                }).toList(),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBusinessUnitCard(BuildContext context, Map<String, dynamic> unit, bool isMobile) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: EdgeInsets.all(isMobile ? 20 : 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: (unit['color'] as Color).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                unit['icon'] as IconData,
+                size: 32,
+                color: unit['color'] as Color,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              unit['title'] as String,
+              style: TextStyle(
+                fontSize: isMobile ? 20 : 24,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0F172A),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              unit['description'] as String,
+              style: TextStyle(
+                fontSize: isMobile ? 14 : 16,
+                color: const Color(0xFF374151),
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Key Services:',
+              style: TextStyle(
+                fontSize: isMobile ? 14 : 16,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E293B),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ...((unit['features'] as List<String>).take(3).map((feature) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Icon(
+                      LucideIcons.checkCircle,
+                      size: 16,
+                      color: unit['color'] as Color,
                     ),
-                  ),
-                ),
-              ),
-              Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 32 : 48,
-                  horizontal: screenWidth * 0.04,
-                ),
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 896),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Explore Our Expertise',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: const Color(0xFF111827),
-                                fontSize: isMobile ? 20 : 24,
-                              ),
-                          textAlign: TextAlign.center,
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        feature,
+                        style: TextStyle(
+                          fontSize: isMobile ? 13 : 15,
+                          color: const Color(0xFF374151),
                         ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'With a commitment to innovation and excellence, our four core divisions provide tailored solutions to meet diverse industry needs across East Africa and beyond.',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: const Color(0xFF4B5563),
-                                fontSize: isMobile ? 14 : 16,
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
+              );
+            })),
+            const Spacer(),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: CustomButton(
+                text: 'Learn More',
+                onPressed: () {
+                  developer.log('BusinessUnitsPage: Navigating to ${unit['route']}', name: 'BusinessUnitsPage');
+                  if (mounted) {
+                    Navigator.pushNamed(context, unit['route'] as String).catchError((e) {
+                      developer.log('BusinessUnitsPage: Navigation error: $e', name: 'BusinessUnitsPage');
+                      return null;
+                    });
+                  }
+                },
+                isLarge: true,
               ),
-              Container(
-                color: const Color(0xFFF9FAFB),
-                padding: EdgeInsets.symmetric(
-                  vertical: screenHeight * 0.04,
-                  horizontal: screenWidth * 0.04,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWhyChooseUsSection(BuildContext context, bool isMobile, bool isTablet) {
+    final reasons = [
+      {
+        'icon': LucideIcons.award,
+        'title': 'Proven Excellence',
+        'description': 'Over 7+ years of delivering high-quality projects across multiple sectors.',
+      },
+      {
+        'icon': LucideIcons.users,
+        'title': 'Expert Team',
+        'description': 'Skilled professionals with deep industry knowledge and experience.',
+      },
+      {
+        'icon': LucideIcons.lightbulb,
+        'title': 'Innovation Focus',
+        'description': 'Cutting-edge solutions that leverage the latest technologies and best practices.',
+      },
+      {
+        'icon': LucideIcons.hand,
+        'title': 'Trusted Partnerships',
+        'description': 'Strong relationships with clients, suppliers, and industry partners.',
+      },
+    ];
+
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFFF8FAFC),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : isTablet ? 32 : 48,
+        vertical: isMobile ? 48 : isTablet ? 64 : 80,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            children: [
+              Text(
+                'Why Choose JV ALMA C.I.S?',
+                style: TextStyle(
+                  fontSize: isMobile ? 24 : isTablet ? 28 : 32,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF0F172A),
                 ),
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1400),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Our Business Units',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              color: const Color(0xFF111827),
-                              fontSize: isMobile ? 20 : 24,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Text(
-                        'Comprehensive solutions across multiple sectors',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: isMobile ? 14 : 16,
-                              color: const Color(0xFF4B5563),
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      GridView.count(
-                        crossAxisCount: isMobile ? 1 : 4,
-                        shrinkWrap: true,
-                        crossAxisSpacing: screenWidth * 0.03,
-                        mainAxisSpacing: screenHeight * 0.02,
-                        childAspectRatio: isMobile ? 1.8 : 1.4,
-                        physics: const NeverScrollableScrollPhysics(),
-                        clipBehavior: Clip.hardEdge,
-                        children: [
-                          HomePageHelperWidgets.businessUnitCard(
-                            context: context,
-                            name: 'Construction',
-                            icon: LucideIcons.building,
-                            title: 'Construction',
-                            description: 'Infrastructure and management',
-                            route: '/construction-detail',
-                            iconColor: const Color(0xFF2563EB),
-                            bgColor: const Color(0xFFEFF6FF),
-                            hoverBgColor: const Color(0xFFDBEAFE),
-                          ),
-                          HomePageHelperWidgets.businessUnitCard(
-                            context: context,
-                            name: 'Agribusiness',
-                            icon: LucideIcons.sprout,
-                            title: 'Agribusiness',
-                            description: 'Apps, irrigation, and training',
-                            route: '/agribusiness',
-                            iconColor: const Color(0xFF16A34A),
-                            bgColor: const Color(0xFFD1FAE5),
-                            hoverBgColor: const Color(0xFFA7F3D0),
-                          ),
-                          HomePageHelperWidgets.businessUnitCard(
-                            context: context,
-                            name: 'Oil & Gas Services',
-                            icon: LucideIcons.droplets,
-                            title: 'Oil & Gas Services',
-                            description: 'Safety and consulting',
-                            route: '/oil-gas',
-                            iconColor: const Color(0xFFF97316),
-                            bgColor: const Color(0xFFFFF7ED),
-                            hoverBgColor: const Color(0xFFFED7AA),
-                          ),
-                          HomePageHelperWidgets.businessUnitCard(
-                            context: context,
-                            name: 'IT Division',
-                            icon: LucideIcons.globe,
-                            title: 'IT Division',
-                            description: 'CMMS and digital solutions',
-                            route: '/it-division',
-                            iconColor: const Color(0xFF9333EA),
-                            bgColor: const Color(0xFFF3E8FF),
-                            hoverBgColor: const Color(0xFFE9D5FF),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                textAlign: TextAlign.center,
               ),
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 40 : 72,
-                  horizontal: 16,
-                ),
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 896),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Partner with Us',
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                              color: Colors.white,
-                              fontSize: isMobile ? 24 : 32,
+              const SizedBox(height: 48),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  int crossAxisCount;
+                  double childAspectRatio;
+                  
+                  if (isMobile) {
+                    crossAxisCount = 1;
+                    childAspectRatio = 1.5;
+                  } else if (isTablet) {
+                    crossAxisCount = 2;
+                    childAspectRatio = 1.3;
+                  } else {
+                    crossAxisCount = 4;
+                    childAspectRatio = 1.0;
+                  }
+
+                  return GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: crossAxisCount,
+                    childAspectRatio: childAspectRatio,
+                    crossAxisSpacing: 24,
+                    mainAxisSpacing: 24,
+                    children: reasons.map((reason) {
+                      return Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withValues(alpha: 0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Let’s collaborate to bring your vision to life with our industry-leading expertise.',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.white,
-                              fontSize: isMobile ? 14 : 18,
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              reason['icon'] as IconData,
+                              size: 32,
+                              color: const Color(0xFF1E293B),
                             ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      Wrap(
-                        spacing: isMobile ? 8 : 16,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          CustomButton(
-                            text: 'Request a Quote',
-                            onPressed: () => _navigate(context, '/contact'),
-                            isLarge: isMobile,
-                            isOutline: false,
-                          ),
-                          CustomButton(
-                            text: 'Book a Consultation',
-                            onPressed: () => _navigate(context, '/contact'),
-                            isLarge: isMobile,
-                            isOutline: true,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                            const SizedBox(height: 16),
+                            Text(
+                              reason['title'] as String,
+                              style: TextStyle(
+                                fontSize: isMobile ? 16 : 18,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0F172A),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              reason['description'] as String,
+                              style: TextStyle(
+                                fontSize: isMobile ? 14 : 16,
+                                color: const Color(0xFF374151),
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
               ),
-              SizedBox(height: screenHeight * 0.03),
-              const Footer(),
             ],
           ),
         ),

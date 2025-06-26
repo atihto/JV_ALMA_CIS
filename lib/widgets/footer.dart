@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jv_alma_cis/config.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
-//import '../config.dart';
-import 'dart:developer' as developer;
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -30,7 +29,6 @@ class _FooterState extends State<Footer> {
         final uri = Uri.parse(url);
         if (await canLaunchUrl(uri)) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
-          developer.log('Footer: Launched URL: $url', name: 'Footer');
         } else {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -39,7 +37,6 @@ class _FooterState extends State<Footer> {
           }
         }
       } catch (e) {
-        developer.log('Footer: URL launch error: $e', name: 'Footer');
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: $e')),
@@ -49,7 +46,6 @@ class _FooterState extends State<Footer> {
     } else {
       if (context.mounted) {
         Navigator.pushNamed(context, route).catchError((e) {
-          developer.log('Footer: Navigation error to $route: $e', name: 'Footer');
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Navigation error: $e')),
@@ -82,7 +78,7 @@ class _FooterState extends State<Footer> {
                 Wrap(
                   spacing: isMobile ? 24 : 48,
                   runSpacing: 32,
-                  alignment: WrapAlignment.start,
+                  alignment: WrapAlignment.center,
                   children: [
                     // Company Info
                     SizedBox(
@@ -94,7 +90,6 @@ class _FooterState extends State<Footer> {
                             onTap: () {
                               if (context.mounted) {
                                 Navigator.pushNamed(context, '/').catchError((e) {
-                                  developer.log('Footer: Navigation error to /: $e', name: 'Footer');
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text('Navigation error: $e')),
@@ -121,7 +116,7 @@ class _FooterState extends State<Footer> {
                                     ),
                                     child: const Center(
                                       child: Text(
-                                        'JV ALMA CIS',
+                                        'JV ALMA C.I.S',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -136,46 +131,17 @@ class _FooterState extends State<Footer> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Leading provider of construction, agribusiness, oil & gas, and IT solutions across East Africa.',
+                            'Leading provider of construction, agribusiness, oil & gas services, and IT solutions across East Africa.',
                             style: TextStyle(
                               color: const Color(0xFF94A3B8),
                               fontSize: isMobile ? 14 : 16,
                               height: 1.5,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildContactInfo(
-                                icon: LucideIcons.mapPin,
-                                text: Config.companyAddress,
-                                isMobile: isMobile,
-                              ),
-                              const SizedBox(height: 8),
-                              _buildContactLink(
-                                context,
-                                icon: LucideIcons.phone,
-                                text: Config.companyPhone,
-                                uri: 'tel:${Config.companyPhone.replaceAll(' ', '')}',
-                                isMobile: isMobile,
-                                buttonKey: 'phone',
-                              ),
-                              const SizedBox(height: 8),
-                              _buildContactLink(
-                                context,
-                                icon: LucideIcons.mail,
-                                text: Config.companyEmail,
-                                uri: 'mailto:${Config.companyEmail}',
-                                isMobile: isMobile,
-                                buttonKey: 'email',
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
-                    
+
                     // Business Units
                     SizedBox(
                       width: isLargeScreen ? 200 : screenWidth,
@@ -184,9 +150,9 @@ class _FooterState extends State<Footer> {
                         children: [
                           Text(
                             'Our Business Units',
-                            style: TextStyle(
-                              fontSize: isMobile ? 18 : 20,
-                              fontWeight: FontWeight.w600,
+                            style: GoogleFonts.poppins(
+                              fontSize: isMobile ? 20 : 24,
+                              fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
                           ),
@@ -225,7 +191,7 @@ class _FooterState extends State<Footer> {
                         ],
                       ),
                     ),
-                    
+
                     // Quick Links
                     SizedBox(
                       width: isLargeScreen ? 200 : screenWidth,
@@ -234,16 +200,16 @@ class _FooterState extends State<Footer> {
                         children: [
                           Text(
                             'Quick Links',
-                            style: TextStyle(
-                              fontSize: isMobile ? 18 : 20,
-                              fontWeight: FontWeight.w600,
+                            style: GoogleFonts.poppins(
+                              fontSize: isMobile ? 20 : 24,
+                              fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
                           ),
                           const SizedBox(height: 16),
                           _buildFooterLink(
                             context,
-                            text: 'About Us',
+                            text: 'About Our Company',
                             route: '/about',
                             isMobile: isMobile,
                             buttonKey: 'aboutUs',
@@ -267,31 +233,64 @@ class _FooterState extends State<Footer> {
                           const SizedBox(height: 12),
                           _buildFooterLink(
                             context,
-                            text: 'Partners',
-                            route: '/references',
+                            text: 'Careers',
+                            route: '/careers',
                             isMobile: isMobile,
-                            buttonKey: 'partnersQuickLink',
+                            buttonKey: 'careersQuickLink',
                           ),
                         ],
                       ),
                     ),
-                    
-                    // Social Media
+
+                    // Contact Details and Social Media
                     SizedBox(
-                      width: isLargeScreen ? 200 : screenWidth,
+                      width: isLargeScreen ? 250 : screenWidth,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Follow Us',
-                            style: TextStyle(
-                              fontSize: isMobile ? 18 : 20,
-                              fontWeight: FontWeight.w600,
+                            'Contact Us',
+                            style: GoogleFonts.poppins(
+                              fontSize: isMobile ? 20 : 24,
+                              fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
                           ),
                           const SizedBox(height: 16),
-                          Row(
+                          _buildContactInfo(
+                            icon: LucideIcons.phone,
+                            text: 'Call us on\n${Config.companyPhone}',
+                            uri: 'tel:${Config.companyPhone.replaceAll(' ', '')}',
+                            isMobile: isMobile,
+                            buttonKey: 'phone',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildContactInfo(
+                            icon: LucideIcons.mail,
+                            text: 'Email us on\n${Config.companyEmail}',
+                            uri: 'mailto:${Config.companyEmail}',
+                            isMobile: isMobile,
+                            buttonKey: 'email',
+                          ),
+                          const SizedBox(height: 12),
+                          _buildContactInfo(
+                            icon: LucideIcons.mapPin,
+                            text: 'Address\n${Config.companyAddress}',
+                            isMobile: isMobile,
+                            buttonKey: 'address',
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Follow Us',
+                            style: GoogleFonts.poppins(
+                              fontSize: isMobile ? 20 : 24,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Wrap(
+                            spacing: 8,
                             children: [
                               _buildSocialLink(
                                 context,
@@ -299,14 +298,12 @@ class _FooterState extends State<Footer> {
                                 url: Config.twitterUrl,
                                 buttonKey: 'twitter',
                               ),
-                              const SizedBox(width: 16),
                               _buildSocialLink(
                                 context,
                                 icon: LucideIcons.linkedin,
                                 url: Config.linkedinUrl,
                                 buttonKey: 'linkedin',
                               ),
-                              const SizedBox(width: 16),
                               _buildSocialLink(
                                 context,
                                 icon: LucideIcons.instagram,
@@ -320,7 +317,7 @@ class _FooterState extends State<Footer> {
                     ),
                   ],
                 ),
-                
+
                 // Bottom Section
                 Container(
                   margin: const EdgeInsets.only(top: 32),
@@ -329,21 +326,21 @@ class _FooterState extends State<Footer> {
                       top: BorderSide(color: Color(0xFF334155)),
                     ),
                   ),
-                  padding: const EdgeInsets.only(top: 24),
+                  padding: const EdgeInsets.only(top: 16),
                   child: Column(
                     children: [
                       if (isMobile) ...[
                         Text(
-                          '© 2025 Copyright JV Alma CIS Kenya.',
+                          '© 2025 Copyright JV ALMA C.I.S Kenya.',
                           style: TextStyle(
                             color: const Color(0xFF94A3B8),
                             fontSize: isMobile ? 12 : 14,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         Wrap(
-                          spacing: 16,
+                          spacing: 8,
                           runSpacing: 8,
                           alignment: WrapAlignment.center,
                           children: [
@@ -364,46 +361,42 @@ class _FooterState extends State<Footer> {
                           ],
                         ),
                       ] else
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Wrap(
+                          spacing: 16,
+                          runSpacing: 16,
+                          alignment: WrapAlignment.center,
                           children: [
                             Text(
-                              '© 2025 Copyright JV Alma CIS Kenya.',
+                              '© 2025 Copyright JV ALMA C.I.S Kenya.',
                               style: TextStyle(
                                 color: const Color(0xFF94A3B8),
                                 fontSize: isMobile ? 12 : 14,
                               ),
                             ),
-                            Row(
-                              children: [
-                                _buildFooterLink(
-                                  context,
-                                  text: 'Privacy Policy',
-                                  route: '/privacy-policy',
-                                  isMobile: isMobile,
-                                  buttonKey: 'privacyPolicy',
-                                ),
-                                const SizedBox(width: 24),
-                                _buildFooterLink(
-                                  context,
-                                  text: 'Cookies Policy',
-                                  route: '/cookies',
-                                  isMobile: isMobile,
-                                  buttonKey: 'cookiesPolicy',
-                                ),
-                                const SizedBox(width: 24),
-                                IconButton(
-                                  icon: const Icon(LucideIcons.arrowUp, color: Colors.white, size: 20),
-                                  onPressed: () {
-                                    Scrollable.of(context).position.animateTo(
-                                      0.0,
-                                      duration: const Duration(milliseconds: 500),
-                                      curve: Curves.easeInOut,
-                                    );
-                                  },
-                                  tooltip: 'Back to Top',
-                                ),
-                              ],
+                            _buildFooterLink(
+                              context,
+                              text: 'Privacy Policy',
+                              route: '/privacy-policy',
+                              isMobile: isMobile,
+                              buttonKey: 'privacyPolicy',
+                            ),
+                            _buildFooterLink(
+                              context,
+                              text: 'Cookies Policy',
+                              route: '/cookies',
+                              isMobile: isMobile,
+                              buttonKey: 'cookiesPolicy',
+                            ),
+                            IconButton(
+                              icon: const Icon(LucideIcons.arrowUp, color: Colors.white, size: 20),
+                              onPressed: () {
+                                Scrollable.of(context).position.animateTo(
+                                  0.0,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              tooltip: 'Back to Top',
                             ),
                           ],
                         ),
@@ -422,35 +415,14 @@ class _FooterState extends State<Footer> {
     required IconData icon,
     required String text,
     required bool isMobile,
-  }) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: const Color(0xFF64748B)),
-        const SizedBox(width: 8),
-        Text(
-          text,
-          style: TextStyle(
-            color: const Color(0xFF94A3B8),
-            fontSize: isMobile ? 14 : 16,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildContactLink(
-    BuildContext context, {
-    required IconData icon,
-    required String text,
-    required String uri,
-    required bool isMobile,
+    String? uri,
     required String buttonKey,
   }) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
       child: InkWell(
-        onTap: () => _handleNavigation(context, buttonKey, url: uri),
+        onTap: uri != null ? () => _handleNavigation(context, buttonKey, url: uri) : null,
         onHover: (isHovering) {
           setState(() {
             _isHovered[buttonKey] = isHovering;
@@ -458,13 +430,16 @@ class _FooterState extends State<Footer> {
         },
         child: Row(
           children: [
-            Icon(icon, size: 16, color: const Color(0xFF64748B)),
+            Icon(icon, size: 16, color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF64748B)),
             const SizedBox(width: 8),
-            Text(
-              text,
-              style: TextStyle(
-                color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
-                fontSize: isMobile ? 14 : 16,
+            Flexible(
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
+                  fontSize: isMobile ? 14 : 16,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -492,7 +467,7 @@ class _FooterState extends State<Footer> {
         },
         child: Text(
           text,
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
             fontSize: isMobile ? 14 : 16,
           ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/custom_button.dart';
@@ -15,12 +15,11 @@ class ReferencesPage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     final partners = [
       {
-        'name': 'Alma CIS Italy',
-        'fullName': 'Alma CIS - Parent Company',
+        'name': 'ALMA C.I.S Italy',
+        'fullName': 'ALMA C.I.S - Parent Company',
         'category': 'Corporate Partnership',
         'description':
             'Our parent company based in Italy, providing international expertise and global standards.',
@@ -112,7 +111,7 @@ class ReferencesPage extends StatelessWidget {
         'name': 'Swedish Embassy',
         'project': 'Facility Upgrades',
         'description':
-            'Ongoing upgrade of the electrical and lighting systems at the Swedish Ambassador’s Residence in Nairobi, with a strong emphasis on safety, energy efficiency, and modern design.',
+            "Ongoing upgrade of the electrical and lighting systems at the Swedish Ambassador's Residence in Nairobi, with a strong emphasis on safety, energy efficiency, and modern design.",
         'year': 'Ongoing',
         'category': 'Diplomatic',
       },
@@ -121,7 +120,7 @@ class ReferencesPage extends StatelessWidget {
         'project': 'Residence Renovation',
         'description':
             'Complete remodeling of embassy residence with focus on security and diplomatic standards.',
-        'year': '2020',
+        'year': '2024',
         'category': 'Construction',
       },
       {
@@ -158,13 +157,7 @@ class ReferencesPage extends StatelessWidget {
       },
     ];
 
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: const Drawer(), // Assuming AppDrawer exists; adjust if needed
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: Header(onMenuPressed: () => scaffoldKey.currentState?.openDrawer()),
-      ),
+    return AppScaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -179,7 +172,10 @@ class ReferencesPage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                    colors: [
+                       Color(0xFF0F172A),
+                       Color(0xFF1E293B),
+                    ],
                   ),
                 ),
                 padding: EdgeInsets.all(isMobile ? 16 : 24),
@@ -190,7 +186,7 @@ class ReferencesPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'References & Partners',
+                          'References',
                           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                 color: Colors.white,
                                 fontSize: isMobile ? 24 : 28,
@@ -208,7 +204,7 @@ class ReferencesPage extends StatelessWidget {
                                 fontSize: isMobile ? 14 : 16,
                               ),
                           textAlign: TextAlign.center,
-                          maxLines: 2,
+                          maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
@@ -246,28 +242,54 @@ class ReferencesPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    GridView.count(
-                      crossAxisCount: isMobile ? 1 : isTablet ? 2 : 3,
-                      shrinkWrap: true,
-                      crossAxisSpacing: 16.0,
-                      mainAxisSpacing: 16.0,
-                      childAspectRatio: isMobile ? 2.0 : isTablet ? 1.5 : 1.2,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: partners.map((partner) {
-                        return _PartnerCard(
-                          name: partner['name'] as String,
-                          fullName: partner['fullName'] as String,
-                          category: partner['category'] as String,
-                          description: partner['description'] as String,
-                          projects: partner['projects'] as List<dynamic>,
-                          website: partner['website'] as String,
-                          icon: partner['icon'] as IconData,
-                          color: partner['color'] as Color,
-                          fontSize: isMobile ? 12 : 14,
-                          isMobile: isMobile,
-                        );
-                      }).toList(),
-                    ),
+                    // Mobile: Use ListView for better scrolling
+                    if (isMobile)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: partners.length,
+                        itemBuilder: (context, index) {
+                          final partner = partners[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: _PartnerCard(
+                              name: partner['name'] as String,
+                              fullName: partner['fullName'] as String,
+                              category: partner['category'] as String,
+                              description: partner['description'] as String,
+                              projects: partner['projects'] as List<dynamic>,
+                              website: partner['website'] as String,
+                              icon: partner['icon'] as IconData,
+                              color: partner['color'] as Color,
+                              fontSize: 12,
+                              isMobile: true,
+                            ),
+                          );
+                        },
+                      )
+                    else
+                      GridView.count(
+                        crossAxisCount: isTablet ? 2 : 3,
+                        shrinkWrap: true,
+                        crossAxisSpacing: 16.0,
+                        mainAxisSpacing: 16.0,
+                        childAspectRatio: isTablet ? 1.5 : 1.2,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: partners.map((partner) {
+                          return _PartnerCard(
+                            name: partner['name'] as String,
+                            fullName: partner['fullName'] as String,
+                            category: partner['category'] as String,
+                            description: partner['description'] as String,
+                            projects: partner['projects'] as List<dynamic>,
+                            website: partner['website'] as String,
+                            icon: partner['icon'] as IconData,
+                            color: partner['color'] as Color,
+                            fontSize: 14,
+                            isMobile: false,
+                          );
+                        }).toList(),
+                      ),
                   ],
                 ),
               ),
@@ -302,25 +324,48 @@ class ReferencesPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    GridView.count(
-                      crossAxisCount: isMobile ? 1 : isTablet ? 2 : 3,
-                      shrinkWrap: true,
-                      crossAxisSpacing: 16.0,
-                      mainAxisSpacing: 16.0,
-                      childAspectRatio: isMobile ? 1.8 : isTablet ? 1.2 : 1.0,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: clients.map((client) {
-                        return _ClientCard(
-                          name: client['name'] as String,
-                          project: client['project'] as String,
-                          description: client['description'] as String,
-                          year: client['year'] as String,
-                          category: client['category'] as String,
-                          fontSize: isMobile ? 12 : 14,
-                          isMobile: isMobile,
-                        );
-                      }).toList(),
-                    ),
+                    // Mobile: Use ListView for better scrolling
+                    if (isMobile)
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: clients.length,
+                        itemBuilder: (context, index) {
+                          final client = clients[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: _ClientCard(
+                              name: client['name'] as String,
+                              project: client['project'] as String,
+                              description: client['description'] as String,
+                              year: client['year'] as String,
+                              category: client['category'] as String,
+                              fontSize: 12,
+                              isMobile: true,
+                            ),
+                          );
+                        },
+                      )
+                    else
+                      GridView.count(
+                        crossAxisCount: isTablet ? 2 : 3,
+                        shrinkWrap: true,
+                        crossAxisSpacing: 16.0,
+                        mainAxisSpacing: 16.0,
+                        childAspectRatio: isTablet ? 1.2 : 1.0,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: clients.map((client) {
+                          return _ClientCard(
+                            name: client['name'] as String,
+                            project: client['project'] as String,
+                            description: client['description'] as String,
+                            year: client['year'] as String,
+                            category: client['category'] as String,
+                            fontSize: 14,
+                            isMobile: false,
+                          );
+                        }).toList(),
+                      ),
                   ],
                 ),
               ),
@@ -346,7 +391,7 @@ class ReferencesPage extends StatelessWidget {
                     ),
                     SizedBox(height: screenHeight * 0.015),
                     Text(
-                      'The advantages of working with JV Alma CIS Kenya',
+                      'The advantages of working with JV ALMA C.I.S Kenya',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: isMobile ? 14 : 16,
                             color: const Color(0xFF4B5563),
@@ -354,43 +399,81 @@ class ReferencesPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    GridView.count(
-                      crossAxisCount: isMobile ? 1 : isTablet ? 2 : 3,
-                      shrinkWrap: true,
-                      crossAxisSpacing: 16.0,
-                      mainAxisSpacing: 16.0,
-                      childAspectRatio: isMobile ? 1.8 : isTablet ? 1.2 : 1.0,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        _BenefitCard(
-                          icon: LucideIcons.award,
-                          title: 'Proven Excellence',
-                          description:
-                              '15+ years of successful project delivery across multiple sectors with international quality standards.',
-                          iconColor: const Color(0xFF2563EB),
-                          fontSize: isMobile ? 12 : 14,
-                          isMobile: isMobile,
-                        ),
-                        _BenefitCard(
-                          icon: LucideIcons.users,
-                          title: 'Strong Network',
-                          description:
-                              'Extensive partnerships with government agencies, international organizations, and industry leaders.',
-                          iconColor: const Color(0xFF16A34A),
-                          fontSize: isMobile ? 12 : 14,
-                          isMobile: isMobile,
-                        ),
-                        _BenefitCard(
-                          icon: LucideIcons.globe,
-                          title: 'Global Standards',
-                          description:
-                              'International expertise through our Italian parent company combined with deep local market knowledge.',
-                          iconColor: const Color(0xFFEA580C),
-                          fontSize: isMobile ? 12 : 14,
-                          isMobile: isMobile,
-                        ),
-                      ],
-                    ),
+                    // Mobile: Use ListView for better scrolling
+                    if (isMobile)
+                      ListView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: const [
+                          _BenefitCard(
+                            icon: LucideIcons.award,
+                            title: 'Proven Excellence',
+                            description:
+                                '15+ years of successful project delivery across multiple sectors with international quality standards.',
+                            iconColor: Color(0xFF2563EB),
+                            fontSize: 12,
+                            isMobile: true,
+                          ),
+                          SizedBox(height: 16),
+                          _BenefitCard(
+                            icon: LucideIcons.users,
+                            title: 'Strong Network',
+                            description:
+                                'Extensive partnerships with government agencies, international organizations, and industry leaders.',
+                            iconColor: Color(0xFF16A34A),
+                            fontSize: 12,
+                            isMobile: true,
+                          ),
+                          SizedBox(height: 16),
+                          _BenefitCard(
+                            icon: LucideIcons.globe,
+                            title: 'Global Standards',
+                            description:
+                                'International expertise through our Italian parent company combined with deep local market knowledge.',
+                            iconColor: Color(0xFFEA580C),
+                            fontSize: 12,
+                            isMobile: true,
+                          ),
+                        ],
+                      )
+                    else
+                      GridView.count(
+                        crossAxisCount: isTablet ? 2 : 3,
+                        shrinkWrap: true,
+                        crossAxisSpacing: 16.0,
+                        mainAxisSpacing: 16.0,
+                        childAspectRatio: isTablet ? 1.2 : 1.0,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: const [
+                          _BenefitCard(
+                            icon: LucideIcons.award,
+                            title: 'Proven Excellence',
+                            description:
+                                '15+ years of successful project delivery across multiple sectors with international quality standards.',
+                            iconColor: Color(0xFF2563EB),
+                            fontSize: 14,
+                            isMobile: false,
+                          ),
+                          _BenefitCard(
+                            icon: LucideIcons.users,
+                            title: 'Strong Network',
+                            description:
+                                'Extensive partnerships with government agencies, international organizations, and industry leaders.',
+                            iconColor: Color(0xFF16A34A),
+                            fontSize: 14,
+                            isMobile: false,
+                          ),
+                          _BenefitCard(
+                            icon: LucideIcons.globe,
+                            title: 'Global Standards',
+                            description:
+                                'International expertise through our Italian parent company combined with deep local market knowledge.',
+                            iconColor: Color(0xFFEA580C),
+                            fontSize: 14,
+                            isMobile: false,
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -421,13 +504,13 @@ class ReferencesPage extends StatelessWidget {
                     ),
                     SizedBox(height: screenHeight * 0.015),
                     Text(
-                      'Join our network of satisfied clients and strategic partners. Let’s discuss how we can work together.',
+                      "Join our network of satisfied clients and strategic partners. Let's discuss how we can work together.",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: const Color(0xFFBFDBFE),
                             fontSize: isMobile ? 14 : 16,
                           ),
                       textAlign: TextAlign.center,
-                      maxLines: 2,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: screenHeight * 0.02),
@@ -498,22 +581,23 @@ class _PartnerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       content: Padding(
-        padding: EdgeInsets.all(isMobile ? 8.0 : 12.0),
+        padding: EdgeInsets.all(isMobile ? 16.0 : 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
                 Container(
-                  width: isMobile ? 40.0 : 48.0,
-                  height: isMobile ? 40.0 : 48.0,
+                  width: isMobile ? 48.0 : 48.0,
+                  height: isMobile ? 48.0 : 48.0,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, color: color, size: isMobile ? 18 : 24),
+                  child: Icon(icon, color: color, size: isMobile ? 24 : 24),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -521,104 +605,114 @@ class _PartnerCard extends StatelessWidget {
                       Text(
                         name,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontSize: fontSize,
+                              fontSize: isMobile ? 16 : fontSize,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF1F2937),
                             ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 4),
                       Text(
                         fullName,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: fontSize * 0.8,
+                              fontSize: isMobile ? 12 : fontSize * 0.8,
                               color: const Color(0xFF6B7280),
                             ),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 4),
-                Chip(
-                  label: Text(category),
-                  backgroundColor: Colors.grey[100],
-                  labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: fontSize * 0.7,
-                        color: const Color(0xFF4B5563),
-                      ),
-                ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
+            Chip(
+              label: Text(category),
+              backgroundColor: Colors.grey[100],
+              labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: isMobile ? 10 : fontSize * 0.7,
+                    color: const Color(0xFF4B5563),
+                  ),
+            ),
+            const SizedBox(height: 12),
             Text(
               description,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: fontSize * 0.8,
+                    fontSize: isMobile ? 13 : fontSize * 0.8,
                     color: const Color(0xFF4B5563),
                   ),
-              maxLines: 3,
+              maxLines: isMobile ? 4 : 3,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 12),
             Text(
               'Key Projects:',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontSize: fontSize,
+                    fontSize: isMobile ? 14 : fontSize,
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFF1F2937),
                   ),
             ),
-            const SizedBox(height: 4),
-            ...projects.map((project) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
+            const SizedBox(height: 8),
+            ...projects.take(isMobile ? 3 : 3).map((project) => Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: 6,
                         height: 6,
+                        margin: const EdgeInsets.only(top: 6),
                         decoration: const BoxDecoration(
                           color: Color(0xFF2563EB),
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           project,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: fontSize * 0.8,
+                                fontSize: isMobile ? 12 : fontSize * 0.8,
                                 color: const Color(0xFF4B5563),
                               ),
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
                 )),
-            const SizedBox(height: 6),
-            InkWell(
-              onTap: () => _launchUrl(website),
-              child: Row(
-                children: [
-                  Text(
-                    'Visit Website',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: fontSize * 0.8,
-                          color: const Color(0xFF2563EB),
-                          decoration: TextDecoration.underline,
-                        ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _launchUrl(website),
+                icon: Icon(
+                  LucideIcons.externalLink,
+                  size: isMobile ? 16 : 18,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  'Visit Website',
+                  style: TextStyle(
+                    fontSize: isMobile ? 12 : 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
-                  const SizedBox(width: 4),
-                  Icon(
-                    LucideIcons.externalLink,
-                    size: fontSize * 0.8,
-                    color: const Color(0xFF2563EB),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2563EB),
+                  padding: EdgeInsets.symmetric(
+                    vertical: isMobile ? 12 : 10,
+                    horizontal: 16,
                   ),
-                ],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
           ],
@@ -651,77 +745,73 @@ class _ClientCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       content: Padding(
-        padding: EdgeInsets.all(isMobile ? 8.0 : 16.0),
+        padding: EdgeInsets.all(isMobile ? 16.0 : 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: fontSize,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1F2937),
-                        ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+            Text(
+              name,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: isMobile ? 16 : fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF1F2937),
                   ),
-                ),
-                const SizedBox(width: 4),
-                Chip(
-                  label: Text(category),
-                  backgroundColor: Colors.grey[100],
-                  labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: fontSize * 0.7,
-                        color: const Color(0xFF4B5563),
-                      ),
-                ),
-              ],
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
+            Chip(
+              label: Text(category),
+              backgroundColor: Colors.grey[100],
+              labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: isMobile ? 10 : fontSize * 0.7,
+                    color: const Color(0xFF4B5563),
+                  ),
+            ),
+            const SizedBox(height: 12),
             Text(
               project,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontSize: fontSize,
+                    fontSize: isMobile ? 14 : fontSize,
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFF2563EB),
                   ),
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               description,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: fontSize * 0.8,
+                    fontSize: isMobile ? 13 : fontSize * 0.8,
                     color: const Color(0xFF4B5563),
                   ),
-              maxLines: 3,
+              maxLines: isMobile ? 4 : 3,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(
                   child: Text(
                     year,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: fontSize * 0.8,
+                          fontSize: isMobile ? 12 : fontSize * 0.8,
                           color: const Color(0xFF6B7280),
+                          fontWeight: FontWeight.w500,
                         ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 8),
                 Chip(
-                  label: Text(year == 'Ongoing' ? 'Ongoing' : 'Completed'),
-                  backgroundColor: year == 'Ongoing' ? const Color(0xFFF97316) : const Color(0xFFE5E7EB),
+                  label: Text(year.contains('Ongoing') ? 'Ongoing' : 'Completed'),
+                  backgroundColor: year.contains('Ongoing') ? const Color(0xFFF97316) : const Color(0xFFE5E7EB),
                   labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: fontSize * 0.7,
-                        color: year == 'Ongoing' ? Colors.white : const Color(0xFF4B5563),
+                        fontSize: isMobile ? 10 : fontSize * 0.7,
+                        color: year.contains('Ongoing') ? Colors.white : const Color(0xFF4B5563),
                       ),
                 ),
               ],
@@ -754,32 +844,32 @@ class _BenefitCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       content: Padding(
-        padding: EdgeInsets.all(isMobile ? 8.0 : 16.0),
+        padding: EdgeInsets.all(isMobile ? 16.0 : 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: isMobile ? 32 : 48, color: iconColor),
-            const SizedBox(height: 6),
+            Icon(icon, size: isMobile ? 40 : 48, color: iconColor),
+            const SizedBox(height: 12),
             Text(
               title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: fontSize,
+                    fontSize: isMobile ? 16 : fontSize,
                     fontWeight: FontWeight.bold,
                     color: const Color(0xFF1F2937),
                   ),
               textAlign: TextAlign.center,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               description,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: fontSize * 0.8,
+                    fontSize: isMobile ? 13 : fontSize * 0.8,
                     color: const Color(0xFF4B5563),
                   ),
               textAlign: TextAlign.center,
-              maxLines: 3,
+              maxLines: isMobile ? 5 : 3,
               overflow: TextOverflow.ellipsis,
             ),
           ],
@@ -788,3 +878,4 @@ class _BenefitCard extends StatelessWidget {
     );
   }
 }
+*/

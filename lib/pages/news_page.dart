@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/footer.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/header.dart';
+import '../widgets/footer.dart';
+import '../widgets/custom_widgets.dart';
+import 'dart:developer' as developer;
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -12,70 +14,83 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> {
   final TextEditingController _emailController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isSubmitting = false;
 
-  void _subscribe() {
-    if (_isSubmitting) return;
-
-    final email = _emailController.text.trim();
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid email')),
-      );
-      return;
-    }
-    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid email format')),
-      );
-      return;
-    }
-
-    setState(() => _isSubmitting = true);
-    Future.delayed(const Duration(seconds: 1), () {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Subscribed with $email')),
-        );
-        _emailController.clear();
-        setState(() => _isSubmitting = false);
+        developer.log('NewsPage: Page loaded successfully', name: 'NewsPage');
       }
     });
   }
 
-  void _navigate(String route) {
-    debugPrint('NewsPage: Navigating to $route');
-    Navigator.pushNamed(context, route).catchError((e) {
-      debugPrint('NewsPage: Navigation error to $route: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Navigation error: $e')),
-      );
-      return null;
-    });
+  void _navigateToArticle(String articleId) {
+    developer.log('NewsPage: Navigating to article $articleId', name: 'NewsPage');
+    if (mounted) {
+      Navigator.pushNamed(context, '/news/$articleId').catchError((e) {
+        developer.log('NewsPage: Navigation error: $e', name: 'NewsPage');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Navigation error: $e')),
+          );
+        }
+        return null;
+      });
+    }
   }
 
-  void _showImageDialog(String imagePath) {
+  void _navigate(String route) {
+    if (mounted) {
+      Navigator.pushNamed(context, route).catchError((e) {
+        developer.log('Navigation error: $e', name: 'NewsPage');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Navigation error: $e')),
+          );
+        }
+        return null;
+      });
+    }
+  }
+
+  Future<void> _subscribe() async {
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    // Simulate a network request
+    await Future.delayed(const Duration(seconds: 2));
+
+    setState(() {
+      _isSubmitting = false;
+    });
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Subscribed successfully!')),
+      );
+    }
+  }
+
+  void _showImageDialog(String imageUrl) {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        child: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: InteractiveViewer(
-            boundaryMargin: const EdgeInsets.all(20.0),
-            minScale: 0.1,
-            maxScale: 3.0,
-            child: Image.asset(imagePath),
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imageUrl),
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
   }
 
   @override
@@ -85,13 +100,7 @@ class _NewsPageState extends State<NewsPage> {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
 
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: const Drawer(), // Replace with AppDrawer if available
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: Header(onMenuPressed: () => _scaffoldKey.currentState?.openDrawer()),
-      ),
+    return AppScaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -104,7 +113,10 @@ class _NewsPageState extends State<NewsPage> {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                    colors: [
+                      Color(0xFF0F172A),
+                      Color(0xFF1E293B),
+                    ],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
@@ -130,7 +142,7 @@ class _NewsPageState extends State<NewsPage> {
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         Text(
-                          'Stay informed about JV ALMA CIS\'s latest achievements, project milestones, and industry insights',
+                          'Stay informed about JV ALMA C.I.S\'s latest achievements, project milestones, and industry insights',
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 fontSize: isMobile ? 14 : 16,
                                 color: const Color(0xFFBFDBFE),
@@ -245,7 +257,7 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      'Subscribe to our newsletters to receive the latest news and updates from JV ALMA CIS',
+                      'Subscribe to our newsletters to receive the latest news and updates from JV ALMA C.I.S',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: isMobile ? 12 : 14,
                             color: const Color(0xFF6B7280),
@@ -330,7 +342,7 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      'Join the companies and organizations that trust JV ALMA CIS for their construction, agribusiness, oil & gas services, and IT needs.',
+                      'Join the companies and organizations that trust JV ALMA C.I.S for their construction, agribusiness, oil & gas services, and IT needs.',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: isMobile ? 12 : 14,
                             color: const Color(0xFFEFF6FF),

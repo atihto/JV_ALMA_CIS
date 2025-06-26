@@ -3,6 +3,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/header.dart';
+import 'dart:developer' as developer;
 
 class OilAndGasServicesDetail extends StatelessWidget {
   const OilAndGasServicesDetail({super.key});
@@ -21,7 +22,10 @@ class OilAndGasServicesDetail extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                  colors: [
+                    Color(0xFF0F172A),
+                    Color(0xFF1E293B),
+                  ],
                 ),
               ),
               padding: EdgeInsets.symmetric(
@@ -39,7 +43,7 @@ class OilAndGasServicesDetail extends StatelessWidget {
                         size: isMobile ? 20 : 24,
                       ),
                       onPressed: () {
-                        debugPrint('OilAndGasServicesDetail: Navigating back to /business-units');
+                        developer.log('OilAndGasServicesDetail: Navigating back to /business-units', name: 'OilAndGasServicesDetail');
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           '/business-units',
@@ -92,52 +96,272 @@ class OilAndGasServicesDetail extends StatelessWidget {
                       child: Container(
                         constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 896),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400), 
-                              child: Image.asset(
-                                'assets/images/tic/tic_1.jpg',
-                                fit: BoxFit.contain,
+                            Text(
+                              'About Us',
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: isMobile ? 16 : 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF1F2937),
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 8),
+                            RichText(
+                              textAlign: TextAlign.left,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'JV ALMA C.I.S',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF0F172A),
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' based on the experience in construction of oil and gas pipelines ventured as shareholders together with ',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF374151),
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'BRISMA AFRICA',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF0F172A),
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' in ',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF374151),
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'TIC East Africa',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF0F172A),
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ', a company that specializes in inspection services, built on the extensive experience of the ',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF374151),
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'TIC GROUP',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF0F172A),
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' as a global organization with a presence in multiple countries and a workforce of over 500 employees, 70% of whom are specialized technicians.',
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 16,
+                                      color: const Color(0xFF374151),
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
+                                child: Image.asset(
+                                  'assets/images/tic/tic_1.jpg',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            Text(
+                              'Subsidiaries',
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: isMobile ? 16 : 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF1F2937),
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
+                                child: Image.asset(
+                                  'assets/images/tic/tic_2.jpg',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            Text(
+                              'Services',
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: isMobile ? 16 : 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF1F2937),
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'a. Inspection and integrity management',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF374151),
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '• TIC EA guarantees the information and resources needed to ensure the safety of customers’ activities and products. • TIC EA is a leader in facility integrity and risk management for the oil and gas industry.',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF374151),
+                                    height: 1.6,
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
+                                child: Image.asset(
+                                  'assets/images/tic/tic_3.jpg',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            Container(
-                              constraints: BoxConstraints(maxWidth: isMobile ? 300 : 600),
-                              child: Image.asset(
-                                'assets/images/tic/tic_2.jpg',
-                                fit: BoxFit.contain,
+                            Text(
+                              'b. Non-Destructive Examination',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF374151),
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '• TIC EA specializes in non-destructive testing of materials and metal structures. Customers trust us for. Characterize the state of integrity of their equipment, without damaging it, either during production, use or maintenance.',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF374151),
+                                    height: 1.6,
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Text(
+                              '• NDT is a major component of product quality control. It differs from laboratory and industrial instrumentation in that its purpose is to detect heterogeneities and anomalies without altering the basic structure.',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF374151),
+                                    height: 1.6,
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Text(
+                              '• Our inspectors are certified, empowered and qualified to international standards. Thanks to a wide range of conventional and advanced control methods, we offer a high value-added service that helps to control risks and reduce lead times and costs.',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF374151),
+                                    height: 1.6,
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
+                                child: Image.asset(
+                                  'assets/images/tic/tic_4.jpg',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            Container(
-                              constraints: BoxConstraints(maxWidth: isMobile ? 300 : 600),
-                              child: Image.asset(
-                                'assets/images/tic/tic_3.jpg',
-                                fit: BoxFit.contain,
+                            Text(
+                              'c. Regulatory Compliance Services',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF374151),
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '• Regulatory auditing and inspection at TIC EA is not just a formality for assessing compliance or maintaining compliance, but rather an approach whose ultimate aim is to help you reduce the multiple risks that directly impact your business.',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFF374151),
+                                    height: 1.6,
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
+                                child: Image.asset(
+                                  'assets/images/tic/tic_5.jpg',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 16),
-                            Container(
-                              constraints: BoxConstraints(maxWidth: isMobile ? 300 : 600),
-                              child: Image.asset(
-                                'assets/images/tic/tic_4.jpg',
-                                fit: BoxFit.contain,
+                            const SizedBox(height: 32),
+                            Text(
+                              'Certifications',
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: isMobile ? 16 : 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF1F2937),
+                                  ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
+                                child: Image.asset(
+                                  'assets/images/tic/tic_6.jpg',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 16),
-                            Container(
-                              constraints: BoxConstraints(maxWidth: isMobile ? 300 : 600),
-                              child: Image.asset(
-                                'assets/images/tic/tic_5.jpg',
-                                fit: BoxFit.contain,
-                              ),
+                            const SizedBox(height: 32),
+                            Text(
+                              'Clients',
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontSize: isMobile ? 16 : 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF1F2937),
+                                  ),
+                              textAlign: TextAlign.left,
                             ),
-                            const SizedBox(height: 16),
-                            Container(
-                              constraints: BoxConstraints(maxWidth: isMobile ? 300 : 600),
-                              child: Image.asset(
-                                'assets/images/tic/tic_6.jpg',
-                                fit: BoxFit.contain,
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
+                                child: Image.asset(
+                                  'assets/images/tic/tic_7.jpg',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                           ],

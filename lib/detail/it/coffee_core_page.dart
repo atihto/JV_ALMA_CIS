@@ -87,7 +87,10 @@ class CoffeeCorePage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF1E3A8A), Color(0xFF1E40AF), Color(0xFF065F46)],
+                     colors: [
+                    Color(0xFF0F172A),
+                    Color(0xFF1E293B),
+                   ],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
@@ -311,7 +314,7 @@ class CoffeeCorePage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Coffee Core, developed by JV Alma CIS Kenya, empowers coffee farmers with specialized tools for cultivation, market access, and farm management.',
+          'Coffee Core, developed by JV ALMA C.I.S, empowers coffee farmers with specialized tools for cultivation, market access, and farm management.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
