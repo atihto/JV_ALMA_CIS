@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart'; // Add Firebase Core
+import 'firebase_options.dart'; // Import generated Firebase options
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'pages/home_page.dart';
@@ -5,11 +7,12 @@ import 'pages/about_page.dart';
 import 'pages/business_units_page.dart';
 import 'pages/contact_page.dart';
 import 'pages/news_page.dart';
-import 'pages/projects_page.dart';
+//import 'pages/projects_page.dart';
 //import 'pages/references_page.dart';
 import 'pages/careers_page.dart';
 import 'pages/certificates_page.dart';
 import 'pages/privacy_policy_page.dart';
+import 'pages/cookies_page.dart';
 import 'pages/map_page.dart';
 import 'detail/construction/construction_detail.dart';
 import 'detail/agribusiness/agribusiness_detail.dart';
@@ -20,8 +23,12 @@ import 'detail/it/coffee_core_page.dart';
 import 'detail/it/kilimo_mkononi_page.dart';
 import 'dart:developer' as developer;
 
-void main() {
-  usePathUrlStrategy();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter bindings are initialized
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // Initialize Firebase with platform-specific options
+  );
+  usePathUrlStrategy(); // Keep your URL strategy for clean URLs
   runApp(const MyApp());
 }
 
@@ -31,7 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'JV Alma CIS Kenya',
+      title: 'JV ALMA C.I.S',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -150,18 +157,20 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const ContactPage());
           case '/news':
             return MaterialPageRoute(builder: (_) => const NewsPage());
-          case '/projects':
+          /*case '/projects':
             return MaterialPageRoute(builder: (_) => const ProjectsPage());
-          /*case '/references':
+          case '/references':
             return MaterialPageRoute(builder: (_) => const ReferencesPage());*/
           case '/careers':
-          return MaterialPageRoute(builder: (_) => const CareersPage());
+            return MaterialPageRoute(builder: (_) => const CareersPage());
           case '/certificates':
             return MaterialPageRoute(builder: (_) => const CertificatesPage());
           case '/privacy-policy':
             return MaterialPageRoute(builder: (_) => const PrivacyPolicyPage());
+          case '/cookies':
+            return MaterialPageRoute(builder: (_) => const CookiesPage());   
           case '/map':
-            return MaterialPageRoute(builder: (_) => const MapPage(address: '',));
+            return MaterialPageRoute(builder: (_) => const MapPage(address: ''));
           case '/construction-detail':
             return MaterialPageRoute(builder: (_) => const ConstructionDetail());
           case '/agribusiness':
@@ -170,11 +179,11 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const OilAndGasServicesDetail());
           case '/it-division':
             return MaterialPageRoute(builder: (_) => const ITDivisionDetail());
-            case '/cmms':
+          case '/cmms':
             return MaterialPageRoute(builder: (_) => const CmmsPage());
-            case '/coffee-core':
+          case '/coffee-core':
             return MaterialPageRoute(builder: (_) => const CoffeeCorePage());
-            case '/kilimo-mkononi':
+          case '/kilimo-mkononi':
             return MaterialPageRoute(builder: (_) => const KilimoMkononiPage());
           default:
             developer.log('Unknown route: ${settings.name}', name: 'MyApp');

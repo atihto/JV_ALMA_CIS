@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/header.dart';
 import '../../widgets/footer.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/responsive_utils.dart';
 
 class CmmsPage extends StatelessWidget {
@@ -39,30 +37,30 @@ class CmmsPage extends StatelessWidget {
   static const List<Map<String, String>> _media = [
     {
       'type': 'image',
-      'path': 'assets/images/cmms_dashboard.jpg',
-      'description': 'CMMS dashboard interface.',
+      'path': 'assets/apk/cmms_overview.jpg',
+      'description': 'CMMS Overview.',
     },
     {
       'type': 'image',
-      'path': 'assets/images/cmms_mobile.jpg',
+      'path': 'assets/apk/nyumba_dashboard.jpg',
       'description': 'CMMS mobile app view.',
     },
     {
-      'type': 'video',
-      'path': 'https://example.com/cmms_demo.mp4',
-      'description': 'CMMS software demo video.',
+      'type': 'image',
+      'path': 'assets/apk/nyumba_mobile_section.jpg',
+      'description': 'CMMS mobile app section view.',
+    },
+    {
+      'type': 'image',
+      'path': 'assets/apk/cmms_desktop_view.jpg',
+      'description': 'CMMS dashboard section interface.',
+    },
+    {
+      'type': 'image',
+      'path': 'assets/apk/cmms_desktop_view1.jpg',
+      'description': 'CMMS dashboard section view.',
     },
   ];
-
-  Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    debugPrint('CmmsPage: Launching URL $url');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint('CmmsPage: Could not launch $url');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,119 +70,86 @@ class CmmsPage extends StatelessWidget {
         screenWidth <= ResponsiveUtils.tabletBreakpoint;
     debugPrint('CmmsPage: Building with screenWidth=$screenWidth');
 
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Header(
-                onMenuPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Menu pressed')),
-                  );
-                },
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                     colors: [
+    return AppScaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
                     Color(0xFF0F172A),
                     Color(0xFF1E293B),
-                 ],
-                  ),
+                  ],
                 ),
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 24 : 48,
-                  horizontal: isMobile ? 8 : 16,
-                ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 896),
-                    child: Column(
-                      children: [
-                        Text(
-                          'NyumbaSmart - CMMS Software',
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                fontSize: isMobile ? 24 : 32,
-                                color: Colors.white,
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Building Maintenance Solution',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontSize: isMobile ? 14 : 16,
-                                color: const Color(0xFFBFDBFE),
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: isMobile ? 24 : 48,
+                horizontal: isMobile ? 8 : 16,
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        LucideIcons.arrowLeft,
+                        color: Colors.white,
+                        size: isMobile ? 20 : 24,
+                      ),
+                      onPressed: () {
+                        debugPrint('CmmsPage: Navigating back');
+                        Navigator.pop(context);
+                      },
+                      tooltip: 'Back',
                     ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 16 : 24,
-                  horizontal: isMobile ? 12 : 16,
-                ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1280),
-                  child: isMobile
-                      ? _buildMobileLayout(context, screenWidth)
-                      : _buildDesktopTabletLayout(context, screenWidth, isTablet),
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 16 : 24,
-                  horizontal: 16,
-                ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 896),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Ready to Streamline Your Facility Management?',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              fontSize: isMobile ? 20 : 24,
-                              color: Colors.white,
+                    Expanded(
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 896),
+                        child: Column(
+                          children: [
+                            Text(
+                              'NyumbaSmart - CMMS Software/Application',
+                              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                    fontSize: isMobile ? 24 : 32,
+                                    color: Colors.white,
+                                  ),
+                              textAlign: TextAlign.center,
                             ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Contact us to learn how our NyumbaSmart - CMMS software can enhance your operations.',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: isMobile ? 12 : 14,
-                              color: Colors.white,
+                            const SizedBox(height: 8),
+                            Text(
+                              'Building Maintenance Solution',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFFBFDBFE),
+                                  ),
+                              textAlign: TextAlign.center,
                             ),
-                        textAlign: TextAlign.center,
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      CustomButton(
-                        text: 'Contact Us',
-                        onPressed: () {
-                          debugPrint('CmmsPage: Navigating to /contact');
-                          Navigator.pushNamed(context, '/contact');
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              const Footer(),
-            ],
-          ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: isMobile ? 16 : 24,
+                horizontal: isMobile ? 12 : 16,
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1280),
+                child: isMobile
+                    ? _buildMobileLayout(context, screenWidth)
+                    : _buildDesktopTabletLayout(context, screenWidth, isTablet),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+            const Footer(),
+          ],
         ),
       ),
     );
@@ -287,22 +252,6 @@ class CmmsPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        IconButton(
-          icon: Icon(
-            LucideIcons.arrowLeft,
-            color: Colors.blue[900],
-            size: isMobile ? 14 : 16,
-          ),
-          onPressed: () {
-            debugPrint('CmmsPage: Navigating back to /it-division');
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/it-division',
-              (route) => false,
-            );
-          },
-          tooltip: 'Back to IT Division',
-        ),
         Text(
           'NyumbaSmart - CMMS Software',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -393,34 +342,18 @@ class CmmsPage extends StatelessWidget {
                       label: media['description'],
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          media['path']!,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                        child: SizedBox(
+                          height: isMobile ? 200 : 300,
+                          child: Image.asset(
+                            media['path']!,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  if (media['type'] == 'video')
-                    Semantics(
-                      button: true,
-                      label: media['description'],
-                      child: OutlinedButton.icon(
-                        icon: const Icon(LucideIcons.play, size: 16),
-                        label: Text(
-                          'Watch Video',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: isMobile ? 12 : 14,
-                              ),
-                        ),
-                        onPressed: () => _launchUrl(media['path']!),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.blue[700],
-                          side: const BorderSide(color: Color(0xFF2563EB)),
                         ),
                       ),
                     ),
@@ -440,16 +373,6 @@ class CmmsPage extends StatelessWidget {
               ),
             );
           }).toList(),
-        ),
-        const SizedBox(height: 16),
-        CustomButton(
-          text: 'Download Coming Soon!',
-          icon: LucideIcons.download,
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('App coming soon! Stay tuned for the release.')),
-            );
-          },
         ),
       ],
     );

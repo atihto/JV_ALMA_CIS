@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../widgets/custom_button.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/footer.dart';
 import '../widgets/header.dart';
@@ -152,100 +151,79 @@ class CertificatesPage extends StatelessWidget {
                                   padding: EdgeInsets.only(right: screenWidth * 0.02),
                                   child: _CertificateCard(
                                     title: i == 0
-                                        ? 'KRA PIN Certificate'
+                                        ? 'ISO 9001:2015 Certification'
                                         : i == 1
-                                            ? 'Nairobi Business Permit'
+                                            ? 'NCA 1 - Building Works'
                                             : i == 2
-                                                ? 'ISO 9001:2015 Certification'
+                                                ? 'NCA 1 - Water Works'
                                                 : i == 3
-                                                    ? 'NCA 1 - Building Works'
-                                                    : i == 4
-                                                        ? 'NCA 1 - Water Works'
-                                                        : i == 5
-                                                            ? 'NCA 1 - Mechanical Engineering Services'
-                                                            : i == 6
-                                                                ? 'NCA Registration Certificate'
-                                                                : i == 7
-                                                                    ? 'Environmental Compliance Certificate'
-                                                                    : i == 8
-                                                                        ? 'KALRO Partnership MOU'
-                                                                        : 'International Partnership Agreements',
-                                    certificateNo: i < 6 ? 'P051644134B' : 'Pending Upload',
-                                    status: i < 6 ? (i % 2 == 0 ? 'Active' : 'Valid') : null,
+                                                    ? 'NCA 1 - Mechanical Engineering Services'
+                                                    : 'Other Certificate',
+                                    certificateNo: i == 0
+                                        ? 'CERT-9001-2023'
+                                        : i == 1
+                                            ? 'NCA-BUILD-2023'
+                                            : i == 2
+                                                ? 'NCA-WATER-2023'
+                                                : i == 3
+                                                    ? 'NCA-MECH-2023'
+                                                    : 'PENDING',
                                     description: i == 0
-                                        ? 'Tax compliance.'
+                                        ? 'Quality Management System'
                                         : i == 1
-                                            ? 'Trade license.'
+                                            ? 'Building Works Compliance'
                                             : i == 2
-                                                ? 'Procurement management.'
+                                                ? 'Water Works Compliance'
                                                 : i == 3
-                                                    ? 'Building contractor.'
-                                                    : i == 4
-                                                        ? 'Water works contractor.'
-                                                        : i == 5
-                                                            ? 'Mechanical services contractor.'
-                                                            : i == 6
-                                                                ? 'Construction authority.'
-                                                                : i == 7
-                                                                    ? 'Environmental compliance.'
-                                                                    : i == 8
-                                                                        ? 'Agricultural research.'
-                                                                        : 'International MOUs.',
-                                    issuer: i < 6
-                                        ? (i == 0
-                                            ? 'Kenya Revenue Authority'
-                                            : i == 1
-                                                ? 'Nairobi City County'
-                                                : i == 2
-                                                    ? 'Bureau Veritas Italia S.p.A.'
-                                                    : 'National Construction Authority')
-                                        : (i == 7
-                                            ? 'NEMA'
-                                            : i == 8
-                                                ? 'Kenya Agricultural and Livestock Research Organization'
-                                                : null),
-                                    issueDate: i < 6
-                                        ? (i == 0
-                                            ? 'April 12, 2024'
-                                            : i == 1
-                                                ? 'July 23, 2024'
-                                                : i == 2
-                                                    ? 'February 2, 2024'
-                                                    : '5/8/2024')
-                                        : null,
-                                    expiryDate: i < 6 && i != 2
-                                        ? 'July 31, 2025'
-                                        : i == 2
-                                            ? 'January 9, 2027'
-                                            : null,
+                                                    ? 'Mechanical Engineering Compliance'
+                                                    : 'Pending certificate',
+                                    issuer: i == 0
+                                        ? 'ISO'
+                                        : i == 1
+                                            ? 'NCA'
+                                            : i == 2
+                                                ? 'NCA'
+                                                : i == 3
+                                                    ? 'NCA'
+                                                    : null,
+                                    issueDate: i == 0
+                                        ? '2023-01-01'
+                                        : i == 1
+                                            ? '2023-02-01'
+                                            : i == 2
+                                                ? '2023-03-01'
+                                                : i == 3
+                                                    ? '2023-04-01'
+                                                    : null,
+                                    expiryDate: i == 0
+                                        ? '2026-01-01'
+                                        : i == 1
+                                            ? '2026-02-01'
+                                            : i == 2
+                                                ? '2026-03-01'
+                                                : i == 3
+                                                    ? '2026-04-01'
+                                                    : null,
                                     image: i == 0
-                                        ? 'assets/certificates/kra_certificate.jpg'
+                                        ? 'assets/certificates/jv_certificate.jpg'
                                         : i == 1
-                                            ? 'assets/certificates/business_permit.jpg'
+                                            ? 'assets/certificates/nca_building_certificate.jpg'
                                             : i == 2
-                                                ? 'assets/certificates/jv_certificate.jpg'
+                                                ? 'assets/certificates/nca_water_certificate.jpg'
                                                 : i == 3
-                                                    ? 'assets/certificates/nca_building_certificate.jpg'
-                                                    : i == 4
-                                                        ? 'assets/certificates/nca_water_certificate.jpg'
-                                                        : i == 5
-                                                            ? 'assets/certificates/nca_mechanical_certificate.jpg'
-                                                            : null,
+                                                    ? 'assets/certificates/nca_mechanical_certificate.jpg'
+                                                    : null,
                                     isMobile: isMobile,
                                     isTablet: isTablet,
-                                    onImageTap: i < 6
+                                    onImageTap: i < 4
                                         ? () => showImageDialog(
                                               i == 0
-                                                  ? 'assets/certificates/kra_certificate.jpg'
+                                                  ? 'assets/certificates/jv_certificate.jpg'
                                                   : i == 1
-                                                      ? 'assets/certificates/business_permit.jpg'
+                                                      ? 'assets/certificates/nca_building_certificate.jpg'
                                                       : i == 2
-                                                          ? 'assets/certificates/jv_certificate.jpg'
-                                                          : i == 3
-                                                              ? 'assets/certificates/nca_building_certificate.jpg'
-                                                              : i == 4
-                                                                  ? 'assets/certificates/nca_water_certificate.jpg'
-                                                                  : 'assets/certificates/nca_mechanical_certificate.jpg',
+                                                          ? 'assets/certificates/nca_water_certificate.jpg'
+                                                          : 'assets/certificates/nca_mechanical_certificate.jpg',
                                             )
                                         : null,
                                   ),
@@ -329,51 +307,6 @@ class CertificatesPage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: isMobile ? screenHeight * 0.03 : screenHeight * 0.04,
-                horizontal: screenWidth * 0.04,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Partner with a Certified Leader',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: Colors.white,
-                            fontSize: isMobile ? 20 : 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: screenHeight * 0.015),
-                    Text(
-                      'Trusted services. Contact us.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: const Color(0xFFBFDBFE),
-                            fontSize: isMobile ? 14 : 16,
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    CustomButton(
-                      text: 'Contact Us',
-                      onPressed: () => navigate('/contact'),
-                      isLarge: isMobile || isTablet,
-                    ),
-                  ],
-                ),
-              ),
-            ),
             SizedBox(height: screenHeight * 0.03),
             const Footer(),
           ],
@@ -386,7 +319,6 @@ class CertificatesPage extends StatelessWidget {
 class _CertificateCard extends StatelessWidget {
   final String title;
   final String certificateNo;
-  final String? status;
   final String description;
   final String? issuer;
   final String? issueDate;
@@ -399,7 +331,6 @@ class _CertificateCard extends StatelessWidget {
   const _CertificateCard({
     required this.title,
     required this.certificateNo,
-    this.status,
     required this.description,
     this.issuer,
     this.issueDate,
@@ -476,29 +407,15 @@ class _CertificateCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            if (status != null)
-              Text(
-                'Status: $status',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF22C55E),
-                      fontSize: isMobile ? 6 : 8,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            SizedBox(height: screenHeight * 0.01),
-            Flexible(
-              child: Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF4B5563),
-                      fontSize: isMobile ? 8 : 10,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Text(
+              description,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: const Color(0xFF4B5563),
+                    fontSize: isMobile ? 8 : 10,
+                  ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            if (issuer != null)
               Text(
                 'Issuer: $issuer',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(

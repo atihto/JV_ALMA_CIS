@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../widgets/business_unit_section.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/header.dart';
 import '../../widgets/subsection.dart';
@@ -140,56 +139,6 @@ class ITDivisionDetail extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: isMobile ? 32 : 64,
-                horizontal: 16,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 896),
-                child: Column(
-                  children: [
-                    Text(
-                      'Ready to Get Started?',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: Colors.white,
-                            fontSize: isMobile ? 24 : 32,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Contact us today to discuss how our comprehensive business units can help bring your project to life with innovation and excellence.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.white,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    Wrap(
-                      spacing: isMobile ? 8 : 16,
-                      runSpacing: isMobile ? 8 : 16,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        CustomButton(
-                          text: 'Request Quote',
-                          onPressed: () => Navigator.pushNamed(context, '/contact'),
-                        ),
-                        CustomButton(
-                          text: 'Schedule Consultation',
-                          onPressed: () => Navigator.pushNamed(context, '/contact'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),

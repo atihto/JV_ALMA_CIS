@@ -1,14 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-
-import 'package:jv_alma_cis/widgets/header.dart';
 import 'package:jv_alma_cis/widgets/custom_button.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Add Firestore
+import 'package:jv_alma_cis/widgets/header.dart';
 import 'package:jv_alma_cis/widgets/custom_card.dart';
 import 'package:jv_alma_cis/widgets/footer.dart';
-import 'package:jv_alma_cis/routing/router.dart';
+import 'dart:developer' as developer;
 
-class CareersPage extends StatelessWidget {
-  const CareersPage({Key? key}) : super(key: key);
+class CareersPage extends StatefulWidget {
+  const CareersPage({super.key});
+
+  @override
+  State<CareersPage> createState() => _CareersPageState();
+}
+
+class _CareersPageState extends State<CareersPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _resumeController = TextEditingController();
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _resumeController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitApplication() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isSubmitting = true;
+      });
+
+      try {
+        await FirebaseFirestore.instance.collection('job_applications').add({
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'resume': _resumeController.text,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Application submitted successfully! We will review it for future opportunities.'),
+              backgroundColor: Color(0xFF059669),
+            ),
+          );
+
+          _nameController.clear();
+          _emailController.clear();
+          _resumeController.clear();
+        }
+      } catch (e) {
+        developer.log('CareersPage: Application submission error: $e', name: 'CareersPage');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error submitting application: $e')),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isSubmitting = false;
+          });
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +85,15 @@ class CareersPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Hero Section
+            // Hero Section (unchanged)
             ClipRRect(
               child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: isMobile ? screenHeight * 0.7 : screenHeight * 0.6,
-                ),
+                constraints: BoxConstraints(maxHeight: isMobile ? screenHeight * 0.7 : screenHeight * 0.6),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                       Color(0xFF0F172A),
-                       Color(0xFF1E293B),
-                    ],
+                    colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
@@ -89,8 +146,7 @@ class CareersPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Rest of the content remains the same...
-            // Intro Section
+            // Intro Section (unchanged)
             Container(
               padding: EdgeInsets.symmetric(
                 vertical: isMobile ? screenHeight * 0.03 : screenHeight * 0.06,
@@ -111,7 +167,7 @@ class CareersPage extends StatelessWidget {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      'Join us at JV ALMA C.I.S and become part of a leading global team in Construction, Agribusiness,Oil & Gas Services and Technology Solutions.',
+                      'Join us at JV ALMA C.I.S and become part of a leading global team in Construction, Agribusiness, Oil & Gas Services and Technology Solutions.',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: const Color(0xFF4B5563),
                             fontSize: isMobile ? 14 : 16,
@@ -147,7 +203,7 @@ class CareersPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Core Values
+            // Core Values (unchanged)
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: screenHeight * 0.06,
@@ -221,7 +277,7 @@ class CareersPage extends StatelessWidget {
                 ),
               ),
             ),
-            // Open Positions
+            // Open Positions with Application Form
             Container(
               color: const Color(0xFFF9FAFB),
               padding: EdgeInsets.symmetric(
@@ -269,11 +325,7 @@ class CareersPage extends StatelessWidget {
                                     color: Colors.white,
                                     shape: BoxShape.circle,
                                     boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 8,
-                                        offset: Offset(0, 2),
-                                      ),
+                                      BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2)),
                                     ],
                                   ),
                                   child: const Icon(
@@ -305,6 +357,76 @@ class CareersPage extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
+                                SizedBox(height: screenHeight * 0.02),
+                                // Application Form
+                                Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextFormField(
+                                        controller: _nameController,
+                                        decoration: InputDecoration(
+                                          labelText: 'Full Name',
+                                          hintText: 'Enter your full name',
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter your full name';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
+                                      TextFormField(
+                                        controller: _emailController,
+                                        decoration: InputDecoration(
+                                          labelText: 'Email Address',
+                                          hintText: 'Enter your email address',
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter your email address';
+                                          }
+                                          if (!value.contains('@')) {
+                                            return 'Please enter a valid email address';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      SizedBox(height: screenHeight * 0.02),
+                                      TextFormField(
+                                        controller: _resumeController,
+                                        maxLines: 3,
+                                        decoration: InputDecoration(
+                                          labelText: 'Resume/CV Details',
+                                          hintText: 'Paste your resume or describe your qualifications',
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please provide resume details';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      SizedBox(height: screenHeight * 0.03),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: CustomButton(
+                                          text: _isSubmitting ? 'Submitting...' : 'Submit Application',
+                                          onPressed: _isSubmitting ? () {} : () => _submitApplication(),
+                                          isLarge: true,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -312,56 +434,6 @@ class CareersPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-              ),
-            ),
-            // Call to Action
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.06,
-                horizontal: screenWidth * 0.04,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Ready to Make a Difference?',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: Colors.white,
-                            fontSize: isMobile ? 20 : 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Text(
-                      'Join a team that values expertise, creativity, and excellence. Contact us to explore future opportunities.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: const Color(0xFFEFF6FF),
-                            fontSize: isMobile ? 14 : 16,
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    CustomButton(
-                      text: 'Get in Touch',
-                      onPressed: () => Navigator.of(context).pushNamed('/contact'),
-                      isLarge: isMobile || isTablet,
-                    ),
-                  ],
                 ),
               ),
             ),
@@ -408,11 +480,7 @@ class _ValueCard extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
-                  ),
+                  BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2)),
                 ],
               ),
               child: Icon(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Add Firestore
 import '../widgets/header.dart';
 import '../widgets/footer.dart';
 import '../widgets/custom_widgets.dart';
@@ -39,12 +40,15 @@ class _ContactPageState extends State<ContactPage> {
         _isSubmitting = true;
       });
 
-      // Simulate form submission
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (mounted) {
-        setState(() {
-          _isSubmitting = false;
+      try {
+        // Save form data to Firestore
+        await FirebaseFirestore.instance.collection('contacts').add({
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'phone': _phoneController.text,
+          'subject': _subjectController.text,
+          'message': _messageController.text,
+          'timestamp': FieldValue.serverTimestamp(),
         });
 
         if (mounted) {
@@ -54,14 +58,27 @@ class _ContactPageState extends State<ContactPage> {
               backgroundColor: Color(0xFF059669),
             ),
           );
-        }
 
-        // Clear form
-        _nameController.clear();
-        _emailController.clear();
-        _phoneController.clear();
-        _subjectController.clear();
-        _messageController.clear();
+          // Clear form
+          _nameController.clear();
+          _emailController.clear();
+          _phoneController.clear();
+          _subjectController.clear();
+          _messageController.clear();
+        }
+      } catch (e) {
+        developer.log('ContactPage: Form submission error: $e', name: 'ContactPage');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error submitting form: $e')),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isSubmitting = false;
+          });
+        }
       }
     }
   }
@@ -148,7 +165,7 @@ class _ContactPageState extends State<ContactPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Hero Section
+            // Hero Section (unchanged)
             ClipRRect(
               child: Container(
                 width: double.infinity,
@@ -156,10 +173,7 @@ class _ContactPageState extends State<ContactPage> {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFF0F172A),
-                      Color(0xFF1E293B),
-                    ],
+                    colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
@@ -186,7 +200,7 @@ class _ContactPageState extends State<ContactPage> {
                 ),
               ),
             ),
-            // Form and Contact Info Section
+            // Form and Contact Info Section (unchanged)
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: screenHeight * 0.06,
@@ -206,18 +220,14 @@ class _ContactPageState extends State<ContactPage> {
                     : Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: _buildForm(context, screenWidth, screenHeight, isMobile, isTablet),
-                          ),
+                          Expanded(child: _buildForm(context, screenWidth, screenHeight, isMobile, isTablet)),
                           SizedBox(width: screenWidth * 0.03),
-                          Expanded(
-                            child: _buildContactInfo(context, isMobile),
-                          ),
+                          Expanded(child: _buildContactInfo(context, isMobile)),
                         ],
                       ),
               ),
             ),
-            // Locations Section
+            // Locations Section (unchanged)
             Container(
               color: const Color(0xFFF9FAFB),
               padding: EdgeInsets.symmetric(
@@ -304,7 +314,7 @@ class _ContactPageState extends State<ContactPage> {
                                 ),
                                 SizedBox(height: screenHeight * 0.01),
                                 Text(
-                                  'Mombasa Trade Centre\nMombasa, Kenya',
+                                  'Manipur Plaza\nMombasa, Kenya',
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                         fontSize: 14,
                                         color: const Color(0xFF4B5563),
@@ -315,7 +325,7 @@ class _ContactPageState extends State<ContactPage> {
                                 SizedBox(height: screenHeight * 0.01),
                                 CustomButton(
                                   text: 'Map',
-                                  onPressed: () => _openMap('Mombasa Trade Centre, Mombasa, Kenya'),
+                                  onPressed: () => _openMap('Manipur Plaza, Mombasa, Kenya'),
                                   isLarge: false,
                                 ),
                               ],
@@ -336,6 +346,7 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
+  // _buildContactInfo, _buildContactInfoCard, _buildSocialButton unchanged
   Widget _buildContactInfo(BuildContext context, bool isMobile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,11 +369,10 @@ class _ContactPageState extends State<ContactPage> {
           ),
         ),
         const SizedBox(height: 32),
-        // Contact Information Cards
         _buildContactInfoCard(
           icon: LucideIcons.mapPin,
           title: 'Address',
-          content: Config.companyAddress,
+          content: "King'ara Heights, Nairobi, Kenya",
           onTap: null,
         ),
         const SizedBox(height: 16),
@@ -380,7 +390,6 @@ class _ContactPageState extends State<ContactPage> {
           onTap: _launchEmail,
         ),
         const SizedBox(height: 32),
-        // Social Media Links
         Text(
           'Follow Us',
           style: TextStyle(
@@ -505,14 +514,9 @@ class _ContactPageState extends State<ContactPage> {
       elevation: 4,
       surfaceTintColor: Colors.white,
       color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: screenHeight * 0.03,
-          horizontal: screenWidth * 0.03,
-        ),
+        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.03, horizontal: screenWidth * 0.03),
         child: Form(
           key: _formKey,
           child: Column(
@@ -536,9 +540,7 @@ class _ContactPageState extends State<ContactPage> {
                 decoration: InputDecoration(
                   labelText: 'Full Name',
                   hintText: 'Enter your full name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 validator: (value) {
@@ -554,9 +556,7 @@ class _ContactPageState extends State<ContactPage> {
                 decoration: InputDecoration(
                   labelText: 'Email Address',
                   hintText: 'Enter your email address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 validator: (value) {
@@ -575,9 +575,7 @@ class _ContactPageState extends State<ContactPage> {
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
                   hintText: 'Enter your phone number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 validator: (value) {
@@ -593,9 +591,7 @@ class _ContactPageState extends State<ContactPage> {
                 decoration: InputDecoration(
                   labelText: 'Subject',
                   hintText: 'Enter the subject',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 validator: (value) {
@@ -612,9 +608,7 @@ class _ContactPageState extends State<ContactPage> {
                 decoration: InputDecoration(
                   labelText: 'Message',
                   hintText: 'Enter your message',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 validator: (value) {
@@ -629,13 +623,7 @@ class _ContactPageState extends State<ContactPage> {
                 width: double.infinity,
                 child: CustomButton(
                   text: _isSubmitting ? 'Sending...' : 'Send Message',
-                  onPressed: _isSubmitting
-                      ? () {}
-                      : () {
-                          if (_formKey.currentState!.validate()) {
-                            _submitForm();
-                          }
-                        },
+                  onPressed: _isSubmitting ? () {} : () => _submitForm(),
                   isLarge: true,
                 ),
               ),

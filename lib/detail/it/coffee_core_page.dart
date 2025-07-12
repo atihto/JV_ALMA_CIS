@@ -3,8 +3,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/header.dart';
 import '../../widgets/footer.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/responsive_utils.dart';
+import 'dart:html' as html;
+import 'package:flutter/services.dart';
 
 class CoffeeCorePage extends StatelessWidget {
   const CoffeeCorePage({super.key});
@@ -39,28 +40,139 @@ class CoffeeCorePage extends StatelessWidget {
   static const List<Map<String, String>> _media = [
     {
       'type': 'image',
-      'path': 'assets/images/coffee_core_app.jpg',
+      'path': 'assets/apk/coffee_mobile_view.jpg',
       'description': 'Coffee Core mobile app interface.',
     },
     {
       'type': 'image',
-      'path': 'assets/images/coffee_farm.jpg',
-      'description': 'Coffee farmers using Coffee Core.',
-    },
-    {
-      'type': 'video',
-      'path': 'https://example.com/coffee_core_demo.mp4',
-      'description': 'Coffee Core tutorial video.',
+      'path': 'assets/apk/coffee_dashboard.jpg',
+      'description': 'Coffee Core dashboard overview.',
     },
   ];
 
-  Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    debugPrint('CoffeeCorePage: Launching URL $url');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint('CoffeeCorePage: Could not launch $url');
+  Future<void> _downloadApk(BuildContext context) async {
+    try {
+      debugPrint('CoffeeCorePage: Starting APK download');
+      
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            content: Row(
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text('Preparing download...'),
+              ],
+            ),
+          );
+        },
+      );
+
+      // For web platform
+      if (html.window.location.href.contains('localhost') || 
+          html.window.location.href.contains('web') ||
+          html.window.location.href.contains('.com')) {
+        try {
+          // Try to load the APK from assets
+          final ByteData data = await rootBundle.load('assets/apk/CoffeeCore.apk');
+          final List<int> bytes = data.buffer.asUint8List();
+          
+          final blob = html.Blob([bytes]);
+          final url = html.Url.createObjectUrlFromBlob(blob);
+          final anchor = html.document.createElement('a') as html.AnchorElement
+            ..href = url
+            ..style.display = 'none'
+            ..download = 'CoffeeCore.apk';
+          html.document.body?.children.add(anchor);
+          anchor.click();
+          html.document.body?.children.remove(anchor);
+          html.Url.revokeObjectUrl(url);
+          
+          if (context.mounted) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('APK download started! Check your downloads folder.'),
+                duration: Duration(seconds: 3),
+                backgroundColor: Colors.brown,
+              ),
+            );
+          }
+          return; // Success - exit early
+        } catch (e) {
+          debugPrint('CoffeeCorePage: Asset loading failed: $e');
+          // Continue to direct download attempt
+        }
+      }
+
+      // For mobile platforms or if asset loading failed
+      try {
+        // Try direct download from server/CDN
+        const String apkUrl = 'https://your-domain.com/downloads/CoffeeCore.apk'; // Replace with your actual APK URL
+        
+        if (await canLaunchUrl(Uri.parse(apkUrl))) {
+          await launchUrl(
+            Uri.parse(apkUrl),
+            mode: LaunchMode.externalApplication,
+          );
+          
+          if (context.mounted) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Download started! Check your downloads folder.'),
+                duration: Duration(seconds: 3),
+                backgroundColor: Colors.brown,
+              ),
+            );
+          }
+          return; // Success - exit early
+        }
+      } catch (e) {
+        debugPrint('CoffeeCorePage: Direct download failed: $e');
+      }
+
+      // If all download methods fail, close loading dialog and allow direct download
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        
+        // Instead of showing contact dialog, provide direct download
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Click here to download Coffee Core APK'),
+            duration: const Duration(seconds: 5),
+            backgroundColor: Colors.brown,
+            action: SnackBarAction(
+              label: 'Download',
+              textColor: Colors.white,
+              onPressed: () async {
+                // Fallback: Open download page or direct link
+                const String fallbackUrl = 'https://your-domain.com/downloads/CoffeeCore.apk';
+                if (await canLaunchUrl(Uri.parse(fallbackUrl))) {
+                  await launchUrl(Uri.parse(fallbackUrl));
+                }
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('CoffeeCorePage: Download error: $e');
+      
+      if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        
+        // Show error but still provide download option
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Download will start shortly. If it doesn\'t start, please contact us.'),
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
     }
   }
 
@@ -72,117 +184,86 @@ class CoffeeCorePage extends StatelessWidget {
         screenWidth <= ResponsiveUtils.tabletBreakpoint;
     debugPrint('CoffeeCorePage: Building with screenWidth=$screenWidth');
 
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Header(
-                onMenuPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                     colors: [
+    return AppScaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
                     Color(0xFF0F172A),
                     Color(0xFF1E293B),
-                   ],
-                  ),
+                  ],
                 ),
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 24 : 48,
-                  horizontal: isMobile ? 8 : 16,
-                ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 896),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Coffee Core',
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                fontSize: isMobile ? 24 : 32,
-                                color: Colors.white,
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Sow, Safeguard, Soar',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontSize: isMobile ? 14 : 16,
-                                color: const Color(0xFFBFDBFE),
-                              ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: isMobile ? 24 : 48,
+                horizontal: isMobile ? 8 : 16,
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        LucideIcons.arrowLeft,
+                        color: Colors.white,
+                        size: isMobile ? 20 : 24,
+                      ),
+                      onPressed: () {
+                        debugPrint('CoffeeCorePage: Navigating back');
+                        Navigator.pop(context);
+                      },
+                      tooltip: 'Back',
                     ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 16 : 24,
-                  horizontal: isMobile ? 12 : 16,
-                ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1280),
-                  child: isMobile
-                      ? _buildMobileLayout(context, screenWidth)
-                      : _buildDesktopTabletLayout(context, screenWidth, isTablet),
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: isMobile ? 16 : 24,
-                  horizontal: 16,
-                ),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 896),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Ready to Elevate Your Coffee Farming?',
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              fontSize: isMobile ? 20 : 24,
-                              color: Colors.white,
+                    Expanded(
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 896),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Coffee Core',
+                              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                    fontSize: isMobile ? 24 : 32,
+                                    color: Colors.white,
+                                  ),
+                              textAlign: TextAlign.center,
                             ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Contact us to learn how Coffee Core can boost your productivity.',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: isMobile ? 12 : 14,
-                              color: Colors.white,
+                            const SizedBox(height: 8),
+                            Text(
+                              'Sow, Safeguard, Soar',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontSize: isMobile ? 14 : 16,
+                                    color: const Color(0xFFBFDBFE),
+                                  ),
+                              textAlign: TextAlign.center,
                             ),
-                        textAlign: TextAlign.center,
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      CustomButton(
-                        text: 'Contact Us',
-                        onPressed: () {
-                          debugPrint('CoffeeCorePage: Navigating to /contact');
-                          Navigator.pushNamed(context, '/contact');
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              const Footer(),
-            ],
-          ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: isMobile ? 16 : 24,
+                horizontal: isMobile ? 12 : 16,
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1280),
+                child: isMobile
+                    ? _buildMobileLayout(context, screenWidth)
+                    : _buildDesktopTabletLayout(context, screenWidth, isTablet),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+            const Footer(),
+          ],
         ),
       ),
     );
@@ -203,7 +284,7 @@ class CoffeeCorePage extends StatelessWidget {
             children: [
               Center(
                 child: Icon(
-                  LucideIcons.cloud,
+                  LucideIcons.coffee,
                   size: 40,
                   color: Colors.grey[400],
                 ),
@@ -246,7 +327,7 @@ class CoffeeCorePage extends StatelessWidget {
               children: [
                 Center(
                   child: Icon(
-                    LucideIcons.cloud,
+                    LucideIcons.coffee,
                     size: isTablet ? 40 : 48,
                     color: Colors.grey[400],
                   ),
@@ -285,26 +366,6 @@ class CoffeeCorePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        IconButton(
-          icon: Icon(
-            LucideIcons.arrowLeft,
-            color: Colors.blue[900],
-            size: isMobile ? 14 : 16,
-          ),
-          onPressed: () {
-            debugPrint('CoffeeCorePage: Attempting to navigate back');
-            try {
-              Navigator.pop(context);
-            } catch (e) {
-              debugPrint('CoffeeCorePage: Navigation error: $e');
-              Navigator.pushNamed(context, '/it-division');
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Failed to go back, redirected to IT Division')),
-              );
-            }
-          },
-          tooltip: 'Back to IT Division',
-        ),
         Text(
           'Coffee Core',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -395,34 +456,18 @@ class CoffeeCorePage extends StatelessWidget {
                       label: media['description'],
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          media['path']!,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                        child: SizedBox(
+                          height: isMobile ? 200 : 300,
+                          child: Image.asset(
+                            media['path']!,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  if (media['type'] == 'video')
-                    Semantics(
-                      button: true,
-                      label: media['description'],
-                      child: OutlinedButton.icon(
-                        icon: const Icon(LucideIcons.play, size: 16),
-                        label: Text(
-                          'Watch Video',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: isMobile ? 12 : 14,
-                              ),
-                        ),
-                        onPressed: () => _launchUrl(media['path']!),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.blue[700],
-                          side: const BorderSide(color: Color(0xFF2563EB)),
                         ),
                       ),
                     ),
@@ -444,14 +489,68 @@ class CoffeeCorePage extends StatelessWidget {
           }).toList(),
         ),
         const SizedBox(height: 16),
-        CustomButton(
-          text: 'Download Coming Soon!',
-          icon: LucideIcons.download,
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('App coming soon! Stay tuned for the release.')),
-            );
-          },
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.brown[50],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.brown[200]!),
+          ),
+          child: Column(
+            children: [
+              Icon(
+                LucideIcons.coffee,
+                size: 48,
+                color: Colors.brown[700],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Download Coffee Core',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: isMobile ? 16 : 18,
+                      color: Colors.brown[800],
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Get the latest version of Coffee Core APK and revolutionize your coffee farming experience!',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: isMobile ? 12 : 14,
+                      color: Colors.brown[700],
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () => _downloadApk(context),
+                  icon: const Icon(LucideIcons.download, size: 20),
+                  label: Text(
+                    'Download APK',
+                    style: TextStyle(
+                      fontSize: isMobile ? 14 : 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown[600],
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      vertical: isMobile ? 12 : 16,
+                      horizontal: 24,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

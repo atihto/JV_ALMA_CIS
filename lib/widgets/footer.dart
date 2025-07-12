@@ -22,7 +22,7 @@ class _FooterState extends State<Footer> {
     });
   }
 
-  void _handleNavigation(BuildContext context, String route, {String? url}) async {
+  Future<void> _handleNavigation(BuildContext context, String route, {String? url}) async {
     _toggleClick(route);
     if (url != null) {
       try {
@@ -141,57 +141,6 @@ class _FooterState extends State<Footer> {
                         ],
                       ),
                     ),
-
-                    // Business Units
-                    SizedBox(
-                      width: isLargeScreen ? 200 : screenWidth,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Our Business Units',
-                            style: GoogleFonts.poppins(
-                              fontSize: isMobile ? 20 : 24,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          _buildFooterLink(
-                            context,
-                            text: 'Construction',
-                            route: '/construction-detail',
-                            isMobile: isMobile,
-                            buttonKey: 'constructionDetail',
-                          ),
-                          const SizedBox(height: 12),
-                          _buildFooterLink(
-                            context,
-                            text: 'Agribusiness',
-                            route: '/agribusiness',
-                            isMobile: isMobile,
-                            buttonKey: 'agribusiness',
-                          ),
-                          const SizedBox(height: 12),
-                          _buildFooterLink(
-                            context,
-                            text: 'Oil & Gas Services',
-                            route: '/oil-gas',
-                            isMobile: isMobile,
-                            buttonKey: 'oilGasServices',
-                          ),
-                          const SizedBox(height: 12),
-                          _buildFooterLink(
-                            context,
-                            text: 'IT Division',
-                            route: '/it-division',
-                            isMobile: isMobile,
-                            buttonKey: 'itDivision',
-                          ),
-                        ],
-                      ),
-                    ),
-
                     // Quick Links
                     SizedBox(
                       width: isLargeScreen ? 200 : screenWidth,
@@ -206,21 +155,13 @@ class _FooterState extends State<Footer> {
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          _buildFooterLink(
-                            context,
-                            text: 'About Our Company',
-                            route: '/about',
-                            isMobile: isMobile,
-                            buttonKey: 'aboutUs',
-                          ),
                           const SizedBox(height: 12),
                           _buildFooterLink(
                             context,
-                            text: 'Projects',
-                            route: '/projects',
+                            text: 'Business Units',
+                            route: '/business-units',
                             isMobile: isMobile,
-                            buttonKey: 'projects',
+                            buttonKey: 'businessUnits',
                           ),
                           const SizedBox(height: 12),
                           _buildFooterLink(
@@ -241,10 +182,9 @@ class _FooterState extends State<Footer> {
                         ],
                       ),
                     ),
-
                     // Contact Details and Social Media
                     SizedBox(
-                      width: isLargeScreen ? 250 : screenWidth,
+                      width: isLargeScreen ? 300 : screenWidth,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -275,9 +215,34 @@ class _FooterState extends State<Footer> {
                           const SizedBox(height: 12),
                           _buildContactInfo(
                             icon: LucideIcons.mapPin,
-                            text: 'Address\n${Config.companyAddress}',
                             isMobile: isMobile,
                             buttonKey: 'address',
+                            customContent: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'HQ: Kingara Heights, Nairobi, Kenya',
+                                  style: TextStyle(
+                                    color: _isHovered['address'] ?? false ? Colors.white : const Color(0xFF94A3B8),
+                                    fontSize: isMobile ? 14 : 16,
+                                    height: 1.5,
+                                  ),
+                                  softWrap: true,
+                                  maxLines: null,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Branch: Manipur Plaza, Mombasa, Kenya',
+                                  style: TextStyle(
+                                    color: _isHovered['address'] ?? false ? Colors.white : const Color(0xFF94A3B8),
+                                    fontSize: isMobile ? 14 : 16,
+                                    height: 1.5,
+                                  ),
+                                  softWrap: true,
+                                  maxLines: null,
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -292,12 +257,6 @@ class _FooterState extends State<Footer> {
                           Wrap(
                             spacing: 8,
                             children: [
-                              _buildSocialLink(
-                                context,
-                                icon: LucideIcons.twitter,
-                                url: Config.twitterUrl,
-                                buttonKey: 'twitter',
-                              ),
                               _buildSocialLink(
                                 context,
                                 icon: LucideIcons.linkedin,
@@ -317,7 +276,6 @@ class _FooterState extends State<Footer> {
                     ),
                   ],
                 ),
-
                 // Bottom Section
                 Container(
                   margin: const EdgeInsets.only(top: 32),
@@ -413,34 +371,41 @@ class _FooterState extends State<Footer> {
 
   Widget _buildContactInfo({
     required IconData icon,
-    required String text,
     required bool isMobile,
-    String? uri,
     required String buttonKey,
+    String? text,
+    String? uri,
+    Widget? customContent,
   }) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
       child: InkWell(
-        onTap: uri != null ? () => _handleNavigation(context, buttonKey, url: uri) : null,
+        onTap: uri != null
+            ? () => _handleNavigation(context, buttonKey, url: uri)
+            : null,
         onHover: (isHovering) {
           setState(() {
             _isHovered[buttonKey] = isHovering;
           });
         },
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(icon, size: 16, color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF64748B)),
             const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
-                  fontSize: isMobile ? 14 : 16,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
+            Expanded(
+              child: customContent ??
+                  Text(
+                    text!,
+                    style: TextStyle(
+                      color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
+                      fontSize: isMobile ? 14 : 16,
+                      height: 1.5,
+                    ),
+                    softWrap: true,
+                    maxLines: null,
+                  ),
             ),
           ],
         ),

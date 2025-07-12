@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/header.dart';
 import '../widgets/footer.dart';
@@ -739,4 +739,4 @@ class _ProjectsPageState extends State<ProjectsPage> {
       ),
     );
   }
-}
+}*/

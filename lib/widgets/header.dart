@@ -43,7 +43,7 @@ class Header extends StatelessWidget {
 
   static const List<Map<String, String>> navigation = [
     {'name': 'Home', 'href': '/'},
-    {'name': 'About Our Company', 'href': '/about'},
+    {'name': 'About Us', 'href': '/about'},
     {'name': 'Business Units', 'href': '/business-units'},
     {'name': 'News', 'href': '/news'},
     {'name': 'Contact', 'href': '/contact'},
@@ -126,7 +126,7 @@ class Header extends StatelessWidget {
                       }),
                       const SizedBox(width: 16),
                       CustomButton(
-                        text: 'Get Quote',
+                        text: 'Contact Us',
                         onPressed: () => _navigate(context, '/contact'),
                         isOutline: true,
                       ),
@@ -208,9 +208,8 @@ class AppDrawer extends StatelessWidget {
 
   static const List<Map<String, dynamic>> navigation = [
     {'name': 'Home', 'href': '/', 'icon': LucideIcons.home},
-    {'name': 'About Our Company', 'href': '/about', 'icon': LucideIcons.info},
+    {'name': 'About Us', 'href': '/about', 'icon': LucideIcons.info},
     {'name': 'Business Units', 'href': '/business-units', 'icon': LucideIcons.building2},
-    {'name': 'Projects', 'href': '/projects', 'icon': LucideIcons.briefcase},
     {'name': 'Careers', 'href': '/careers', 'icon': LucideIcons.users},
     {'name': 'News', 'href': '/news', 'icon': LucideIcons.newspaper},
     {'name': 'Contact', 'href': '/contact', 'icon': LucideIcons.phone},
@@ -232,7 +231,7 @@ class AppDrawer extends StatelessWidget {
                 Container(
                   height: 100,
                   decoration: const BoxDecoration(
-                    color: Color(0xFF1E293B),
+                    color: Colors.white,
                   ),
                   child: Stack(
                     children: [
@@ -252,7 +251,7 @@ class AppDrawer extends StatelessWidget {
                                 child: Text(
                                   'JV ALMA C.I.S',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color(0xFF1E293B),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
@@ -268,7 +267,7 @@ class AppDrawer extends StatelessWidget {
                         child: IconButton(
                           icon: const Icon(
                             LucideIcons.x,
-                            color: Colors.white,
+                            color: Color(0xFF1E293B),
                             size: 24,
                           ),
                           onPressed: () {
@@ -323,7 +322,7 @@ class AppDrawer extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: CustomButton(
-                      text: 'Get Quote',
+                      text: 'Contact Us',
                       onPressed: () {
                         developer.log('AppDrawer: Tapped Get Quote', name: 'AppDrawer');
                         scaffoldKey?.currentState?.closeEndDrawer();

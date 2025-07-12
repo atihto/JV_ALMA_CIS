@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/header.dart';
 import '../widgets/footer.dart';
-import '../widgets/custom_widgets.dart';
 import 'dart:developer' as developer;
 
 class NewsPage extends StatefulWidget {
@@ -81,6 +80,7 @@ class _NewsPageState extends State<NewsPage> {
         return Dialog(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.8,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(imageUrl),
@@ -173,6 +173,14 @@ class _NewsPageState extends State<NewsPage> {
                         'assets/news/news_2.jpg',
                         width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
+                          height: 200,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -188,16 +196,24 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     GestureDetector(
-                      onTap: () => _showImageDialog('assets/news/news_3.jpg'),
+                      onTap: () => _showImageDialog('assets/news/wei_wei_project.jpg'),
                       child: Image.asset(
-                        'assets/news/news_3.jpg',
+                        'assets/news/wei_wei_project.jpg',
                         width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
+                          height: 200,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Pastoralists in Baringo Kapluk reap big from seed maize farming (continued)',
+                      'Wei Wei irrigation scheme to be handed over to pastoralists',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontSize: isMobile ? 14 : 16,
                             color: const Color(0xFF4B5563),
@@ -208,16 +224,52 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     GestureDetector(
-                      onTap: () => _showImageDialog('assets/news/wei_wei_project.jpg'),
+                      onTap: () => _showImageDialog('assets/news/italy_project.jpg'),
                       child: Image.asset(
-                        'assets/news/wei_wei_project.jpg',
+                        'assets/news/italy_project.jpg',
                         width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
+                          height: 200,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Wei Wei irrigation scheme to be handed over to pastoralists',
+                      'Italian "giardiniera" helps Kenyan farmers',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: isMobile ? 14 : 16,
+                            color: const Color(0xFF4B5563),
+                          ),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    GestureDetector(
+                      onTap: () => _showImageDialog('assets/news/news_3.jpg'),
+                      child: Image.asset(
+                        'assets/news/news_3.jpg',
+                        width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
+                          height: 200,
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Pastoralists in Baringo Kapluk reap big from seed maize farming (continued)',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontSize: isMobile ? 14 : 16,
                             color: const Color(0xFF4B5563),
@@ -289,10 +341,22 @@ class _NewsPageState extends State<NewsPage> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        CustomButton(
-                          text: _isSubmitting ? 'Subscribing...' : 'Subscribe',
+                        ElevatedButton(
                           onPressed: _subscribe,
-                          isLarge: isMobile,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2563EB),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                              vertical: isMobile ? 12 : 16,
+                              horizontal: isMobile ? 16 : 24,
+                            ),
+                          ),
+                          child: Text(
+                            _isSubmitting ? 'Subscribing...' : 'Subscribe',
+                            style: TextStyle(
+                              fontSize: isMobile ? 12 : 14,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -306,69 +370,6 @@ class _NewsPageState extends State<NewsPage> {
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Call to Action
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF1E40AF), Color(0xFF1E3A8A)],
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.06,
-                horizontal: screenWidth * 0.04,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Ready to Work With Us?',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            fontSize: isMobile ? 20 : 24,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Text(
-                      'Join the companies and organizations that trust JV ALMA C.I.S for their construction, agribusiness, oil & gas services, and IT needs.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: isMobile ? 12 : 14,
-                            color: const Color(0xFFEFF6FF),
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    Wrap(
-                      spacing: screenWidth * 0.02,
-                      runSpacing: 16,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        CustomButton(
-                          text: 'Contact Us',
-                          onPressed: () => _navigate('/contact'),
-                          isLarge: isTablet || isMobile,
-                        ),
-                        CustomButton(
-                          text: 'View Our Projects',
-                          onPressed: () => _navigate('/projects'),
-                          isOutline: true,
-                          isLarge: isTablet || isMobile,
-                        ),
-                      ],
                     ),
                   ],
                 ),

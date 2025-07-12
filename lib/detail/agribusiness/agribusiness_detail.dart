@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/header.dart';
 import 'dart:developer' as developer;
@@ -14,11 +13,11 @@ class AgribusinessDetail extends StatelessWidget {
       'title': 'Sigor Wei Wei Integrated Irrigation Scheme – West Pokot, Kenya',
       'client': 'Kerio Valley Development Authority (KVDA)',
       'period': 'June 2017 – July 2020',
-      'description': 'Major civil works for a large-scale irrigation scheme in a remote region, including installation of pipelines to irrigate over 325 hectares. The project also involved bush clearing and refurbishment of 290 ha of existing irrigation systems, and construction of fully furnished accommodation and support facilities.',
+      'description': 'Major civil works for a large-scale irrigation scheme in a remote region, including installation of pipelines to irrigate over 325 hectares. The project also involved bush clearing and refurbishment of 290 ha of existing irrigation systems, and construction of warehouses and support facilities.',
       'testimonial': '"JV ALMA C.I.S. delivered extensive infrastructure in a complex rural setting, significantly boosting the region\'s agricultural productivity." — Eng. Daniel Kimutai, KVDA',
       'imagePaths': [
-        'assets/images/agribusiness/sigor_1.jpg',
-        'assets/images/agribusiness/sigor_2.jpg',
+        {'path': 'assets/images/agribusiness/sigor_1.jpg', 'caption': 'Former President Uhuru Kenyatta During the launch of the project'},
+        {'path': 'assets/images/agribusiness/sigor_2.jpg', 'caption': ''},
       ],
     },
     {
@@ -28,8 +27,8 @@ class AgribusinessDetail extends StatelessWidget {
       'description': 'Design-build execution of a solar-powered irrigation system. The scope included survey and design of the distribution network and related pump system, 10,000-liter tanks, hydrants, and all associated valves. The project engaged the local community extensively, providing employment opportunities while ensuring technical supervision and quality control.',
       'testimonial': '"As a farmer and resident of Kapluk, I saw firsthand how JV ALMA C.I.S worked with our community—not just to build an irrigation system, but to build our confidence and capacity. Thanks to their commitment, we now have water, jobs, and a future." — Simion Yator, Kiptolelyo Self Help Group Chairman.',
       'imagePaths': [
-        'assets/images/agribusiness/kapluk_1.jpg',
-        'assets/images/agribusiness/kapluk_2.jpg',
+        {'path': 'assets/images/agribusiness/kapluk_1.jpg', 'caption': ''},
+        {'path': 'assets/images/agribusiness/kapluk_2.jpg', 'caption': ''},
       ],
     },
     {
@@ -39,8 +38,8 @@ class AgribusinessDetail extends StatelessWidget {
       'description': 'Solar-powered irrigation system and agri-enterprise pilot in Makueni County. Beyond construction, JV ALMA C.I.S introduced organic farming methods and trained farmers on sustainable practices. The project catalyzed local agri-enterprise and reduced chemical inputs for improved livelihoods.',
       'testimonial': '"As Greenland Farm, we witnessed how JV ALMA C.I.S combined innovation with hands-on support—delivering not just infrastructure, but real impact. With their guidance, we\'ve adopted sustainable practices, improved our yields, and built stronger ties with the market." — Greenland Farm Management',
       'imagePaths': [
-        'assets/images/agribusiness/makueni_1.jpg',
-        'assets/images/agribusiness/makueni_2.jpg',
+        {'path': 'assets/images/agribusiness/makueni_1.jpg', 'caption': ''},
+        {'path': 'assets/images/agribusiness/makueni_2.jpg', 'caption': ''},
       ],
     },
   ];
@@ -52,38 +51,37 @@ class AgribusinessDetail extends StatelessWidget {
         'title': 'Training Programs',
         'description': '• Training young professionals in multidisciplinary skills (engineering, agribusiness, irrigation design) through technical modules delivered in partnership with academic institutions.',
         'imagePaths': [
-          'assets/images/agribusiness/training_2.jpg',
+          {'path': 'assets/images/agribusiness/training_2.jpg', 'caption': ''},
         ],
       },
       {
         'title': 'Formation of Self-Help Groups',
         'description': '• Organizing communities into formal groups, such as self-help groups (e.g., Kiptolelyo SHG), to transition from fragmented subsistence farming to coordinated, economically viable units.',
         'imagePaths': [
-          'assets/images/agribusiness/group_cert.jpg',
+          {'path': 'assets/images/agribusiness/group_cert.jpg', 'caption': ''},
         ],
       },
       {
         'title': 'Promoting Sustainability',
         'description': '• Promoting sustainability by emphasizing self-reliance over aid-dependence ("beyond the mentality of grants")—encouraging co-investment, structured loan repayment, and shared ownership of infrastructure.',
         'imagePaths': [
-          'assets/images/agribusiness/sustainability.jpg',
+          {'path': 'assets/images/agribusiness/sustainability.jpg', 'caption': ''},
         ],
       },
       {
         'title': 'Soil Health and Controlled Use of Pesticides',
         'description': '• Soil sampling and analysis to support fertility management\n• Recommendations for responsible fertilizer and pesticide use\n• Tailored nutrient application plans based on farm-specific data',
         'imagePaths': [
-          'assets/images/agribusiness/soil_health_1.jpg',
-          'assets/images/agribusiness/soil_health_2.jpg',
+          {'path': 'assets/images/agribusiness/soil_health_1.jpg', 'caption': ''},
+          {'path': 'assets/images/agribusiness/soil_health_2.jpg', 'caption': ''},
         ],
       },
       {
         'title': 'Data Processing',
         'description': '• Collection and analysis of real-time field data\n• Crop and pest tracking for precision farming\n• Integration of mobile technology to support informed decisions',
         'imagePaths': [
-          'assets/images/agribusiness/data_collection.jpg',
-          'assets/images/agribusiness/data_processing.jpg',
-          'assets/images/agribusiness/data_.jpg',
+          {'path': 'assets/images/agribusiness/data_processing.jpg', 'caption': ''},
+          {'path': 'assets/images/agribusiness/data_extraction.jpg', 'caption': ''},
         ],
       },
     ],
@@ -100,7 +98,9 @@ class AgribusinessDetail extends StatelessWidget {
           '• Patricia Ngutu – Corporation Secretary, KALRO',
         ],
         'impact': "The MoU empowers KALRO to provide technical support, capacity building, irrigation supervision, soil/water analysis, and ESIA services. This partnership grounds JV ALMA C.I.S's field projects in scientific rigor, enhancing sustainability and agricultural productivity.",
-        'imagePaths': [],
+        'imagePaths': [
+          {'path': 'assets/images/agribusiness/kalro_logo.jpg', 'caption': 'KALRO Logo'},
+        ],
       },
       {
         'name': 'Moi University & JV ALMA C.I.S',
@@ -109,7 +109,9 @@ class AgribusinessDetail extends StatelessWidget {
           '• Prof. Eng. Simiyu Sitati – Dean School of Engineering, Moi University',
         ],
         'impact': 'Through the agribusiness training program, Moi University trained students, developed business models, and coordinated local engagement. The MoU strengthens academic-practical collaboration and builds youth capacity for rural innovation.',
-        'imagePaths': [],
+        'imagePaths': [
+          {'path': 'assets/images/agribusiness/moi_logo.jpg', 'caption': 'Moi University Logo'},
+        ],
       },
     ],
   };
@@ -173,7 +175,7 @@ class AgribusinessDetail extends StatelessWidget {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'End-to-end solutions for rural transformation, integrating advanced infrastructure, capacity building, and digital tools to enhance agricultural productivity and sustainability.',
+                              'End-to-end solutions for rural transformation, integrating advanced infrastructure, community development & capacity building, and digital tools to enhance agricultural productivity and sustainability.',
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     color: const Color(0xFFBFDBFE),
                                   ),
@@ -204,56 +206,6 @@ class AgribusinessDetail extends StatelessWidget {
                   // Digitization Section
                   _buildDigitizationSection(context, isMobile),
                 ],
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: isMobile ? 32 : 64,
-                horizontal: 16,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 896),
-                child: Column(
-                  children: [
-                    Text(
-                      'Ready to Get Started?',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: Colors.white,
-                            fontSize: isMobile ? 24 : 32,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Contact us today to discuss how our comprehensive business units can help bring your project to life with innovation and excellence.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.white,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    Wrap(
-                      spacing: isMobile ? 8 : 16,
-                      runSpacing: isMobile ? 8 : 16,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        CustomButton(
-                          text: 'Request Quote',
-                          onPressed: () => Navigator.pushNamed(context, '/contact'),
-                        ),
-                        CustomButton(
-                          text: 'Schedule Consultation',
-                          onPressed: () => Navigator.pushNamed(context, '/contact'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),
@@ -291,7 +243,7 @@ class AgribusinessDetail extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'JV ALMACIS delivers comprehensive solutions for rural transformation, combining large-scale infrastructure development, community empowerment, and innovative digital agriculture tools. Our approach enhances productivity, builds resilient livelihoods, and promotes sustainable growth in underserved regions.',
+            'JV ALMA C.I.S delivers comprehensive solutions for rural transformation, combining large-scale infrastructure development, community development & capacity building, and innovative digital agriculture tools. Our approach enhances productivity, builds resilient livelihoods, and promotes sustainable growth in underserved regions.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: isMobile ? 12 : 14,
                   color: const Color(0xFF4B5563),
@@ -309,60 +261,26 @@ class AgribusinessDetail extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isMobile) ...[
-            Row(
-              children: [
-                const Icon(
-                  LucideIcons.bookOpen,
-                  size: 28,
-                  color: Color(0xFF16A34A),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Infrastructure',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 20,
-                        color: const Color(0xFF1F2937),
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (!isMobile)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 120,
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        LucideIcons.bookOpen,
-                        size: 28,
-                        color: Color(0xFF16A34A),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Infrastructure',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: 16,
-                              color: const Color(0xFF1F2937),
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: _buildInfrastructureContent(context, isMobile),
-                ),
-              ],
-            ),
-          if (isMobile) _buildInfrastructureContent(context, isMobile),
+          Row(
+            children: [
+              const Icon(
+                LucideIcons.bookOpen,
+                size: 28,
+                color: Color(0xFF16A34A),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Infrastructure',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: isMobile ? 20 : 24,
+                      color: const Color(0xFF1F2937),
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildInfrastructureContent(context, isMobile),
         ],
       ),
     );
@@ -415,7 +333,8 @@ class AgribusinessDetail extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: _getImageWidgets(context, _projects[index]['imagePaths']),
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: _getImageWidgets(context, _projects[index]['imagePaths'], isLogo: false),
                             ),
                           ),
                         ),
@@ -472,62 +391,26 @@ class AgribusinessDetail extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isMobile) ...[
-            Row(
-              children: [
-                const Icon(
-                  LucideIcons.users,
-                  size: 28,
-                  color: Color(0xFF16A34A),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Community Development and Capacity Building',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 18,
-                          color: const Color(0xFF1F2937),
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (!isMobile)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 120,
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        LucideIcons.users,
-                        size: 28,
-                        color: Color(0xFF16A34A),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Community Development and Capacity Building',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: 16,
-                              color: const Color(0xFF1F2937),
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: _buildCommunityContent(context, isMobile),
-                ),
-              ],
-            ),
-          if (isMobile) _buildCommunityContent(context, isMobile),
+          Row(
+            children: [
+              const Icon(
+                LucideIcons.users,
+                size: 28,
+                color: Color(0xFF16A34A),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Capacity Building',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: isMobile ? 20 : 24,
+                      color: const Color(0xFF1F2937),
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildCommunityContent(context, isMobile),
         ],
       ),
     );
@@ -575,7 +458,8 @@ class AgribusinessDetail extends StatelessWidget {
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: _getImageWidgets(context, service['imagePaths']),
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _getImageWidgets(context, service['imagePaths'], isLogo: false),
                               ),
                             ),
                           ),
@@ -609,11 +493,11 @@ class AgribusinessDetail extends StatelessWidget {
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.9),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center, // Center the entire partnership content
                   children: [
                     ...(_partnerships['partnerships'] as List<Map<String, dynamic>>).map(
                       (partnership) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center, // Center each partnership
                         children: [
                           Text(
                             partnership['name'],
@@ -623,23 +507,27 @@ class AgribusinessDetail extends StatelessWidget {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: _getImageWidgets(context, partnership['imagePaths']),
+                              mainAxisAlignment: MainAxisAlignment.center, // Center the logos
+                              children: _getImageWidgets(context, partnership['imagePaths'], isLogo: true),
                             ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             partnership['impact'],
                             style: TextStyle(fontSize: isMobile ? 12 : 14, color: const Color(0xFF4B5563)),
+                            textAlign: TextAlign.center, // Center the impact text
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'Signatories:',
                             style: TextStyle(fontSize: isMobile ? 12 : 14, color: const Color(0xFF4B5563), fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center, // Center the signatories header
                           ),
                           ...((partnership['signatories'] as List<String>).map(
                             (signatory) => Text(
                               signatory,
                               style: TextStyle(fontSize: isMobile ? 12 : 14, color: const Color(0xFF4B5563)),
+                              textAlign: TextAlign.center, // Center each signatory
                             ),
                           )),
                           const SizedBox(height: 12),
@@ -663,60 +551,26 @@ class AgribusinessDetail extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isMobile) ...[
-            Row(
-              children: [
-                const Icon(
-                  LucideIcons.globe,
-                  size: 28,
-                  color: Color(0xFF16A34A),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Digitization In Agriculture',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 20,
-                        color: const Color(0xFF1F2937),
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (!isMobile)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 120,
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        LucideIcons.globe,
-                        size: 28,
-                        color: Color(0xFF16A34A),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Digitization In Agriculture',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: 16,
-                              color: const Color(0xFF1F2937),
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: _buildDigitizationContent(context, isMobile),
-                ),
-              ],
-            ),
-          if (isMobile) _buildDigitizationContent(context, isMobile),
+          Row(
+            children: [
+              const Icon(
+                LucideIcons.globe,
+                size: 28,
+                color: Color(0xFF16A34A),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Digitization In Agriculture',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: isMobile ? 20 : 24,
+                      color: const Color(0xFF1F2937),
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildDigitizationContent(context, isMobile),
         ],
       ),
     );
@@ -727,7 +581,7 @@ class AgribusinessDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'JV ALMA CIS leverages digital innovation to empower farmers with mobile-based tools for crop management, market access, and financial planning.',
+          'JV ALMA C.I.S leverages digital innovation to empower farmers with mobile-based tools for crop management, market access, and financial planning.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
@@ -858,28 +712,52 @@ class AgribusinessDetail extends StatelessWidget {
     );
   }
 
-  List<Widget> _getImageWidgets(BuildContext context, dynamic imagePaths) {
+  List<Widget> _getImageWidgets(BuildContext context, dynamic imagePaths, {bool isLogo = false}) {
     final isMobile = MediaQuery.of(context).size.width < 600;
     if (imagePaths == null) return [];
     if (imagePaths is List<dynamic>) {
-      return imagePaths.map((path) {
-        if (path is String) {
+      return imagePaths.map((imageData) {
+        if (imageData is Map<String, dynamic> && imageData['path'] is String) {
           return Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                path,
-                height: isMobile ? 180 : 240,
-                width: isMobile ? 300 : 400,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  height: isMobile ? 180 : 240,
-                  width: isMobile ? 300 : 400,
-                  color: Colors.grey[200],
-                  child: const Center(child: Icon(LucideIcons.imageOff, color: Colors.grey)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: isLogo ? (isMobile ? 100 : 150) : (isMobile ? 180 : 240), // Reduced height for logos only
+                  width: isLogo ? (isMobile ? 150 : 200) : (isMobile ? 300 : 400),   // Reduced width for logos only
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      imageData['path'],
+                      height: isLogo ? (isMobile ? 100 : 150) : (isMobile ? 180 : 240),
+                      width: isLogo ? (isMobile ? 150 : 200) : (isMobile ? 300 : 400),
+                      fit: isLogo ? BoxFit.contain : BoxFit.cover, // Contain for logos, cover for others
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: isLogo ? (isMobile ? 100 : 150) : (isMobile ? 180 : 240),
+                        width: isLogo ? (isMobile ? 150 : 200) : (isMobile ? 300 : 400),
+                        color: Colors.grey[200],
+                        child: const Center(child: Icon(LucideIcons.imageOff, color: Colors.grey)),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                if (imageData['caption'] != null && imageData['caption'].isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: isLogo ? (isMobile ? 150 : 200) : (isMobile ? 300 : 400),
+                    child: Text(
+                      imageData['caption'],
+                      style: TextStyle(
+                        fontSize: isMobile ? 12 : 14,
+                        color: const Color(0xFF4B5563),
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ],
             ),
           );
         }

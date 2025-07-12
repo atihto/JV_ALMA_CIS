@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/header.dart';
-import '../../widgets/custom_button.dart';
 import '../it/cmms_page.dart';
 
 class ConstructionDetail extends StatelessWidget {
@@ -98,49 +97,6 @@ class ConstructionDetail extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF1E40AF), Color(0xFF065F46)],
-                ),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: isMobile ? 16 : 24,
-                horizontal: 16,
-              ),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 896),
-                child: Column(
-                  children: [
-                    Text(
-                      'Ready to Build Your Infrastructure Project?',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontSize: isMobile ? 20 : 24,
-                            color: Colors.white,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Contact us to discuss how our infrastructure and diplomatic facility solutions can help realize your vision.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: isMobile ? 12 : 14,
-                            color: Colors.white,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    CustomButton(
-                      text: 'Contact Us',
-                      onPressed: () {
-                        debugPrint('ConstructionPage: Navigating to /contact from CTA');
-                        Navigator.pushNamed(context, '/contact');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             const Footer(),
           ],
@@ -156,87 +112,33 @@ class ConstructionDetail extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isMobile) ...[
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    LucideIcons.building2,
-                    size: 28,
-                    color: Colors.blue[700],
-                  ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Chip(
-                        label: const Text('Construction'),
-                        backgroundColor: Colors.blue[50],
-                        labelStyle: TextStyle(
-                          color: Colors.blue[700],
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Construction Services',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 20,
-                              color: const Color(0xFF1F2937),
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
+                child: Icon(
+                  LucideIcons.building2,
+                  size: 28,
+                  color: Colors.blue[700],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (!isMobile)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Chip(
-                        label: const Text('Construction'),
-                        backgroundColor: Colors.blue[50],
-                        labelStyle: TextStyle(
-                          color: Colors.blue[700],
-                          fontSize: 10,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Icon(
-                        LucideIcons.building2,
-                        size: 48,
-                        color: Colors.grey[400],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildConstructionContent(context, screenWidth, isMobile),
-                ),
-              ],
-            ),
-          if (isMobile) _buildConstructionContent(context, screenWidth, isMobile),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Construction Services',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: isMobile ? 20 : 24,
+                      color: const Color(0xFF1F2937),
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildConstructionContent(context, screenWidth, isMobile),
         ],
       ),
     );
@@ -296,7 +198,7 @@ class ConstructionDetail extends StatelessWidget {
       {
         'title': 'Italian Ambassador\'s Residence Renov, Nairobi.',
         'client': 'Italian Embassy Nairobi',
-        'period': 'Unknown',
+        'period': 'May 2024 - December 2024',
         'description': 'Comprehensive renovation of the Italian Ambassador\'s Residence in Karura Close, with a strong focus on modernizing and optimizing building systems for energy efficiency.',
         'testimonial': '"JV ALMA C.I.S provided a detailed and professional assessment, setting a clear path for renovation tailored to the building\'s age and structural needs." — Paolo Rotilli',
         'imagePaths': [
@@ -311,7 +213,6 @@ class ConstructionDetail extends StatelessWidget {
         'testimonial': '',
         'imagePaths': [
           'assets/images/construction/portugese_embassy_1.jpg',
-          'assets/images/construction/portugese_embassy_3.jpg',
           'assets/images/construction/portugese_embassy_2.jpg',
         ],
       },
@@ -331,7 +232,7 @@ class ConstructionDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Our construction services deliver large-scale infrastructure and specialized diplomatic projects across Kenya, ensuring precision, sustainability, and compliance with international standards.',
+          'Our construction services deliver large-scale infrastructure and specialized diplomatic missions across Kenya, ensuring precision, sustainability, and compliance with international standards.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
@@ -418,87 +319,33 @@ class ConstructionDetail extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isMobile) ...[
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.purple[50],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    LucideIcons.database,
-                    size: 28,
-                    color: Colors.purple[700],
-                  ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.purple[50],
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Chip(
-                        label: const Text('Facility Mgmt'),
-                        backgroundColor: Colors.purple[50],
-                        labelStyle: TextStyle(
-                          color: Colors.purple[700],
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Facility Management Services',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 20,
-                              color: const Color(0xFF1F2937),
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
+                child: Icon(
+                  LucideIcons.database,
+                  size: 28,
+                  color: Colors.purple[700],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (!isMobile)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Chip(
-                        label: const Text('Facility Mgmt'),
-                        backgroundColor: Colors.purple[50],
-                        labelStyle: TextStyle(
-                          color: Colors.purple[700],
-                          fontSize: 10,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Icon(
-                        LucideIcons.database,
-                        size: 48,
-                        color: Colors.grey[400],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildFacilityContent(context, screenWidth, isMobile),
-                ),
-              ],
-            ),
-          if (isMobile) _buildFacilityContent(context, screenWidth, isMobile),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Facility Management Services',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: isMobile ? 20 : 24,
+                      color: const Color(0xFF1F2937),
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildFacilityContent(context, screenWidth, isMobile),
         ],
       ),
     );
@@ -509,7 +356,7 @@ class ConstructionDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Facility management (FM) involves the coordination of space, infrastructure, and services to ensure that buildings and facilities operate efficiently and safely. It encompasses maintenance, operations, and strategic planning to support the core functions of an organization.\n\nOur approach integrates our proprietary Nyumba Smart - Computerized Maintenance Management System (CMMS), developed by our IT Division, to streamline these processes.',
+          'Facility management (FM) involves the coordination of space, infrastructure, and services to ensure that buildings and facilities operate efficiently and safely. It encompasses maintenance, operations, and strategic planning to support the core functions of an organization.\n\nOur approach integrates our proprietary NyumbaSmart - Computerized Maintenance Management System (CMMS), developed by our IT Division, to streamline these processes.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
@@ -542,7 +389,7 @@ class ConstructionDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Nyumba Smart - Computerized Maintenance Management System (CMMS)',
+                        'NyumbaSmart - Computerized Maintenance Management System (CMMS)',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: isMobile ? 12 : 14,

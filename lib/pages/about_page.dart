@@ -69,32 +69,6 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
-
-    return AppScaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeroSection(context, isMobile, isTablet),
-            _buildCompanyOverviewSection(context, isMobile, isTablet),
-            _buildMissionVisionSection(context, isMobile, isTablet),
-            _buildValuesSection(context, isMobile, isTablet),
-            _buildTeamSection(context, isMobile, isTablet),
-            _buildLeadershipSection(context, isMobile, isTablet, screenWidth, screenHeight),
-            _buildTestimonialsSection(context, isMobile, isTablet, screenWidth, screenHeight),
-            _buildHistorySection(context, isMobile, isTablet),
-            const Footer(),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildHeroSection(BuildContext context, bool isMobile, bool isTablet) {
     return Container(
       width: double.infinity,
@@ -131,13 +105,39 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                 'Building partnerships, delivering excellence, and creating sustainable solutions across East Africa.',
                 style: TextStyle(
                   fontSize: isMobile ? 16 : isTablet ? 18 : 20,
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Colors.white.withOpacity(0.9),
                   height: 1.6,
                 ),
                 textAlign: TextAlign.center,
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isMobile = screenWidth < 600;
+    final isTablet = screenWidth >= 600 && screenWidth < 1024;
+
+    return AppScaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildHeroSection(context, isMobile, isTablet),
+            _buildCompanyOverviewSection(context, isMobile, isTablet),
+            _buildMissionVisionSection(context, isMobile, isTablet),
+            _buildValuesSection(context, isMobile, isTablet),
+            _buildTeamSection(context, isMobile, isTablet),
+            _buildLeadershipSection(context, isMobile, isTablet, screenWidth, screenHeight),
+            _buildTestimonialsSection(context, isMobile, isTablet, screenWidth, screenHeight),
+            _buildHistorySection(context, isMobile, isTablet),
+            const Footer(),
+          ],
         ),
       ),
     );
@@ -302,7 +302,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: Colors.grey.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -355,7 +355,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: Colors.grey.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -635,8 +635,8 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                     _leadershipCard(
                       initials: 'PD',
                       name: 'Piergiorgio Di Carmine',
-                      title: 'Managing Director',
-                      description: 'Leading international project management.',
+                      title: 'CEO and Founder',
+                      description: 'Managing Director.',
                       gradient: const LinearGradient(
                         colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
                       ),
@@ -652,6 +652,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
     );
   }
 
+  // FIXED TESTIMONIALS SECTION - No more overflow errors
   Widget _buildTestimonialsSection(BuildContext context, bool isMobile, bool isTablet, double screenWidth, double screenHeight) {
     final testimonials = [
       {
@@ -676,67 +677,80 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: screenHeight * 0.03,
-        horizontal: screenWidth * 0.04,
+        vertical: screenHeight * 0.05,
+        horizontal: isMobile ? 16 : screenWidth * 0.04,
       ),
       color: const Color(0xFFF9FAFB),
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: isMobile ? screenWidth : 1800),
-          child: CustomCard(
-            content: Padding(
-              padding: EdgeInsets.all(isMobile ? 8 : 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'What People Say About Us',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: const Color(0xFF1F2937),
-                          fontSize: isMobile ? 20 : 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: screenHeight * 0.015),
-                  Text(
-                    'Hear from our community about the impact of our work',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: const Color(0xFF4B5563),
-                          fontSize: isMobile ? 14 : 16,
-                        ),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  GridView.count(
-                    crossAxisCount: isMobile ? 1 : isTablet ? 2 : 2,
-                    shrinkWrap: true,
-                    crossAxisSpacing: 48.0,
-                    mainAxisSpacing: 48.0,
-                    childAspectRatio: isMobile ? 2.5 : isTablet ? 2.0 : 1.8,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: testimonials
-                        .map((testimonial) => ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: isMobile ? 380 : isTablet ? 460 : 540,
-                                minHeight: isMobile ? 360 : isTablet ? 340 : 320,
-                              ),
-                              child: _testimonialCard(
-                                quote: testimonial['quote']!,
-                                author: testimonial['author']!,
-                                location: testimonial['location']!,
-                                fontSize: isMobile ? 13 : 15,
-                                isMobile: isMobile,
-                                isTablet: isTablet,
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                ],
+          constraints: BoxConstraints(maxWidth: isMobile ? screenWidth : 1200),
+          child: Column(
+            children: [
+              Text(
+                'What People Say About Us',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: const Color(0xFF1F2937),
+                      fontSize: isMobile ? 24 : 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
               ),
-            ),
+              SizedBox(height: screenHeight * 0.02),
+              Text(
+                'Hear from our community about the impact of our work',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: const Color(0xFF4B5563),
+                      fontSize: isMobile ? 16 : 18,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: screenHeight * 0.04),
+              
+              // Mobile: Single column layout
+              if (isMobile)
+                Column(
+                  children: testimonials.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final testimonial = entry.value;
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 24),
+                      child: _testimonialCard(
+                        quote: testimonial['quote']!,
+                        author: testimonial['author']!,
+                        location: testimonial['location']!,
+                        fontSize: 14,
+                        isMobile: isMobile,
+                        isTablet: isTablet,
+                        index: index,
+                      ),
+                    );
+                  }).toList(),
+                )
+              
+              // Tablet/Desktop: Grid layout
+              else
+                GridView.count(
+                  crossAxisCount: isTablet ? 1 : 2,
+                  shrinkWrap: true,
+                  crossAxisSpacing: 24,
+                  mainAxisSpacing: 24,
+                  childAspectRatio: isTablet ? 3.5 : 2.5, // Increased for more height
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: testimonials.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final testimonial = entry.value;
+                    return _testimonialCard(
+                      quote: testimonial['quote']!,
+                      author: testimonial['author']!,
+                      location: testimonial['location']!,
+                      fontSize: 16,
+                      isMobile: isMobile,
+                      isTablet: isTablet,
+                      index: index,
+                    );
+                  }).toList(),
+                ),
+            ],
           ),
         ),
       ),
@@ -916,7 +930,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: Colors.grey.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -982,6 +996,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
     );
   }
 
+  // FIXED TESTIMONIAL CARD - No more overflow errors
   Widget _testimonialCard({
     required String quote,
     required String author,
@@ -989,77 +1004,86 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
     required double fontSize,
     required bool isMobile,
     required bool isTablet,
+    required int index,
   }) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        developer.log(
-          'TestimonialCard: maxWidth=${constraints.maxWidth}, minWidth=${isMobile ? 380 : isTablet ? 460 : 540}, minHeight=${isMobile ? 360 : isTablet ? 340 : 320}, fontSize=$fontSize, quoteLength=${quote.length}, author=$author, locationLength=${location.length}',
-          name: 'testimonials',
-        );
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
+    return Container(
+      constraints: BoxConstraints(
+        minHeight: isMobile ? 220 : 200,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
-          clipBehavior: Clip.none,
-          padding: const EdgeInsets.all(12),
-          child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.format_quote,
-                  color: Color(0xFF4B5563),
-                  size: 32,
-                ),
-                const SizedBox(height: 6),
-                Flexible(
-                  child: Text(
-                    quote,
-                    style: TextStyle(
-                      fontSize: fontSize,
-                      color: const Color(0xFF374151),
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.left,
-                    maxLines: null,
-                    overflow: TextOverflow.visible,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  author,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                if (location.isNotEmpty)
-                  Text(
-                    location,
-                    style: TextStyle(
-                      fontSize: isMobile ? 12 : 14,
-                      color: const Color(0xFF6B7280),
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-              ],
+        ],
+      ),
+      padding: EdgeInsets.all(isMobile ? 20 : 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Quote icon at the top
+          Icon(
+            Icons.format_quote,
+            color: const Color(0xFF4B5563),
+            size: isMobile ? 20 : 24,
+          ),
+          
+          SizedBox(height: isMobile ? 12 : 16),
+          
+          // Quote text - FIRST (takes available space)
+          Flexible(
+            flex: 3,
+            child: Text(
+              quote,
+              style: TextStyle(
+                fontSize: fontSize,
+                color: const Color(0xFF374151),
+                height: 1.4,
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.left,
+              maxLines: isMobile ? 8 : 6,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-        );
-      },
+          
+          // Spacer
+          const SizedBox(height: 16),
+          
+          // Author and location section - SECOND (fixed at bottom)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                author,
+                style: TextStyle(
+                  fontSize: fontSize * 0.95,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF1F2937),
+                ),
+              ),
+              if (location.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  location,
+                  style: TextStyle(
+                    fontSize: fontSize * 0.85,
+                    color: const Color(0xFF6B7280),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
