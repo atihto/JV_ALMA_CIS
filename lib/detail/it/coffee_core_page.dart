@@ -50,9 +50,9 @@ class CoffeeCorePage extends StatelessWidget {
     },
   ];
 
-  Future<void> _downloadApk(BuildContext context) async {
+  Future<void> _openPlayStore(BuildContext context) async {
     try {
-      debugPrint('CoffeeCorePage: Starting APK download');
+      debugPrint('CoffeeCorePage: Opening Google Play Store');
       
       showDialog(
         context: context,
@@ -63,111 +63,51 @@ class CoffeeCorePage extends StatelessWidget {
               children: [
                 CircularProgressIndicator(),
                 SizedBox(width: 20),
-                Text('Preparing download...'),
+                Text('Redirecting to Play Store...'),
               ],
             ),
           );
         },
       );
 
-      // For web platform
-      if (html.window.location.href.contains('localhost') || 
-          html.window.location.href.contains('web') ||
-          html.window.location.href.contains('.com')) {
-        try {
-          // Try to load the APK from assets
-          final ByteData data = await rootBundle.load('assets/apk/CoffeeCore.apk');
-          final List<int> bytes = data.buffer.asUint8List();
-          
-          final blob = html.Blob([bytes]);
-          final url = html.Url.createObjectUrlFromBlob(blob);
-          final anchor = html.document.createElement('a') as html.AnchorElement
-            ..href = url
-            ..style.display = 'none'
-            ..download = 'CoffeeCore.apk';
-          html.document.body?.children.add(anchor);
-          anchor.click();
-          html.document.body?.children.remove(anchor);
-          html.Url.revokeObjectUrl(url);
-          
-          if (context.mounted) {
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('APK download started! Check your downloads folder.'),
-                duration: Duration(seconds: 3),
-                backgroundColor: Colors.brown,
-              ),
-            );
-          }
-          return; // Success - exit early
-        } catch (e) {
-          debugPrint('CoffeeCorePage: Asset loading failed: $e');
-          // Continue to direct download attempt
-        }
-      }
-
-      // For mobile platforms or if asset loading failed
-      try {
-        // Try direct download from server/CDN
-        const String apkUrl = 'https://your-domain.com/downloads/CoffeeCore.apk'; // Replace with your actual APK URL
-        
-        if (await canLaunchUrl(Uri.parse(apkUrl))) {
-          await launchUrl(
-            Uri.parse(apkUrl),
-            mode: LaunchMode.externalApplication,
-          );
-          
-          if (context.mounted) {
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Download started! Check your downloads folder.'),
-                duration: Duration(seconds: 3),
-                backgroundColor: Colors.brown,
-              ),
-            );
-          }
-          return; // Success - exit early
-        }
-      } catch (e) {
-        debugPrint('CoffeeCorePage: Direct download failed: $e');
-      }
-
-      // If all download methods fail, close loading dialog and allow direct download
-      if (context.mounted) {
-        Navigator.of(context).pop();
-        
-        // Instead of showing contact dialog, provide direct download
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Click here to download Coffee Core APK'),
-            duration: const Duration(seconds: 5),
-            backgroundColor: Colors.brown,
-            action: SnackBarAction(
-              label: 'Download',
-              textColor: Colors.white,
-              onPressed: () async {
-                // Fallback: Open download page or direct link
-                const String fallbackUrl = 'https://your-domain.com/downloads/CoffeeCore.apk';
-                if (await canLaunchUrl(Uri.parse(fallbackUrl))) {
-                  await launchUrl(Uri.parse(fallbackUrl));
-                }
-              },
-            ),
-          ),
+      const String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jvalmacis.coffeecore';
+      
+      if (await canLaunchUrl(Uri.parse(playStoreUrl))) {
+        await launchUrl(
+          Uri.parse(playStoreUrl),
+          mode: LaunchMode.externalApplication,
         );
+        
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Opening Google Play Store...'),
+              duration: Duration(seconds: 3),
+              backgroundColor: Colors.brown,
+            ),
+          );
+        }
+      } else {
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not open Play Store. Please try again.'),
+              duration: Duration(seconds: 3),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
       }
     } catch (e) {
-      debugPrint('CoffeeCorePage: Download error: $e');
+      debugPrint('CoffeeCorePage: Play Store redirect error: $e');
       
       if (context.mounted) {
-        Navigator.of(context, rootNavigator: true).pop();
-        
-        // Show error but still provide download option
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Download will start shortly. If it doesn\'t start, please contact us.'),
+            content: Text('Error redirecting to Play Store. Please visit the Play Store manually.'),
             duration: Duration(seconds: 3),
             backgroundColor: Colors.orange,
           ),
@@ -506,7 +446,7 @@ class CoffeeCorePage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Download Coffee Core',
+                'Get Coffee Core',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontSize: isMobile ? 16 : 18,
                       color: Colors.brown[800],
@@ -516,7 +456,7 @@ class CoffeeCorePage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Get the latest version of Coffee Core APK and revolutionize your coffee farming experience!',
+                'Download Coffee Core from Google Play Store and revolutionize your coffee farming experience!',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: isMobile ? 12 : 14,
                       color: Colors.brown[700],
@@ -527,10 +467,10 @@ class CoffeeCorePage extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () => _downloadApk(context),
+                  onPressed: () => _openPlayStore(context),
                   icon: const Icon(LucideIcons.download, size: 20),
                   label: Text(
-                    'Download APK',
+                    'Get from Play Store',
                     style: TextStyle(
                       fontSize: isMobile ? 14 : 16,
                       fontWeight: FontWeight.bold,

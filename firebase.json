@@ -17,6 +17,13 @@
         "destination": "/index.html"
       }
     ],
+    "redirects": [
+      {
+        "source": "https://jvalmacis.com{,/**}",
+        "destination": "https://www.jvalmacis.com",
+        "type": 301
+      }
+    ],
     "headers": [
       {
         "source": "/index.html",
@@ -60,3 +67,5 @@
     }
   }
 }
+
+
