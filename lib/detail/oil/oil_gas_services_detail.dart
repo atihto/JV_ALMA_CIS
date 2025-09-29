@@ -189,9 +189,12 @@ class OilAndGasServicesDetail extends StatelessWidget {
                                 Center(
                                   child: Container(
                                     constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
-                                    child: Image.asset(
-                                      'assets/images/tic/tic_1.jpg',
-                                      fit: BoxFit.contain,
+                                    child: Semantics(
+                                      label: 'TIC East Africa overview image',
+                                      child: Image.asset(
+                                        'assets/images/tic/tic_1.jpg',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -206,112 +209,119 @@ class OilAndGasServicesDetail extends StatelessWidget {
                                   textAlign: TextAlign.left,
                                 ),
                                 const SizedBox(height: 16),
-                                // Subsidiaries Section
+                                // Featured Subsidiary and Other Subsidiaries
                                 isMobile
                                     ? Column(
-                                        children: _buildSubsidiaryCards(context, screenWidth),
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Featured Subsidiary',
+                                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                  fontSize: isMobile ? 14 : 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: const Color(0xFF374151),
+                                                ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          _buildFeaturedSubsidiary(context, isMobile, screenWidth),
+                                          const SizedBox(height: 24),
+                                          Text(
+                                            'Other Subsidiaries',
+                                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                  fontSize: isMobile ? 14 : 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: const Color(0xFF374151),
+                                                ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Semantics(
+                                            label: 'Other subsidiaries list',
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: _buildOtherSubsidiariesList(context, isMobile),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       )
-                                    : isTablet
-                                        ? Column(
-                                            children: [
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 16,
-                                                alignment: WrapAlignment.center,
-                                                children: _buildSubsidiaryCards(context, screenWidth)
-                                                    .take(2)
-                                                    .toList(),
-                                              ),
-                                              const SizedBox(height: 16),
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 16,
-                                                alignment: WrapAlignment.center,
-                                                children: _buildSubsidiaryCards(context, screenWidth)
-                                                    .skip(2)
-                                                    .take(2)
-                                                    .toList(),
-                                              ),
-                                              const SizedBox(height: 16),
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 16,
-                                                alignment: WrapAlignment.center,
-                                                children: _buildSubsidiaryCards(context, screenWidth)
-                                                    .skip(4)
-                                                    .take(2)
-                                                    .toList(),
-                                              ),
-                                              const SizedBox(height: 16),
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 16,
-                                                alignment: WrapAlignment.center,
-                                                children: _buildSubsidiaryCards(context, screenWidth)
-                                                    .skip(6)
-                                                    .take(2)
-                                                    .toList(),
-                                              ),
-                                            ],
-                                          )
-                                        : Column(
-                                            children: [
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 16,
-                                                alignment: WrapAlignment.center,
-                                                children: _buildSubsidiaryCards(context, screenWidth)
-                                                    .take(3)
-                                                    .toList(),
-                                              ),
-                                              const SizedBox(height: 16),
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 16,
-                                                alignment: WrapAlignment.center,
-                                                children: _buildSubsidiaryCards(context, screenWidth)
-                                                    .skip(3)
-                                                    .take(3)
-                                                    .toList(),
-                                              ),
-                                              const SizedBox(height: 16),
-                                              Wrap(
-                                                spacing: 8,
-                                                runSpacing: 16,
-                                                alignment: WrapAlignment.center,
-                                                children: _buildSubsidiaryCards(context, screenWidth)
-                                                    .skip(6)
-                                                    .take(2)
-                                                    .toList(),
-                                              ),
-                                            ],
+                                    : Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            flex: 4,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Featured Subsidiary',
+                                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                        fontSize: isMobile ? 14 : 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: const Color(0xFF374151),
+                                                      ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                _buildFeaturedSubsidiary(context, isMobile, screenWidth),
+                                              ],
+                                            ),
                                           ),
-                                const SizedBox(height: 16),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Card(
-                                        child: Container(
-                                          constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/tic/tic_2.jpg',
-                                                fit: BoxFit.contain,
-                                                width: double.infinity,
-                                              ),
-                                            ],
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Other Subsidiaries',
+                                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                        fontSize: isMobile ? 14 : 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: const Color(0xFF374151),
+                                                      ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Semantics(
+                                                  label: 'Other subsidiaries list',
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: _buildOtherSubsidiariesList(context, isMobile),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
+                                        ],
+                                      ),
+                                const SizedBox(height: 24),
+                                // Map of All Subsidiaries
+                                Text(
+                                  'Our Global Presence',
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                        fontSize: isMobile ? 14 : 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF374151),
+                                      ),
+                                ),
+                                const SizedBox(height: 8),
+                                Center(
+                                  child: Container(
+                                    constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 500),
+                                    child: Semantics(
+                                      label: 'Map of all TIC subsidiaries',
+                                      child: Image.asset(
+                                        'assets/images/tic/tic_2.jpg',
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
                                 const SizedBox(height: 32),
+                                // Rest of the content
                                 Text(
-                                  'Services',
+                                  'Our Services',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         fontSize: isMobile ? 16 : 18,
                                         fontWeight: FontWeight.bold,
@@ -342,9 +352,12 @@ class OilAndGasServicesDetail extends StatelessWidget {
                                 Center(
                                   child: Container(
                                     constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
-                                    child: Image.asset(
-                                      'assets/images/tic/tic_3.jpg',
-                                      fit: BoxFit.contain,
+                                    child: Semantics(
+                                      label: 'Inspection and integrity management',
+                                      child: Image.asset(
+                                        'assets/images/tic/tic_3.jpg',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -380,9 +393,12 @@ class OilAndGasServicesDetail extends StatelessWidget {
                                 Center(
                                   child: Container(
                                     constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
-                                    child: Image.asset(
-                                      'assets/images/tic/tic_4.jpg',
-                                      fit: BoxFit.contain,
+                                    child: Semantics(
+                                      label: 'Non-Destructive Examination',
+                                      child: Image.asset(
+                                        'assets/images/tic/tic_4.jpg',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -409,9 +425,12 @@ class OilAndGasServicesDetail extends StatelessWidget {
                                 Center(
                                   child: Container(
                                     constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
-                                    child: Image.asset(
-                                      'assets/images/tic/tic_5.jpg',
-                                      fit: BoxFit.contain,
+                                    child: Semantics(
+                                      label: 'Regulatory Compliance Services',
+                                      child: Image.asset(
+                                        'assets/images/tic/tic_5.jpg',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -428,9 +447,12 @@ class OilAndGasServicesDetail extends StatelessWidget {
                                 Center(
                                   child: Container(
                                     constraints: BoxConstraints(maxWidth: isMobile ? 300 : 400),
-                                    child: Image.asset(
-                                      'assets/images/tic/tic_6.jpg',
-                                      fit: BoxFit.contain,
+                                    child: Semantics(
+                                      label: 'Certifications',
+                                      child: Image.asset(
+                                        'assets/images/tic/tic_6.jpg',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -447,9 +469,12 @@ class OilAndGasServicesDetail extends StatelessWidget {
                                 Center(
                                   child: Container(
                                     constraints: BoxConstraints(maxWidth: isMobile ? 500 : 700),
-                                    child: Image.asset(
-                                      'assets/images/tic/tic_7.jpg',
-                                      fit: BoxFit.contain,
+                                    child: Semantics(
+                                      label: 'Clients',
+                                      child: Image.asset(
+                                        'assets/images/tic/tic_7.jpg',
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -471,133 +496,170 @@ class OilAndGasServicesDetail extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildSubsidiaryCards(BuildContext context, double screenWidth) {
-    final subsidiaries = [
+  Widget _buildFeaturedSubsidiary(BuildContext context, bool isMobile, double screenWidth) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Container(
+        constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 400),
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Semantics(
+                label: 'TIC East Africa',
+                child: Image.asset(
+                  'assets/images/subsidiaries/TIC-ea.jpg',
+                  fit: BoxFit.contain,
+                  height: isMobile ? 150 : 200,
+                  width: double.infinity,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Icon(LucideIcons.mapPin, size: 16, color: Color(0xFF374151)),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'TIC East Africa - Kenya/2022',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF374151),
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Address: 5th-floor Brisma Towers, Off Magadi 74429-00200 Nairobi, Kenya',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xFF374151),
+                    height: 1.5,
+                  ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Phone: +254 72 28 46 458',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xFF374151),
+                    height: 1.5,
+                  ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Email: tic@tic-inspectiongroup.com',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 14,
+                    color: const Color(0xFF374151),
+                    height: 1.5,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildOtherSubsidiariesList(BuildContext context, bool isMobile) {
+    final otherSubsidiaries = [
       {
-        'image': 'assets/images/subsidiaries/TIC-hq.jpg',
-        'title': 'TIC, Technique inspection & Contrôle-Tunisia/1993',
-        'details': [
-          'Address: Zone industrielle Kheireddine, lot 1-1-18, le Kram',
-          'Phone: +216 71 180 140, +216 25 987 000',
-          'Fax: +216 71 180 141',
-          'E-mail: tic@tic-inspectiongroup.com',
-        ],
+        'title': 'Technique Inspection & Contrôle - Tunisia/1993',
+        'phone': '+216 71 180 140',
+        'email': 'tic@tic-inspectiongroup.com',
       },
       {
-        'image': 'assets/images/subsidiaries/TIC-gabon.jpg',
         'title': 'TIC Gabon - Gabon/2014',
-        'details': [
-          'Address: Quartier SOGEC – BP 1034 – PORT GENTIL GABON',
-          'Tel: +241 01 53 08 52, +241 01 53 08 53',
-          'Fax: +241 01 53 08 51',
-          'E-mail: contact@tic-ga.com',
-        ],
+        'phone': '+241 01 53 08 52',
+        'email': 'contact@tic-ga.com',
       },
       {
-        'image': 'assets/images/subsidiaries/TIC-ea.jpg',
-        'title': 'TIC East Africa - Kenya/2022',
-        'details': [
-          'Address: 5th-floor Brisma Towers, Off Magadi 74429-00200 Nairobi, Kenya',
-          'Tel: +254 72 28 46 458',
-          'Fax: +254 72 28 46 458',
-        ],
-      },
-      {
-        'image': 'assets/images/subsidiaries/TIC-libya.jpg',
         'title': 'TIC JSC - Libya/2003',
-        'details': [
-          'Address: Rue Hassouna Pacha, Branche de l’avenue 24 décembre – BP 2755 – Tripoli – Libya',
-          'Tel: +218 21 44 40 504',
-          'Fax: +218 213 34 10 94',
-          'E-mail: tic@tic-inspectiongroup.com',
-        ],
+        'phone': '+218 21 44 40 504',
+        'email': 'tic@tic-inspectiongroup.com',
       },
       {
-        'image': 'assets/images/subsidiaries/TIC-algeria.jpg',
         'title': 'ICT Algeria - Algeria/2023',
-        'details': [
-          'Address: 25, Haouche SIDALI BtD, Bloc D SIDI YAHIA, HYDRA, ALGER',
-          'Tel: +213 (0) 23 469 808',
-          'Fax: +213 (0) 23 469 808',
-        ],
+        'phone': '+213 (0) 23 469 808',
+        'email': null,
       },
       {
-        'image': 'assets/images/subsidiaries/TIC-tunisia.jpg',
         'title': 'TIC Gc - Tunisia/2010',
-        'details': [
-          'Tel: +216 71 180 029',
-          'Fax: +216 71 180 028',
-          'E-mail: ticgc@tic-inspectiongroup.com',
-        ],
+        'phone': '+216 71 180 029',
+        'email': 'ticgc@tic-inspectiongroup.com',
       },
       {
-        'image': 'assets/images/subsidiaries/cetim.jpg',
         'title': 'CETIM International Engineering Services - 2008',
-        'details': [
-          'Partnership for CETIM France',
-        ],
+        'phone': null,
+        'email': null,
       },
       {
-        'image': 'assets/images/subsidiaries/ais.jpg',
         'title': 'Advanced inspection services - KSA/2010',
-        'details': [
-          'Address: P.O. Box 36400 – Jubail Industrial City 31961 – K.S.A.',
-          'Tel: +966 (3) 340 1100 (Extn 112)',
-          'Fax: +966 (3) 340 7182',
-          'E-mail: info@ais-ksa.com',
-        ],
+        'phone': '+966 (3) 340 1100 (Extn 112)',
+        'email': 'info@ais-ksa.com',
       },
     ];
 
-    return subsidiaries.asMap().entries.map((entry) {
+    return otherSubsidiaries.asMap().entries.expand((entry) {
       final subsidiary = entry.value;
-      return Card(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 280), // Uniform width for all cards
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
+      return [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                subsidiary['image'] as String,
-                fit: BoxFit.contain,
-                height: 180, // Uniform height for images
-                width: double.infinity,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Icon(LucideIcons.mapPin, size: 14, color: Color(0xFF374151)),
+              const SizedBox(width: 8),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       subsidiary['title'] as String,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF374151),
                           ),
                     ),
-                    const SizedBox(height: 8),
-                    ...((subsidiary['details'] as List?)?.map<Widget>((detail) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 4.0),
+                    const SizedBox(height: 4),
+                    if (subsidiary['phone'] != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0, bottom: 2.0),
                         child: Text(
-                          detail as String,
+                          '• Phone: ${subsidiary['phone']}',
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontSize: 14,
+                                fontSize: 12,
                                 color: const Color(0xFF374151),
                                 height: 1.5,
                               ),
                         ),
-                      );
-                    }).toList() ?? []),
+                      ),
+                    if (subsidiary['email'] != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0, bottom: 2.0),
+                        child: Text(
+                          '• Email: ${subsidiary['email']}',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontSize: 12,
+                                color: const Color(0xFF374151),
+                                height: 1.5,
+                              ),
+                        ),
+                      ),
                   ],
                 ),
               ),
             ],
           ),
         ),
-      );
+      ];
     }).toList();
   }
 }

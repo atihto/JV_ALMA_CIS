@@ -145,8 +145,24 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       onGenerateRoute: (settings) {
         developer.log('Navigating to: ${settings.name}', name: 'MyApp');
-        
-        switch (settings.name) {
+
+        // Parse the route name and query parameters
+        final uri = Uri.parse(settings.name ?? '/');
+        final path = uri.path.isEmpty ? '/' : uri.path;
+        final queryParams = uri.queryParameters;
+
+        // If fbclid is present, redirect to the same path without query parameters
+        if (queryParams.containsKey('fbclid')) {
+          developer.log('fbclid detected, redirecting to: $path', name: 'MyApp');
+          // Redirect to the clean path
+          return MaterialPageRoute(
+            builder: (_) => _buildPageForRoute(path),
+            settings: RouteSettings(name: path),
+          );
+        }
+
+        // Handle routes as before
+        switch (path) {
           case '/':
             return MaterialPageRoute(builder: (_) => const HomePage());
           case '/about':
@@ -168,7 +184,7 @@ class MyApp extends StatelessWidget {
           case '/privacy-policy':
             return MaterialPageRoute(builder: (_) => const PrivacyPolicyPage());
           case '/cookies':
-            return MaterialPageRoute(builder: (_) => const CookiesPage());   
+            return MaterialPageRoute(builder: (_) => const CookiesPage());
           case '/map':
             return MaterialPageRoute(builder: (_) => const MapPage(address: ''));
           case '/construction-detail':
@@ -198,5 +214,56 @@ class MyApp extends StatelessWidget {
         }
       },
     );
+  }
+
+  // Helper function to build page for clean route
+  Widget _buildPageForRoute(String path) {
+    switch (path) {
+      case '/':
+        return const HomePage();
+      case '/about':
+        return const AboutPage();
+      case '/business-units':
+        return const BusinessUnitsPage();
+      case '/contact':
+        return const ContactPage();
+      case '/news':
+        return const NewsPage();
+      /*case '/projects':
+        return const ProjectsPage();
+      case '/references':
+        return const ReferencesPage();*/
+      case '/careers':
+        return const CareersPage();
+      case '/certificates':
+        return const CertificatesPage();
+      case '/privacy-policy':
+        return const PrivacyPolicyPage();
+      case '/cookies':
+        return const CookiesPage();
+      case '/map':
+        return const MapPage(address: '');
+      case '/construction-detail':
+        return const ConstructionDetail();
+      case '/agribusiness':
+        return const AgribusinessDetail();
+      case '/oil-gas':
+        return const OilAndGasServicesDetail();
+      case '/it-division':
+        return const ITDivisionDetail();
+      case '/cmms':
+        return const CmmsPage();
+      case '/coffee-core':
+        return const CoffeeCorePage();
+      case '/kilimo-mkononi':
+        return const KilimoMkononiPage();
+      default:
+        return Scaffold(
+          appBar: AppBar(title: const Text('Page Not Found')),
+          body: const Center(
+            child: Text('404 - Page Not Found'),
+          ),
+        );
+    }
   }
 }

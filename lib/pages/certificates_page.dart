@@ -4,8 +4,28 @@ import '../widgets/custom_card.dart';
 import '../widgets/footer.dart';
 import '../widgets/header.dart';
 
-class CertificatesPage extends StatelessWidget {
+class CertificatesPage extends StatefulWidget {
   const CertificatesPage({super.key});
+
+  @override
+  State<CertificatesPage> createState() => _CertificatesPageState();
+}
+
+class _CertificatesPageState extends State<CertificatesPage> {
+  late ScrollController _scrollController;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,22 +33,7 @@ class CertificatesPage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    void navigate(String route) {
-      debugPrint('CertificatesPage: Navigating to $route');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        try {
-          Navigator.pushNamed(context, route);
-          debugPrint('CertificatesPage: Navigation to $route successful');
-        } catch (e) {
-          debugPrint('CertificatesPage: Navigation error to $route: $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Navigation error: $e')),
-          );
-        }
-      });
-    }
 
     void showImageDialog(String imagePath) {
       showDialog(
@@ -51,7 +56,7 @@ class CertificatesPage extends StatelessWidget {
 
     return Scaffold(
       key: scaffoldKey,
-      drawer: const Drawer(), // Assuming AppDrawer exists; adjust if needed
+      drawer: const Drawer(),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: Header(onMenuPressed: () => scaffoldKey.currentState?.openDrawer()),
@@ -70,10 +75,7 @@ class CertificatesPage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                       Color(0xFF0F172A),
-                       Color(0xFF1E293B),
-                    ],
+                    colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
                   ),
                 ),
                 padding: EdgeInsets.all(isMobile ? 16 : 24),
@@ -141,95 +143,233 @@ class CertificatesPage extends StatelessWidget {
                     SizedBox(height: screenHeight * 0.03),
                     LayoutBuilder(
                       builder: (context, constraints) {
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              for (var i = 0; i < 10; i++)
-                                Padding(
-                                  padding: EdgeInsets.only(right: screenWidth * 0.02),
-                                  child: _CertificateCard(
-                                    title: i == 0
-                                        ? 'ISO 9001:2015 Certification'
-                                        : i == 1
-                                            ? 'NCA 1 - Building Works'
-                                            : i == 2
-                                                ? 'NCA 1 - Water Works'
-                                                : i == 3
-                                                    ? 'NCA 1 - Mechanical Engineering Services'
-                                                    : 'Other Certificate',
-                                    certificateNo: i == 0
-                                        ? 'CERT-9001-2023'
-                                        : i == 1
-                                            ? 'NCA-BUILD-2023'
-                                            : i == 2
-                                                ? 'NCA-WATER-2023'
-                                                : i == 3
-                                                    ? 'NCA-MECH-2023'
-                                                    : 'PENDING',
-                                    description: i == 0
-                                        ? 'Quality Management System'
-                                        : i == 1
-                                            ? 'Building Works Compliance'
-                                            : i == 2
-                                                ? 'Water Works Compliance'
-                                                : i == 3
-                                                    ? 'Mechanical Engineering Compliance'
-                                                    : 'Pending certificate',
-                                    issuer: i == 0
-                                        ? 'ISO'
-                                        : i == 1
-                                            ? 'NCA'
-                                            : i == 2
-                                                ? 'NCA'
-                                                : i == 3
-                                                    ? 'NCA'
-                                                    : null,
-                                    issueDate: i == 0
-                                        ? '2023-01-01'
-                                        : i == 1
-                                            ? '2023-02-01'
-                                            : i == 2
-                                                ? '2023-03-01'
-                                                : i == 3
-                                                    ? '2023-04-01'
-                                                    : null,
-                                    expiryDate: i == 0
-                                        ? '2026-01-01'
-                                        : i == 1
-                                            ? '2026-02-01'
-                                            : i == 2
-                                                ? '2026-03-01'
-                                                : i == 3
-                                                    ? '2026-04-01'
-                                                    : null,
-                                    image: i == 0
-                                        ? 'assets/certificates/jv_certificate.jpg'
-                                        : i == 1
-                                            ? 'assets/certificates/nca_building_certificate.jpg'
-                                            : i == 2
-                                                ? 'assets/certificates/nca_water_certificate.jpg'
-                                                : i == 3
-                                                    ? 'assets/certificates/nca_mechanical_certificate.jpg'
-                                                    : null,
-                                    isMobile: isMobile,
-                                    isTablet: isTablet,
-                                    onImageTap: i < 4
-                                        ? () => showImageDialog(
-                                              i == 0
+                        return Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(LucideIcons.chevronLeft, color: Colors.blue, size: isMobile ? 24 : 32),
+                              onPressed: () {
+                                _scrollController.animateTo(
+                                  _scrollController.offset - 300,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                controller: _scrollController,
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    for (var i = 0; i < 11; i++)
+                                      Padding(
+                                        padding: EdgeInsets.only(right: screenWidth * 0.02),
+                                        child: _CertificateCard(
+                                          title: i == 0
+                                              ? 'JV Certificate'
+                                              : i == 1
+                                                  ? 'Business Permit'
+                                                  : i == 2
+                                                      ? 'KRA Certificate'
+                                                      : i == 3
+                                                          ? 'NCA Building Certificate'
+                                                          : i == 4
+                                                              ? 'NCA Mechanical Certificate'
+                                                              : i == 5
+                                                                  ? 'NCA Water Certificate'
+                                                                  : i == 6
+                                                                      ? 'Building Works Certificate (2026)'
+                                                                      : i == 7
+                                                                          ? 'Water Works Certificate (2026)'
+                                                                          : i == 8
+                                                                              ? 'Mechanical Service Certificate (2026)'
+                                                                              : i == 9
+                                                                                  ? 'Water Works Certificate (2028)'
+                                                                                  : i == 10
+                                                                                      ? 'Mechanical Service Certificate (2028)'
+                                                                                      : 'Other Certificate',
+                                          certificateNo: i == 0
+                                              ? 'JV-CERT-2023'
+                                              : i == 1
+                                                  ? 'BUS-PERMIT-2023'
+                                                  : i == 2
+                                                      ? 'KRA-CERT-2023'
+                                                      : i == 3
+                                                          ? 'NCA-BUILD-2023'
+                                                          : i == 4
+                                                              ? 'NCA-MECH-2023'
+                                                              : i == 5
+                                                                  ? 'NCA-WATER-2023'
+                                                                  : i == 6
+                                                                      ? '61515/B/0920'
+                                                                      : i == 7
+                                                                          ? '61515/W/0920'
+                                                                          : i == 8
+                                                                              ? '61515/M/0920'
+                                                                              : i == 9
+                                                                                  ? '61515/W/0920'
+                                                                                  : i == 10
+                                                                                      ? '61515/M/0920'
+                                                                                      : 'PENDING',
+                                          description: i == 0
+                                              ? 'Joint Venture Certification'
+                                              : i == 1
+                                                  ? 'Business Operating Permit'
+                                                  : i == 2
+                                                      ? 'Kenya Revenue Authority Certificate'
+                                                      : i == 3
+                                                          ? 'NCA Building Compliance'
+                                                          : i == 4
+                                                              ? 'NCA Mechanical Compliance'
+                                                              : i == 5
+                                                                  ? 'NCA Water Compliance'
+                                                                  : i == 6
+                                                                      ? 'Building Works Contractor Certificate'
+                                                                      : i == 7
+                                                                          ? 'Water Works Contractor Certificate'
+                                                                          : i == 8
+                                                                              ? 'Mechanical Service Contractor Certificate'
+                                                                              : i == 9
+                                                                                  ? 'Water Works Contractor Certificate (2028)'
+                                                                                  : i == 10
+                                                                                      ? 'Mechanical Service Contractor Certificate (2028)'
+                                                                                      : 'Pending certificate',
+                                          issuer: i == 0
+                                              ? 'JV Authority'
+                                              : i == 1
+                                                  ? 'Local Government'
+                                                  : i == 2
+                                                      ? 'KRA'
+                                                      : i == 3
+                                                          ? 'NCA'
+                                                          : i == 4
+                                                              ? 'NCA'
+                                                              : i == 5
+                                                                  ? 'NCA'
+                                                                  : i == 6
+                                                                      ? 'NCA'
+                                                                      : i == 7
+                                                                          ? 'NCA'
+                                                                          : i == 8
+                                                                              ? 'NCA'
+                                                                              : i == 9
+                                                                                  ? 'NCA'
+                                                                                  : i == 10
+                                                                                      ? 'NCA'
+                                                                                      : null,
+                                          issueDate: i == 0
+                                              ? '2023-01-01'
+                                              : i == 1
+                                                  ? '2023-02-01'
+                                                  : i == 2
+                                                      ? '2023-03-01'
+                                                      : i == 3
+                                                          ? '2023-04-01'
+                                                          : i == 4
+                                                              ? '2023-05-01'
+                                                              : i == 5
+                                                                  ? '2023-06-01'
+                                                                  : i == 6
+                                                                      ? '2025-08-09'
+                                                                      : i == 7
+                                                                          ? '2025-08-09'
+                                                                          : i == 8
+                                                                              ? '2025-08-09'
+                                                                              : i == 9
+                                                                                  ? '2025-08-09'
+                                                                                  : i == 10
+                                                                                      ? '2025-08-09'
+                                                                                      : null,
+                                          expiryDate: i == 0
+                                              ? '2026-01-01'
+                                              : i == 1
+                                                  ? '2026-02-01'
+                                                  : i == 2
+                                                      ? '2026-03-01'
+                                                  : i == 3
+                                                      ? '2026-04-01'
+                                                      : i == 4
+                                                          ? '2026-05-01'
+                                                          : i == 5
+                                                              ? '2026-06-01'
+                                                              : i == 6
+                                                                  ? '2026-07-31'
+                                                                  : i == 7
+                                                                      ? '2026-07-31'
+                                                                      : i == 8
+                                                                          ? '2026-07-31'
+                                                                          : i == 9
+                                                                              ? '2028-07-31'
+                                                                              : i == 10
+                                                                                  ? '2028-07-31'
+                                                                                  : null,
+                                          filePath: i == 0
+                                              ? 'assets/certificates/jv_certificate.jpg'
+                                              : i == 1
+                                                  ? 'assets/certificates/business_permit.jpg'
+                                                  : i == 2
+                                                      ? 'assets/certificates/kra_certificate.jpg'
+                                                      : i == 3
+                                                          ? 'assets/certificates/nca_building_certificate.jpg'
+                                                          : i == 4
+                                                              ? 'assets/certificates/nca_mechanical_certificate.jpg'
+                                                              : i == 5
+                                                                  ? 'assets/certificates/nca_water_certificate.jpg'
+                                                                  : i == 6
+                                                                      ? 'assets/certificates/Building_Works_Certificate 2026.jpg'
+                                                                      : i == 7
+                                                                          ? 'assets/certificates/Water_Works_Certificate%202026.jpg'
+                                                                          : i == 8
+                                                                              ? 'assets/certificates/Mechanical_Service_Certificate 2026.jpg'
+                                                                          : i == 9
+                                                                              ? 'assets/certificates/Water_Works_Certificate%202028.jpg'
+                                                                              : i == 10
+                                                                                  ? 'assets/certificates/Mechanical_Service_Certificate 2028.jpg'
+                                                                                  : null,
+                                          isImage: true,
+                                          isMobile: isMobile,
+                                          isTablet: isTablet,
+                                          onImageTap: i <= 10
+                                              ? () => showImageDialog(i == 0
                                                   ? 'assets/certificates/jv_certificate.jpg'
                                                   : i == 1
-                                                      ? 'assets/certificates/nca_building_certificate.jpg'
+                                                      ? 'assets/certificates/business_permit.jpg'
                                                       : i == 2
-                                                          ? 'assets/certificates/nca_water_certificate.jpg'
-                                                          : 'assets/certificates/nca_mechanical_certificate.jpg',
-                                            )
-                                        : null,
-                                  ),
+                                                          ? 'assets/certificates/kra_certificate.jpg'
+                                                          : i == 3
+                                                              ? 'assets/certificates/nca_building_certificate.jpg'
+                                                              : i == 4
+                                                                  ? 'assets/certificates/nca_mechanical_certificate.jpg'
+                                                                  : i == 5
+                                                                      ? 'assets/certificates/nca_water_certificate.jpg'
+                                                                      : i == 6
+                                                                          ? 'assets/certificates/Building_Works_Certificate 2026.jpg'
+                                                                          : i == 7
+                                                                              ? 'assets/certificates/Water_Works_Certificate%202026.jpg'
+                                                                              : i == 8
+                                                                                  ? 'assets/certificates/Mechanical_Service_Certificate 2026.jpg'
+                                                                                  : i == 9
+                                                                                      ? 'assets/certificates/Water_Works_Certificate%202028.jpg'
+                                                                                      : 'assets/certificates/Mechanical_Service_Certificate 2028.jpg')
+                                              : null,
+                                        ),
+                                      ),
+                                  ],
                                 ),
-                            ],
-                          ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(LucideIcons.chevronRight, color: Colors.blue, size: isMobile ? 24 : 32),
+                              onPressed: () {
+                                _scrollController.animateTo(
+                                  _scrollController.offset + 300,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                            ),
+                          ],
                         );
                       },
                     ),
@@ -323,7 +463,8 @@ class _CertificateCard extends StatelessWidget {
   final String? issuer;
   final String? issueDate;
   final String? expiryDate;
-  final String? image;
+  final String? filePath;
+  final bool isImage;
   final bool isMobile;
   final bool isTablet;
   final VoidCallback? onImageTap;
@@ -335,7 +476,8 @@ class _CertificateCard extends StatelessWidget {
     this.issuer,
     this.issueDate,
     this.expiryDate,
-    this.image,
+    this.filePath,
+    required this.isImage,
     required this.isMobile,
     required this.isTablet,
     this.onImageTap,
@@ -354,14 +496,14 @@ class _CertificateCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (image != null)
+            if (filePath != null)
               GestureDetector(
                 onTap: onImageTap,
                 child: Container(
                   height: isMobile ? 25 : 50,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(image!),
+                      image: AssetImage(filePath!),
                       fit: BoxFit.contain,
                       alignment: Alignment.center,
                     ),
@@ -416,6 +558,7 @@ class _CertificateCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
+            if (issuer != null)
               Text(
                 'Issuer: $issuer',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(

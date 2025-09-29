@@ -175,8 +175,8 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: screenHeight * 0.02),
                     GridView.builder(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: isSmallScreen ? 300 : isMobile ? 400 : isTablet ? 360 : 300,
-                        childAspectRatio: isSmallScreen ? 1.8 : isMobile ? 1.4 : isTablet ? 1.5 : 1.2,
+                        maxCrossAxisExtent: isSmallScreen ? 300 : isMobile ? 400 : isTablet ? 320 : 280, // Smaller on tablet
+                        childAspectRatio: isSmallScreen ? 1.6 : isMobile ? 1.3 : isTablet ? 1.5 : 1.5, // Match mobile/desktop compactness
                         crossAxisSpacing: isSmallScreen ? screenWidth * 0.02 : screenWidth * 0.03,
                         mainAxisSpacing: isSmallScreen ? screenHeight * 0.01 : screenHeight * 0.02,
                       ),
@@ -186,18 +186,51 @@ class _HomePageState extends State<HomePage> {
                       clipBehavior: Clip.hardEdge,
                       itemCount: businessUnits.length,
                       itemBuilder: (context, index) {
+                        final unit = businessUnits[index];
                         return ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 300),
-                          child: HomePageHelperWidgets.businessUnitCard(
-                            context: context,
-                            name: businessUnits[index]['name'] as String,
-                            icon: businessUnits[index]['icon'] as IconData,
-                            title: businessUnits[index]['title'] as String,
-                            description: businessUnits[index]['description'] as String,
-                            route: businessUnits[index]['route'] as String,
-                            iconColor: businessUnits[index]['iconColor'] as Color,
-                            bgColor: businessUnits[index]['bgColor'] as Color,
-                            hoverBgColor: businessUnits[index]['hoverBgColor'] as Color,
+                          constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 320), // Match tablet maxCrossAxisExtent
+                          child: InkWell(
+                            onTap: () => _navigate(context, unit['route'] as String),
+                            child: Container(
+                              padding: EdgeInsets.all(isMobile ? 12 : 16),
+                              decoration: BoxDecoration(
+                                color: unit['bgColor'] as Color,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    unit['icon'] as IconData,
+                                    color: unit['iconColor'] as Color,
+                                    size: isMobile ? 40 : 48,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    unit['title'] as String,
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                          fontSize: isMobile ? 16 : 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF111827),
+                                        ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Expanded(
+                                    child: Text(
+                                      unit['description'] as String,
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            fontSize: isMobile ? 12 : 13,
+                                            color: const Color(0xFF4B5563),
+                                          ),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -206,84 +239,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            /*Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.06,
-                horizontal: screenWidth * 0.04,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 896),
-                child: Column(
-                  children: [
-                    Text(
-                      'Featured Projects',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: const Color(0xFF111827),
-                            fontSize: isMobile ? 20 : 24,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Text(
-                      'Showcasing our commitment to excellence',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    GridView.count(
-                      crossAxisCount: isMobile ? 1 : isTablet ? 2 : 3,
-                      shrinkWrap: true,
-                      crossAxisSpacing: screenWidth * 0.03,
-                      mainAxisSpacing: screenHeight * 0.03,
-                      physics: const NeverScrollableScrollPhysics(),
-                      clipBehavior: Clip.hardEdge,
-                      children: [
-                        HomePageHelperWidgets.projectCard(
-                          context: context,
-                          icon: LucideIcons.droplets,
-                          title: 'Sigor Wei Wei',
-                          description: 'Major civil works for a large-scale irrigation scheme in a remote region, including installation of 29 km of underground PVC and HDPE pipelines to irrigate over 325 hectares.',
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFFB923C), Color(0xFFF97316)],
-                          ),
-                          route: '/agribusiness',
-                        ),
-                        HomePageHelperWidgets.projectCard(
-                          context: context,
-                          icon: LucideIcons.home,
-                          title: 'United States Embassy - Rosslyn Ridge Renov.',
-                          description: 'Multi-phase renovation of 30+ residential units with modern upgrades.',
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF10B981), Color(0xFF065F46)],
-                          ),
-                          route: '/construction-detail',
-                        ),
-                        HomePageHelperWidgets.projectCard(
-                          context: context,
-                          icon: LucideIcons.coffee,
-                          title: 'Coffee Core',
-                          description: 'Mobile application serving over 5,000+ coffee farmers with agricultural management tools.',
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFA855F7), Color(0xFF9333EA)],
-                          ),
-                          route: '/coffee-core',
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    CustomButton(
-                      text: 'Explore Our Business Units',
-                      onPressed: () => _navigate(context, '/business-units'),
-                      icon: LucideIcons.arrowRight,
-                      isLarge: isMobile || isTablet,
-                    ),
-                  ],
-                ),
-              ),
-            ),*/
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: screenHeight * 0.06,
@@ -313,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: screenHeight * 0.03),
                     CarouselSlider(
                       options: CarouselOptions(
-                        height: isMobile ? 160 : 240, // Increased to accommodate larger images
+                        height: isMobile ? 160 : 240,
                         autoPlay: true,
                         autoPlayInterval: const Duration(seconds: 3),
                         enlargeCenterPage: true,

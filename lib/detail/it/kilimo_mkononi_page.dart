@@ -4,8 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/header.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/responsive_utils.dart';
-import 'dart:html' as html;
-import 'package:flutter/services.dart';
 
 class KilimoMkononiPage extends StatelessWidget {
   const KilimoMkononiPage({super.key});
@@ -54,9 +52,9 @@ class KilimoMkononiPage extends StatelessWidget {
     },
   ];
 
-  Future<void> _downloadApk(BuildContext context) async {
+  Future<void> _openPlayStore(BuildContext context) async {
     try {
-      debugPrint('KilimoMkononiPage: Starting APK download');
+      debugPrint('KilimoMkononiPage: Opening Google Play Store');
       
       showDialog(
         context: context,
@@ -67,111 +65,51 @@ class KilimoMkononiPage extends StatelessWidget {
               children: [
                 CircularProgressIndicator(),
                 SizedBox(width: 20),
-                Text('Preparing download...'),
+                Text('Redirecting to Play Store...'),
               ],
             ),
           );
         },
       );
 
-      // For web platform
-      if (html.window.location.href.contains('localhost') || 
-          html.window.location.href.contains('web') ||
-          html.window.location.href.contains('.com')) {
-        try {
-          // Try to load the APK from assets
-          final ByteData data = await rootBundle.load('assets/apk/KilimoMkononi.apk');
-          final List<int> bytes = data.buffer.asUint8List();
-          
-          final blob = html.Blob([bytes]);
-          final url = html.Url.createObjectUrlFromBlob(blob);
-          final anchor = html.document.createElement('a') as html.AnchorElement
-            ..href = url
-            ..style.display = 'none'
-            ..download = 'KilimoMkononi.apk';
-          html.document.body?.children.add(anchor);
-          anchor.click();
-          html.document.body?.children.remove(anchor);
-          html.Url.revokeObjectUrl(url);
-          
-          if (context.mounted) {
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('APK download started! Check your downloads folder.'),
-                duration: Duration(seconds: 3),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-          return; // Success - exit early
-        } catch (e) {
-          debugPrint('KilimoMkononiPage: Asset loading failed: $e');
-          // Continue to direct download attempt
-        }
-      }
-
-      // For mobile platforms or if asset loading failed
-      try {
-        // Try direct download from server/CDN
-        const String apkUrl = 'https://your-domain.com/downloads/KilimoMkononi.apk'; // Replace with your actual APK URL
-        
-        if (await canLaunchUrl(Uri.parse(apkUrl))) {
-          await launchUrl(
-            Uri.parse(apkUrl),
-            mode: LaunchMode.externalApplication,
-          );
-          
-          if (context.mounted) {
-            Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Download started! Check your downloads folder.'),
-                duration: Duration(seconds: 3),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-          return; // Success - exit early
-        }
-      } catch (e) {
-        debugPrint('KilimoMkononiPage: Direct download failed: $e');
-      }
-
-      // If all download methods fail, close loading dialog and allow direct download
-      if (context.mounted) {
-        Navigator.of(context).pop();
-        
-        // Instead of showing contact dialog, provide direct download
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Click here to download Kilimo Mkononi APK'),
-            duration: const Duration(seconds: 5),
-            backgroundColor: Colors.green,
-            action: SnackBarAction(
-              label: 'Download',
-              textColor: Colors.white,
-              onPressed: () async {
-                // Fallback: Open download page or direct link
-                const String fallbackUrl = 'https://your-domain.com/downloads/KilimoMkononi.apk';
-                if (await canLaunchUrl(Uri.parse(fallbackUrl))) {
-                  await launchUrl(Uri.parse(fallbackUrl));
-                }
-              },
-            ),
-          ),
+      const String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jvalmacis.kilimomkononi&pli=1';
+      
+      if (await canLaunchUrl(Uri.parse(playStoreUrl))) {
+        await launchUrl(
+          Uri.parse(playStoreUrl),
+          mode: LaunchMode.externalApplication,
         );
+        
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Opening Google Play Store...'),
+              duration: Duration(seconds: 3),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else {
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not open Play Store. Please try again.'),
+              duration: Duration(seconds: 3),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
       }
     } catch (e) {
-      debugPrint('KilimoMkononiPage: Download error: $e');
+      debugPrint('KilimoMkononiPage: Play Store redirect error: $e');
       
       if (context.mounted) {
-        Navigator.of(context, rootNavigator: true).pop();
-        
-        // Show error but still provide download option
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Download will start shortly. If it doesn\'t start, please contact us.'),
+            content: Text('Error redirecting to Play Store. Please visit the Play Store manually.'),
             duration: Duration(seconds: 3),
             backgroundColor: Colors.orange,
           ),
@@ -180,7 +118,6 @@ class KilimoMkononiPage extends StatelessWidget {
     }
   }
 
-  // Rest of the build method and other methods remain the same...
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -274,7 +211,6 @@ class KilimoMkononiPage extends StatelessWidget {
     );
   }
 
-  // Include all other methods from the original file...
   Widget _buildMobileLayout(BuildContext context, double screenWidth) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -439,63 +375,6 @@ class KilimoMkononiPage extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'Media',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: isMobile ? 14 : 16,
-                color: const Color(0xFF1F2937),
-              ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: isMobile ? 12 : 16,
-          runSpacing: 12,
-          alignment: WrapAlignment.center,
-          children: _media.map((media) {
-            return SizedBox(
-              width: isMobile ? screenWidth * 0.9 : screenWidth * (isTablet ? 0.45 : 0.3),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (media['type'] == 'image')
-                    Semantics(
-                      image: true,
-                      label: media['description'],
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: SizedBox(
-                          height: isMobile ? 200 : 300,
-                          child: Image.asset(
-                            media['path']!,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              color: Colors.grey[200],
-                              child: const Center(
-                                child: Icon(LucideIcons.imageOff, color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      media['description']!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 12 : 14,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 12),
-        Text(
           'Impact',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontSize: isMobile ? 14 : 16,
@@ -528,7 +407,7 @@ class KilimoMkononiPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Download Kilimo Mkononi',
+                'Get Kilimo Mkononi',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontSize: isMobile ? 16 : 18,
                       color: Colors.green[800],
@@ -538,7 +417,7 @@ class KilimoMkononiPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Get the latest version of Kilimo Mkononi APK and start farming smarter today!',
+                'Download Kilimo Mkononi from Google Play Store and start farming smarter today!',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: isMobile ? 12 : 14,
                       color: Colors.green[700],
@@ -549,10 +428,10 @@ class KilimoMkononiPage extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () => _downloadApk(context),
+                  onPressed: () => _openPlayStore(context),
                   icon: const Icon(LucideIcons.download, size: 20),
                   label: Text(
-                    'Download APK',
+                    'Get from Play Store',
                     style: TextStyle(
                       fontSize: isMobile ? 14 : 16,
                       fontWeight: FontWeight.bold,

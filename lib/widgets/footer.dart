@@ -17,10 +17,12 @@ class _FooterState extends State<Footer> {
   String? _hoveredUrl;
 
   void _toggleClick(String buttonKey) {
-    setState(() {
-      _isClicked.updateAll((key, value) => false);
-      _isClicked[buttonKey] = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isClicked.updateAll((key, value) => false);
+        _isClicked[buttonKey] = true;
+      });
+    }
   }
 
   Future<void> _handleNavigation(BuildContext context, String route, {String? url}) async {
@@ -55,6 +57,15 @@ class _FooterState extends State<Footer> {
           return null;
         });
       }
+    }
+  }
+
+  void _handleHover(String buttonKey, bool isHovering, {String? url}) {
+    if (mounted) {
+      setState(() {
+        _isHovered[buttonKey] = isHovering;
+        _hoveredUrl = isHovering ? url : null;
+      });
     }
   }
 
@@ -263,7 +274,7 @@ class _FooterState extends State<Footer> {
                                   _buildSocialLink(
                                     context,
                                     icon: LucideIcons.linkedin,
-                                    url: Config.linkedinUrl,
+                                    url: 'https://www.linkedin.com/company/jvalmacis/',
                                     buttonKey: 'linkedin',
                                   ),
                                   _buildSocialLink(
@@ -406,34 +417,33 @@ class _FooterState extends State<Footer> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
-      child: InkWell(
-        onTap: uri != null
-            ? () => _handleNavigation(context, buttonKey, url: uri)
-            : null,
-        onHover: (isHovering) {
-          setState(() {
-            _isHovered[buttonKey] = isHovering;
-          });
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 16, color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF64748B)),
-            const SizedBox(width: 8),
-            Expanded(
-              child: customContent ??
-                  Text(
-                    text!,
-                    style: TextStyle(
-                      color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
-                      fontSize: isMobile ? 14 : 16,
-                      height: 1.5,
+      child: MouseRegion(
+        onEnter: (_) => _handleHover(buttonKey, true, url: uri),
+        onExit: (_) => _handleHover(buttonKey, false),
+        child: InkWell(
+          onTap: uri != null
+              ? () => _handleNavigation(context, buttonKey, url: uri)
+              : null,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 16, color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF64748B)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: customContent ??
+                    Text(
+                      text!,
+                      style: TextStyle(
+                        color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
+                        fontSize: isMobile ? 14 : 16,
+                        height: 1.5,
+                      ),
+                      softWrap: true,
+                      maxLines: null,
                     ),
-                    softWrap: true,
-                    maxLines: null,
-                  ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -449,18 +459,17 @@ class _FooterState extends State<Footer> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
-      child: InkWell(
-        onTap: () => _handleNavigation(context, route),
-        onHover: (isHovering) {
-          setState(() {
-            _isHovered[buttonKey] = isHovering;
-          });
-        },
-        child: Text(
-          text,
-          style: GoogleFonts.poppins(
-            color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
-            fontSize: isMobile ? 14 : 16,
+      child: MouseRegion(
+        onEnter: (_) => _handleHover(buttonKey, true),
+        onExit: (_) => _handleHover(buttonKey, false),
+        child: InkWell(
+          onTap: () => _handleNavigation(context, route),
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(
+              color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF94A3B8),
+              fontSize: isMobile ? 14 : 16,
+            ),
           ),
         ),
       ),
@@ -476,24 +485,22 @@ class _FooterState extends State<Footer> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       transform: Matrix4.translationValues(0, _isHovered[buttonKey] ?? false ? -2.0 : 0, 0),
-      child: InkWell(
-        onTap: () => _handleNavigation(context, buttonKey, url: url),
-        onHover: (isHovering) {
-          setState(() {
-            _isHovered[buttonKey] = isHovering;
-            _hoveredUrl = isHovering ? url : null;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: _isHovered[buttonKey] ?? false ? const Color(0xFF1E293B) : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            icon,
-            size: 20,
-            color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF64748B),
+      child: MouseRegion(
+        onEnter: (_) => _handleHover(buttonKey, true, url: url),
+        onExit: (_) => _handleHover(buttonKey, false),
+        child: InkWell(
+          onTap: () => _handleNavigation(context, buttonKey, url: url),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: _isHovered[buttonKey] ?? false ? const Color(0xFF1E293B) : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 20,
+              color: _isHovered[buttonKey] ?? false ? Colors.white : const Color(0xFF64748B),
+            ),
           ),
         ),
       ),

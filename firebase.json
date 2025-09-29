@@ -19,6 +19,11 @@
     ],
     "redirects": [
       {
+        "source": "/:path*\\?fbclid=:fbclid",
+        "destination": "https://www.jvalmacis.com/:path*",
+        "type": 301
+      },
+      {
         "source": "https://jvalmacis.com{,/**}",
         "destination": "https://www.jvalmacis.com",
         "type": 301
@@ -67,5 +72,3 @@
     }
   }
 }
-
-

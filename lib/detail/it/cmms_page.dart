@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/header.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/responsive_utils.dart';
@@ -61,6 +62,72 @@ class CmmsPage extends StatelessWidget {
       'description': 'CMMS dashboard section view.',
     },
   ];
+
+  Future<void> _openPlayStore(BuildContext context) async {
+    try {
+      debugPrint('CmmsPage: Opening Google Play Store');
+      
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            content: Row(
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text('Redirecting to Play Store...'),
+              ],
+            ),
+          );
+        },
+      );
+
+      const String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jvalmacis.cmms';
+      
+      if (await canLaunchUrl(Uri.parse(playStoreUrl))) {
+        await launchUrl(
+          Uri.parse(playStoreUrl),
+          mode: LaunchMode.externalApplication,
+        );
+        
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Opening Google Play Store...'),
+              duration: Duration(seconds: 3),
+              backgroundColor: Colors.purple,
+            ),
+          );
+        }
+      } else {
+        if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not open Play Store. Please try again.'),
+              duration: Duration(seconds: 3),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('CmmsPage: Play Store redirect error: $e');
+      
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error redirecting to Play Store. Please visit the Play Store manually.'),
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -373,6 +440,70 @@ class CmmsPage extends StatelessWidget {
               ),
             );
           }).toList(),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.purple[50],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.purple[200]!),
+          ),
+          child: Column(
+            children: [
+              Icon(
+                LucideIcons.database,
+                size: 48,
+                color: Colors.purple[700],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Get NyumbaSmart - CMMS',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: isMobile ? 16 : 18,
+                      color: Colors.purple[800],
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Download NyumbaSmart - CMMS from Google Play Store and streamline your facility management today!',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: isMobile ? 12 : 14,
+                      color: Colors.purple[700],
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () => _openPlayStore(context),
+                  icon: const Icon(LucideIcons.download, size: 20),
+                  label: Text(
+                    'Get from Play Store',
+                    style: TextStyle(
+                      fontSize: isMobile ? 14 : 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple[600],
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      vertical: isMobile ? 12 : 16,
+                      horizontal: 24,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

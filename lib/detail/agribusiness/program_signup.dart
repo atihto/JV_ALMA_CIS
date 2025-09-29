@@ -158,7 +158,7 @@ class _ProgramSignupPageState extends State<ProgramSignupPage> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<String>(
-                          value: _farmType,
+                          initialValue: _farmType,
                           style: const TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
                             labelText: 'Farm Type',

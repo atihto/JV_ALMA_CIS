@@ -3,6 +3,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/header.dart';
 import '../widgets/footer.dart';
 import 'dart:developer' as developer;
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -12,8 +13,6 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  final TextEditingController _emailController = TextEditingController();
-  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -25,51 +24,18 @@ class _NewsPageState extends State<NewsPage> {
     });
   }
 
-  void _navigateToArticle(String articleId) {
-    developer.log('NewsPage: Navigating to article $articleId', name: 'NewsPage');
-    if (mounted) {
-      Navigator.pushNamed(context, '/news/$articleId').catchError((e) {
-        developer.log('NewsPage: Navigation error: $e', name: 'NewsPage');
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Navigation error: $e')),
-          );
-        }
-        return null;
-      });
-    }
-  }
 
-  void _navigate(String route) {
-    if (mounted) {
-      Navigator.pushNamed(context, route).catchError((e) {
-        developer.log('Navigation error: $e', name: 'NewsPage');
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Navigation error: $e')),
-          );
-        }
-        return null;
-      });
-    }
-  }
 
-  Future<void> _subscribe() async {
-    setState(() {
-      _isSubmitting = true;
-    });
-
-    // Simulate a network request
-    await Future.delayed(const Duration(seconds: 2));
-
-    setState(() {
-      _isSubmitting = false;
-    });
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Subscribed successfully!')),
-      );
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch $url')),
+        );
+      }
     }
   }
 
@@ -282,7 +248,7 @@ class _NewsPageState extends State<NewsPage> {
                 ),
               ),
             ),
-            // Newsletter Signup
+            // Stay Updated Section
             Container(
               decoration: const BoxDecoration(
                 color: Color(0xFFF9FAFB),
@@ -309,7 +275,7 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      'Subscribe to our newsletters to receive the latest news and updates from JV ALMA C.I.S',
+                      'Follow us on our social media pages to stay updated with the latest news and updates from JV ALMA C.I.S',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: isMobile ? 12 : 14,
                             color: const Color(0xFF6B7280),
@@ -320,56 +286,18 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                              hintText: 'Enter your email address',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontSize: isMobile ? 12 : 14,
-                                    color: const Color(0xFF6B7280),
-                                  ),
-                            ),
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontSize: isMobile ? 12 : 14,
-                                  color: const Color(0xFF111827),
-                                ),
-                          ),
+                        IconButton(
+                          icon: Icon(LucideIcons.linkedin, color: const Color(0xFFF97316), size: isMobile ? 24 : 32),
+                          onPressed: () => _launchUrl('https://www.linkedin.com/company/jvalmacis/'),
                         ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: _subscribe,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF2563EB),
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                              vertical: isMobile ? 12 : 16,
-                              horizontal: isMobile ? 16 : 24,
-                            ),
-                          ),
-                          child: Text(
-                            _isSubmitting ? 'Subscribing...' : 'Subscribe',
-                            style: TextStyle(
-                              fontSize: isMobile ? 12 : 14,
-                            ),
-                          ),
+                        const SizedBox(width: 16),
+                        IconButton(
+                          icon: Icon(LucideIcons.instagram, color: const Color(0xFFF97316), size: isMobile ? 24 : 32),
+                          onPressed: () => _launchUrl('https://www.instagram.com/jvalmacis/'),
                         ),
                       ],
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Text(
-                      'We respect your privacy. Unsubscribe at any time.',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 10 : 12,
-                            color: const Color(0xFF6B7280),
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

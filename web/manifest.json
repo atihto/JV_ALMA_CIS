@@ -1,32 +1,37 @@
 {
-  "name": "JV ALMACIS",
-  "short_name": "JV ALMACIS",
-  "start_url": "https://www.jvalmacis.com/",
+  "name": "JV ALMA C.I.S",
+  "short_name": "JV ALMA C.I.S",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0175C2",
   "theme_color": "#0175C2",
-  "description": "Est. 2017, JV Almacis drives agritech and construction with apps like CoffeeCore, KilimoMkononi, and NyumbaSmart. HQ in Nairobi, Mombasa branch.",
+  "description": "Est. 2017, JV ALMA C.I.S (11–50 employees) drives agritech, CMMS, and construction across four business units, with HQ in Nairobi and a Mombasa branch.",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "jv.png",
+      "src": "/jv.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/Icon-512.png",
+      "src": "/icons/Icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/Icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "icons/Icon-maskable-192.png",
+      "src": "/icons/Icon-maskable-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/Icon-maskable-512.png",
+      "src": "/icons/Icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Add Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../widgets/header.dart';
 import '../widgets/footer.dart';
 import '../widgets/custom_widgets.dart';
@@ -41,7 +41,6 @@ class _ContactPageState extends State<ContactPage> {
       });
 
       try {
-        // Save form data to Firestore
         await FirebaseFirestore.instance.collection('contacts').add({
           'name': _nameController.text,
           'email': _emailController.text,
@@ -59,7 +58,6 @@ class _ContactPageState extends State<ContactPage> {
             ),
           );
 
-          // Clear form
           _nameController.clear();
           _emailController.clear();
           _phoneController.clear();
@@ -70,7 +68,7 @@ class _ContactPageState extends State<ContactPage> {
         developer.log('ContactPage: Form submission error: $e', name: 'ContactPage');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error submitting form: $e')),
+            SnackBar(content: Text('Failed to send message: $e')),
           );
         }
       } finally {
@@ -92,7 +90,7 @@ class _ContactPageState extends State<ContactPage> {
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Could not launch $url')),
+            SnackBar(content: Text('Cannot launch $url')),
           );
         }
       }
@@ -100,7 +98,7 @@ class _ContactPageState extends State<ContactPage> {
       developer.log('ContactPage: URL launch error: $e', name: 'ContactPage');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('Error launching URL: $e')),
         );
       }
     }
@@ -110,12 +108,12 @@ class _ContactPageState extends State<ContactPage> {
     try {
       final uri = Uri.parse('tel:${Config.companyPhone.replaceAll(' ', '')}');
       if (await canLaunchUrl(uri)) {
-        await launchUrl(uri);
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
         developer.log('ContactPage: Launched phone: ${Config.companyPhone}', name: 'ContactPage');
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not launch phone: ${Config.companyPhone}')),
+            const SnackBar(content: Text('Cannot launch phone: ${Config.companyPhone}')),
           );
         }
       }
@@ -123,7 +121,7 @@ class _ContactPageState extends State<ContactPage> {
       developer.log('ContactPage: Phone launch error: $e', name: 'ContactPage');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('Error launching phone: $e')),
         );
       }
     }
@@ -131,14 +129,28 @@ class _ContactPageState extends State<ContactPage> {
 
   Future<void> _launchEmail() async {
     try {
-      final uri = Uri.parse('mailto:${Config.companyEmail}');
+      // Log Config.companyEmail for debugging
+      developer.log('ContactPage: Attempting to launch email with: ${Config.companyEmail}', name: 'ContactPage');
+      // Fallback email if Config.companyEmail is invalid
+      final email = Config.companyEmail.isNotEmpty && Config.companyEmail.contains('@')
+          ? Config.companyEmail
+          : 'info@jvalmacis.com'; // Fallback email
+      if (email.isEmpty || !email.contains('@')) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invalid email address configured')),
+          );
+        }
+        return;
+      }
+      final uri = Uri.parse('mailto:$email');
       if (await canLaunchUrl(uri)) {
-        await launchUrl(uri);
-        developer.log('ContactPage: Launched email: ${Config.companyEmail}', name: 'ContactPage');
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+        developer.log('ContactPage: Launched email: $email', name: 'ContactPage');
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not launch email: ${Config.companyEmail}')),
+            SnackBar(content: Text('Cannot launch email: $email')),
           );
         }
       }
@@ -146,7 +158,7 @@ class _ContactPageState extends State<ContactPage> {
       developer.log('ContactPage: Email launch error: $e', name: 'ContactPage');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text('Error launching email: $e')),
         );
       }
     }
@@ -165,7 +177,6 @@ class _ContactPageState extends State<ContactPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Hero Section (unchanged)
             ClipRRect(
               child: Container(
                 width: double.infinity,
@@ -200,7 +211,6 @@ class _ContactPageState extends State<ContactPage> {
                 ),
               ),
             ),
-            // Form and Contact Info Section (unchanged)
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: screenHeight * 0.06,
@@ -227,117 +237,6 @@ class _ContactPageState extends State<ContactPage> {
                       ),
               ),
             ),
-            // Locations Section (unchanged)
-            Container(
-              color: const Color(0xFFF9FAFB),
-              padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.06,
-                horizontal: screenWidth * 0.04,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Our Locations',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontSize: isMobile ? 20 : 24,
-                            color: const Color(0xFF111827),
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
-                    Wrap(
-                      spacing: screenWidth * 0.03,
-                      runSpacing: screenHeight * 0.02,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        CustomCard(
-                          hoverEffect: false,
-                          content: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Nairobi',
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF111827),
-                                      ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                Text(
-                                  'King\'ara Heights\nNairobi, Kenya',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: 14,
-                                        color: const Color(0xFF4B5563),
-                                      ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                CustomButton(
-                                  text: 'Map',
-                                  onPressed: () => _openMap('King\'ara Heights, Nairobi, Kenya'),
-                                  isLarge: false,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        CustomCard(
-                          hoverEffect: false,
-                          content: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Mombasa',
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF111827),
-                                      ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                Text(
-                                  'Manipur Plaza\nMombasa, Kenya',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        fontSize: 14,
-                                        color: const Color(0xFF4B5563),
-                                      ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: screenHeight * 0.01),
-                                CustomButton(
-                                  text: 'Map',
-                                  onPressed: () => _openMap('Manipur Plaza, Mombasa, Kenya'),
-                                  isLarge: false,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
             SizedBox(height: screenHeight * 0.03),
             const Footer(),
           ],
@@ -346,34 +245,34 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  // _buildContactInfo, _buildContactInfoCard, _buildSocialButton unchanged
   Widget _buildContactInfo(BuildContext context, bool isMobile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Get in Touch',
-          style: TextStyle(
-            fontSize: isMobile ? 24 : 28,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xFF0F172A),
-          ),
+          'Contact Information',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontSize: isMobile ? 18 : 20,
+                color: const Color(0xFF111827),
+                fontWeight: FontWeight.bold,
+              ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 24),
-        Text(
-          'Connect with us to explore how our construction, agribusiness, oil & gas services, and IT solutions can support your goals. We’ll get back to you promptly.',
-          style: TextStyle(
-            fontSize: isMobile ? 16 : 18,
-            color: const Color(0xFF374151),
-            height: 1.6,
-          ),
-        ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 16),
         _buildContactInfoCard(
           icon: LucideIcons.mapPin,
-          title: 'Address',
-          content: "King'ara Heights, Nairobi, Kenya",
-          onTap: null,
+          title: 'HQ Office',
+          content: 'Kingara Heights, Nairobi, Kenya',
+          onTap: () => _openMap('Kingara Heights, Nairobi, Kenya'),
+        ),
+        const SizedBox(height: 16),
+        _buildContactInfoCard(
+          icon: LucideIcons.mapPin,
+          title: 'Branch Office',
+          content: 'Manipur Plaza, Mombasa, Kenya',
+          onTap: () => _openMap('Manipur Plaza, Mombasa, Kenya'),
         ),
         const SizedBox(height: 16),
         _buildContactInfoCard(
@@ -392,25 +291,23 @@ class _ContactPageState extends State<ContactPage> {
         const SizedBox(height: 32),
         Text(
           'Follow Us',
-          style: TextStyle(
-            fontSize: isMobile ? 18 : 20,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF0F172A),
-          ),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontSize: isMobile ? 14 : 16,
+                color: const Color(0xFF111827),
+                fontWeight: FontWeight.bold,
+              ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 16),
-        Row(
+        Wrap(
+          spacing: 16,
           children: [
-            _buildSocialButton(
-              icon: LucideIcons.twitter,
-              onTap: () => _launchURL(Config.twitterUrl),
-            ),
-            const SizedBox(width: 16),
             _buildSocialButton(
               icon: LucideIcons.linkedin,
               onTap: () => _launchURL(Config.linkedinUrl),
             ),
-            const SizedBox(width: 16),
             _buildSocialButton(
               icon: LucideIcons.instagram,
               onTap: () => _launchURL(Config.instagramUrl),

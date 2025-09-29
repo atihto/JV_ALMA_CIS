@@ -176,9 +176,9 @@ class ConstructionDetail extends StatelessWidget {
       {
         'title': 'United States Embassy - Rosslyn Ridge Renov, Nairobi.',
         'client': 'Embassy of United States, Nairobi',
-        'period': 'Sep 2018 – Sep 2023',
-        'description': 'Multi-phase renovation across more than 30 residential single units including structural upgrades and modern exterior finishes for long-term resilience and performance.',
-        'testimonial': '"JV ALMA C.I.S. performed reliably and professionally, meeting all regulatory standards and delivering a high-quality result we would trust again." — Wencke Jacobsen, Contract Specialist, RPSO Frankfurt',
+        'period': 'Sep 2018 – Ongoing',
+        'description': 'Multi-phase renovation across more than 50 residential single units including structural upgrades and modern exterior finishes for long-term resilience and performance.',
+        'testimonial': '"JV ALMA C.I.S. performed reliably and professionally, meeting all regulatory standards and delivering a high-quality result we would trust again." — Wencke Jacobsen, Contract Specialist, RPSO Frankfurt (PHASE 2)',
         'imagePaths': [
           'assets/images/construction/rosslyn_ridge_1.jpg',
           'assets/images/construction/rosslyn_ridge_2.jpg',
@@ -198,9 +198,9 @@ class ConstructionDetail extends StatelessWidget {
       {
         'title': 'Italian Ambassador\'s Residence Renov, Nairobi.',
         'client': 'Italian Embassy Nairobi',
-        'period': 'May 2024 - December 2024',
+        'period': 'May 2024 - Ongoing',
         'description': 'Comprehensive renovation of the Italian Ambassador\'s Residence in Karura Close, with a strong focus on modernizing and optimizing building systems for energy efficiency.',
-        'testimonial': '"JV ALMA C.I.S provided a detailed and professional assessment, setting a clear path for renovation tailored to the building\'s age and structural needs." — Paolo Rotilli',
+        'testimonial': '"JV ALMA C.I.S provided a detailed and professional assessment, they are setting a clear path for renovation tailored to the building\'s age and structural needs." — Paolo Rotilli',
         'imagePaths': [
           'assets/images/construction/italian_embassy.jpg',
         ],
@@ -210,7 +210,7 @@ class ConstructionDetail extends StatelessWidget {
         'client': 'Embassy of Portugal',
         'period': 'Mar 2025 – Aug 2025',
         'description': 'Adaptive renovation to transform an existing structure into a modern consular section for the Portuguese Embassy. The project involves full conversion of former spaces into biometric enrollment, visa production, and reception offices.',
-        'testimonial': '',
+        'testimonial': '"JV ALMA C.I.S. demonstrated exceptional professionalism and delivered thorough documentation, ensuring smooth collaboration throughout the project. Their commitment to excellence was integral to the success of the renovation." — Miguel Antonio Luis ',
         'imagePaths': [
           'assets/images/construction/portugese_embassy_1.jpg',
           'assets/images/construction/portugese_embassy_2.jpg',
@@ -219,9 +219,9 @@ class ConstructionDetail extends StatelessWidget {
       {
         'title': 'Swedish Ambassador\'s Residence Renov, Nairobi.',
         'client': 'Embassy of Sweden',
-        'period': 'Ongoing',
-        'description': 'Ongoing upgrade of the electrical and lighting systems at the Swedish Ambassador\'s Residence in Nairobi, with a strong emphasis on safety, energy efficiency, and modern design.',
-        'testimonial': '',
+        'period': 'July 2025 – September 2025',
+        'description': 'Overhaul of the electrical systems at the Swedish Ambassador’s residence, including upgrades to key electrical infrastructure to enhance system performance, improve energy efficiency, and ensure the reliability of the residence’s electrical operations.',
+        'testimonial': '“JV ALMA C.I.S. displayed exceptional professionalism in upgrading the electrical systems at the Swedish Ambassador’s residence, ensuring efficient execution and minimal disruption to daily operations.” — Julius Miano',
         'imagePaths': [
           'assets/images/construction/swedish_embassy.jpg',
         ],

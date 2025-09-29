@@ -4,8 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/header.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/responsive_utils.dart';
-import 'dart:html' as html;
-import 'package:flutter/services.dart';
 
 class CoffeeCorePage extends StatelessWidget {
   const CoffeeCorePage({super.key});

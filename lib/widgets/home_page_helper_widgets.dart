@@ -22,8 +22,19 @@ class HomePageHelperWidgets {
         bool isHovered = false;
 
         return MouseRegion(
-          onEnter: (_) => setState(() => isHovered = true),
-          onExit: (_) => setState(() => isHovered = false),
+          onEnter: (_) {
+            if (context.mounted) {
+              setState(() => isHovered = true);
+              developer.log('businessUnitCard: Hover enter $name', name: 'HomePageHelperWidgets');
+            }
+          },
+          onExit: (_) {
+            if (context.mounted) {
+              setState(() => isHovered = false);
+              developer.log('businessUnitCard: Hover exit $name', name: 'HomePageHelperWidgets');
+            }
+          },
+          cursor: SystemMouseCursors.click,
           child: GestureDetector(
             onTap: () {
               developer.log('businessUnitCard: Tapped $route', name: 'HomePageHelperWidgets');
@@ -40,14 +51,14 @@ class HomePageHelperWidgets {
               }
             },
             child: SizedBox(
-              height: isMobile ? 250 : 250, // Increased from 200 to 250 for mobile
+              height: isMobile ? 250 : 250,
               child: Card(
-                elevation: isHovered ? 6 : 3,
+                elevation: isHovered ? 5 : 3,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 color: isHovered ? hoverBgColor : bgColor,
                 clipBehavior: Clip.hardEdge,
                 child: Padding(
-                  padding: EdgeInsets.all(isMobile ? 12 : 20), // Reduced padding from 16 to 12 for mobile
+                  padding: EdgeInsets.all(isMobile ? 12 : 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -57,7 +68,7 @@ class HomePageHelperWidgets {
                         size: isMobile ? 28 : 32,
                         color: iconColor,
                       ),
-                      const SizedBox(height: 12), // Reduced from 16
+                      const SizedBox(height: 12),
                       Text(
                         title,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -68,7 +79,7 @@ class HomePageHelperWidgets {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8), // Reduced from 12
+                      const SizedBox(height: 8),
                       Expanded(
                         child: Text(
                           description,
@@ -77,11 +88,11 @@ class HomePageHelperWidgets {
                                 color: const Color(0xFF4B5563),
                                 height: 1.4,
                               ),
-                          maxLines: 2, // Reduced from 3 to 2
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const SizedBox(height: 12), // Reduced from 16
+                      const SizedBox(height: 12),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: CustomButton(
