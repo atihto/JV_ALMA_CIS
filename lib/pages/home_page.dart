@@ -21,6 +21,17 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pushNamed(route);
   }
 
+  double _getResponsiveFontSize(double screenWidth, {double baseSize = 16}) {
+    return baseSize * (screenWidth / 600).clamp(0.8, 1.2);
+  }
+
+  double _getChildAspectRatio(double screenWidth, double screenHeight) {
+    if (screenWidth < 400) return 1.5; // Small mobile, much shorter
+    if (screenWidth < 600) return 1.5; // Mobile, much shorter
+    if (screenWidth < 1024) return 1.2; // Tablet, unchanged
+    return 1.8; // Desktop, much shorter
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +57,6 @@ class _HomePageState extends State<HomePage> {
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     final isSmallScreen = screenWidth < 400;
 
-    // List of client logos with optional text
     final List<Map<String, dynamic>> clients = [
       {'image': 'assets/images/clients/kvda.jpg', 'text': null},
       {'image': 'assets/images/clients/sweden.jpg', 'text': null},
@@ -58,7 +68,6 @@ class _HomePageState extends State<HomePage> {
       {'image': 'assets/images/clients/total.jpg', 'text': null},
     ];
 
-    // Complete business units data
     final List<Map<String, dynamic>> businessUnits = [
       {
         'name': 'Construction',
@@ -133,11 +142,9 @@ class _HomePageState extends State<HomePage> {
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: isMobile ? 15 : 18,
+                                fontSize: _getResponsiveFontSize(screenWidth, baseSize: 18),
                               ),
                           textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -159,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                       'Our Business Units',
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             color: const Color(0xFF111827),
-                            fontSize: isMobile ? 20 : 24,
+                            fontSize: _getResponsiveFontSize(screenWidth, baseSize: 24),
                           ),
                       textAlign: TextAlign.center,
                     ),
@@ -167,71 +174,40 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       'Comprehensive solutions across multiple sectors',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
+                            fontSize: _getResponsiveFontSize(screenWidth, baseSize: 16),
                             color: const Color(0xFF4B5563),
                           ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    GridView.builder(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: isSmallScreen ? 300 : isMobile ? 400 : isTablet ? 320 : 280, // Smaller on tablet
-                        childAspectRatio: isSmallScreen ? 1.6 : isMobile ? 1.3 : isTablet ? 1.5 : 1.5, // Match mobile/desktop compactness
-                        crossAxisSpacing: isSmallScreen ? screenWidth * 0.02 : screenWidth * 0.03,
-                        mainAxisSpacing: isSmallScreen ? screenHeight * 0.01 : screenHeight * 0.02,
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 16),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      clipBehavior: Clip.hardEdge,
-                      itemCount: businessUnits.length,
-                      itemBuilder: (context, index) {
-                        final unit = businessUnits[index];
-                        return ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.9 : 320), // Match tablet maxCrossAxisExtent
-                          child: InkWell(
-                            onTap: () => _navigate(context, unit['route'] as String),
-                            child: Container(
-                              padding: EdgeInsets.all(isMobile ? 12 : 16),
-                              decoration: BoxDecoration(
-                                color: unit['bgColor'] as Color,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    unit['icon'] as IconData,
-                                    color: unit['iconColor'] as Color,
-                                    size: isMobile ? 40 : 48,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    unit['title'] as String,
-                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                          fontSize: isMobile ? 16 : 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF111827),
-                                        ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Expanded(
-                                    child: Text(
-                                      unit['description'] as String,
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                            fontSize: isMobile ? 12 : 13,
-                                            color: const Color(0xFF4B5563),
-                                          ),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return GridView.builder(
+                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: isSmallScreen ? 300 : isMobile ? 400 : isTablet ? 320 : 280,
+                            childAspectRatio: _getChildAspectRatio(screenWidth, screenHeight),
+                            crossAxisSpacing: isSmallScreen ? screenWidth * 0.02 : screenWidth * 0.03,
+                            mainAxisSpacing: isSmallScreen ? screenHeight * 0.01 : screenHeight * 0.02,
                           ),
+                          padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 16),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          clipBehavior: Clip.hardEdge,
+                          itemCount: businessUnits.length,
+                          itemBuilder: (context, index) {
+                            final unit = businessUnits[index];
+                            return HomePageHelperWidgets.businessUnitCard(
+                              context: context,
+                              name: unit['name'] as String,
+                              icon: unit['icon'] as IconData,
+                              title: unit['title'] as String,
+                              description: unit['description'] as String,
+                              route: unit['route'] as String,
+                              iconColor: unit['iconColor'] as Color,
+                              bgColor: unit['bgColor'] as Color,
+                              hoverBgColor: unit['hoverBgColor'] as Color,
+                            );
+                          },
                         );
                       },
                     ),
@@ -252,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                       'Our Valued Clients',
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             color: const Color(0xFF111827),
-                            fontSize: isMobile ? 20 : 24,
+                            fontSize: _getResponsiveFontSize(screenWidth, baseSize: 24),
                           ),
                       textAlign: TextAlign.center,
                     ),
@@ -260,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       'Trusted by leading organizations across industries',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
+                            fontSize: _getResponsiveFontSize(screenWidth, baseSize: 16),
                             color: const Color(0xFF4B5563),
                           ),
                       textAlign: TextAlign.center,
@@ -300,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                                         client['text'] as String,
                                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                               color: Colors.black,
-                                              fontSize: isMobile ? 12 : 16,
+                                              fontSize: _getResponsiveFontSize(screenWidth, baseSize: 16),
                                               fontWeight: FontWeight.bold,
                                             ),
                                         textAlign: TextAlign.center,
@@ -337,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       'Ready to Collaborate?',
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            fontSize: isMobile ? 20 : 24,
+                            fontSize: _getResponsiveFontSize(screenWidth, baseSize: 24),
                             color: Colors.white,
                           ),
                       textAlign: TextAlign.center,
@@ -346,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       'Let\'s build a sustainable future together.',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
+                            fontSize: _getResponsiveFontSize(screenWidth, baseSize: 16),
                             color: const Color(0xFFBFDBFE),
                           ),
                       textAlign: TextAlign.center,

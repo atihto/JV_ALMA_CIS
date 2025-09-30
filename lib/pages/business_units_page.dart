@@ -2,10 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/footer.dart';
 import '../widgets/header.dart';
+import '../widgets/custom_card.dart' as card;
 import 'dart:developer' as developer;
 
 class BusinessUnitsPage extends StatelessWidget {
   const BusinessUnitsPage({super.key});
+
+  double _getResponsiveFontSize(double screenWidth, {double baseSize = 16}) {
+    return baseSize * (screenWidth / 600).clamp(0.8, 1.2);
+  }
+
+  double _getChildAspectRatio(double screenWidth, double screenHeight, {bool isWhyChooseUs = false}) {
+    if (isWhyChooseUs) {
+      if (screenWidth < 400) return 2.2; // Small mobile, shorter
+      if (screenWidth < 600) return 2.2; // Mobile, shorter
+      if (screenWidth < 1024) return 2.5; // Tablet, unchanged
+      return 3.4; // Desktop, shorter
+    }
+    if (screenWidth < 400) return 1.4; // Small mobile, shorter
+    if (screenWidth < 600) return 1.4; // Mobile, shorter
+    if (screenWidth < 1024) return 1.1; // Tablet, unchanged
+    return 1.7; // Desktop, shorter
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +71,7 @@ class BusinessUnitsPage extends StatelessWidget {
               Text(
                 'Our Business Units',
                 style: TextStyle(
-                  fontSize: isMobile ? 28 : isTablet ? 36 : 48,
+                  fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 28 : isTablet ? 36 : 48),
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -63,7 +81,7 @@ class BusinessUnitsPage extends StatelessWidget {
               Text(
                 'Delivering innovative solutions across construction, agribusiness, oil & gas, and information technology.',
                 style: TextStyle(
-                  fontSize: isMobile ? 16 : isTablet ? 18 : 20,
+                  fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 16 : isTablet ? 18 : 20),
                   color: Colors.white.withOpacity(0.9),
                   height: 1.6,
                 ),
@@ -83,28 +101,32 @@ class BusinessUnitsPage extends StatelessWidget {
         'title': 'Construction',
         'description': 'Comprehensive civil works including diplomatic and residential projects, infrastructure development projects, and facility maintenance management.',
         'route': '/construction-detail',
-        'color': Color(0xFFEFF6FF),
+        'color': const Color(0xFFEFF6FF),
+        'hoverColor': const Color(0xFFDBEAFE),
       },
       {
         'icon': LucideIcons.sprout,
         'title': 'Agribusiness',
         'description': 'Our agribusiness division empowers farmers with modern agricultural solutions, infrastructure, training and smart digital farming tools like CoffeeCore and KilimoMkononi, promoting sustainable agriculture and food security.',
         'route': '/agribusiness',
-        'color': Color(0xFFD1FAE5),
+        'color': const Color(0xFFD1FAE5),
+        'hoverColor': const Color(0xFFA7F3D0),
       },
       {
         'icon': LucideIcons.droplets,
         'title': 'Oil & Gas',
         'description': 'We provide specialized inspection services and regulatory compliance for the oil and gas industry.',
         'route': '/oil-gas',
-        'color': Color(0xFFFFF7ED),
+        'color': const Color(0xFFFFF7ED),
+        'hoverColor': const Color(0xFFFED7AA),
       },
       {
         'icon': LucideIcons.globe,
         'title': 'Information Technology',
-        'description': 'Our IT division, provides cuttiing-edge software solutions including NyumbaSmart CMMS, streamline facility management and asset maintenance for businesses in Kenya and CoffeeCore and KilimoMkononi agricultural applications.',
+        'description': 'Our IT division provides cutting-edge software solutions including NyumbaSmart CMMS, streamlining facility management and asset maintenance for businesses in Kenya and CoffeeCore and KilimoMkononi agricultural applications.',
         'route': '/it-division',
-        'color': Color(0xFFF5E8FF),
+        'color': const Color(0xFFF5E8FF),
+        'hoverColor': const Color(0xFFE9D5FF),
       },
     ];
 
@@ -122,7 +144,7 @@ class BusinessUnitsPage extends StatelessWidget {
               Text(
                 'Our Core Divisions',
                 style: TextStyle(
-                  fontSize: isMobile ? 24 : isTablet ? 28 : 32,
+                  fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 24 : isTablet ? 28 : 32),
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF0F172A),
                 ),
@@ -132,149 +154,46 @@ class BusinessUnitsPage extends StatelessWidget {
               Text(
                 'Explore our diverse portfolio of services across multiple industries',
                 style: TextStyle(
-                  fontSize: isMobile ? 16 : 18,
+                  fontSize: _getResponsiveFontSize(screenWidth, baseSize: 18),
                   color: const Color(0xFF64748B),
                 ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: screenHeight * 0.04),
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: isMobile ? 1 : isTablet ? 2 : 2,
-                  childAspectRatio: isMobile ? 3 / 2 : isTablet ? 3 / 2 : 5 / 2,
-                  crossAxisSpacing: 24,
-                  mainAxisSpacing: 24,
-                ),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: businessUnits.length,
-                itemBuilder: (context, index) {
-                  final unit = businessUnits[index];
-                  return _businessUnitCard(
-                    context: context,
-                    icon: unit['icon'] as IconData,
-                    title: unit['title'] as String,
-                    description: unit['description'] as String,
-                    route: unit['route'] as String,
-                    color: unit['color'] as Color,
-                    isMobile: isMobile,
-                    isTablet: isTablet,
-                    screenWidth: screenWidth,
-                    screenHeight: screenHeight,
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isMobile ? 1 : 2,
+                      childAspectRatio: _getChildAspectRatio(screenWidth, screenHeight),
+                      crossAxisSpacing: 24,
+                      mainAxisSpacing: 24,
+                    ),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: businessUnits.length,
+                    itemBuilder: (context, index) {
+                      final unit = businessUnits[index];
+                      return BusinessUnitCard(
+                        context: context,
+                        icon: unit['icon'] as IconData,
+                        title: unit['title'] as String,
+                        description: unit['description'] as String,
+                        route: unit['route'] as String,
+                        color: unit['color'] as Color,
+                        hoverColor: unit['hoverColor'] as Color,
+                        isMobile: isMobile,
+                        isTablet: isTablet,
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
+                      );
+                    },
                   );
                 },
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _businessUnitCard({
-    required BuildContext context,
-    required IconData icon,
-    required String title,
-    required String description,
-    required String route,
-    required Color color,
-    required bool isMobile,
-    required bool isTablet,
-    required double screenWidth,
-    required double screenHeight,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.all(isMobile ? 12 : 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(
-            icon,
-            size: isMobile ? 32 : 36,
-            color: const Color(0xFF1E293B),
-          ),
-          SizedBox(height: isMobile ? 8 : 12),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: isMobile ? 16 : 18,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF0F172A),
-            ),
-          ),
-          SizedBox(height: isMobile ? 6 : 8),
-          Flexible(
-            child: Text(
-              description,
-              style: TextStyle(
-                fontSize: isMobile ? 14 : 14,
-                color: const Color(0xFF374151),
-                height: 1.4,
-              ),
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(height: isMobile ? 8 : 12),
-          ElevatedButton(
-            onPressed: () {
-              try {
-                Navigator.pushNamed(context, route).then((_) {
-                  developer.log('BusinessUnits: Successfully navigated to $route', name: 'BusinessUnitsPage');
-                }).catchError((error) {
-                  developer.log('BusinessUnits: Navigation failed to $route: $error', name: 'BusinessUnitsPage');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Unable to open $title page. Please try again.'),
-                      backgroundColor: Colors.red,
-                      duration: const Duration(seconds: 3),
-                    ),
-                  );
-                });
-              } catch (e) {
-                developer.log('BusinessUnits: Exception during navigation to $route: $e', name: 'BusinessUnitsPage');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error opening $title page'),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 3),
-                  ),
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1E293B),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: isMobile ? 10 : 12,
-                horizontal: isMobile ? 16 : 24,
-              ),
-              minimumSize: Size(0, isMobile ? 40 : 48),
-            ),
-            child: Text(
-              'Learn More',
-              style: TextStyle(
-                fontSize: isMobile ? 14 : 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -317,7 +236,7 @@ class BusinessUnitsPage extends StatelessWidget {
               Text(
                 'Why Choose Us',
                 style: TextStyle(
-                  fontSize: isMobile ? 24 : isTablet ? 28 : 32,
+                  fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 24 : isTablet ? 28 : 32),
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF0F172A),
                 ),
@@ -327,31 +246,36 @@ class BusinessUnitsPage extends StatelessWidget {
               Text(
                 'Our commitment to quality and innovation sets us apart',
                 style: TextStyle(
-                  fontSize: isMobile ? 16 : 18,
+                  fontSize: _getResponsiveFontSize(screenWidth, baseSize: 18),
                   color: const Color(0xFF64748B),
                 ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: screenHeight * 0.04),
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: isMobile ? 1 : 2,
-                  childAspectRatio: isMobile ? 3 / 1 : isTablet ? 3.5 / 1 : 4 / 1, // Slightly taller on tablet
-                  crossAxisSpacing: 24,
-                  mainAxisSpacing: 24,
-                ),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: whyChooseUs.length,
-                itemBuilder: (context, index) {
-                  final reason = whyChooseUs[index];
-                  return _whyChooseUsCard(
-                    icon: reason['icon'] as IconData,
-                    title: reason['title'] as String,
-                    description: reason['description'] as String,
-                    isMobile: isMobile,
-                    isTablet: isTablet,
-                    screenWidth: screenWidth,
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isMobile ? 1 : 2,
+                      childAspectRatio: _getChildAspectRatio(screenWidth, screenHeight, isWhyChooseUs: true),
+                      crossAxisSpacing: 24,
+                      mainAxisSpacing: 24,
+                    ),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: whyChooseUs.length,
+                    itemBuilder: (context, index) {
+                      final reason = whyChooseUs[index];
+                      return _whyChooseUsCard(
+                        icon: reason['icon'] as IconData,
+                        title: reason['title'] as String,
+                        description: reason['description'] as String,
+                        isMobile: isMobile,
+                        isTablet: isTablet,
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
+                      );
+                    },
                   );
                 },
               ),
@@ -369,59 +293,190 @@ class BusinessUnitsPage extends StatelessWidget {
     required bool isMobile,
     required bool isTablet,
     required double screenWidth,
+    required double screenHeight,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.all(isMobile ? 16 : 20), // Reduced padding
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: isMobile ? 36 : 40,
-            color: const Color(0xFF1E293B),
-          ),
-          SizedBox(width: isMobile ? 12 : 16),
-          Expanded(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardHeight = constraints.maxHeight;
+        return card.CustomCard(
+          hoverEffect: false,
+          clipBehavior: Clip.hardEdge,
+          content: Container(
+            padding: EdgeInsets.all(isMobile ? 10 : isTablet ? 12 : 12),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: isMobile ? 18 : isTablet ? 18 : 20, // Smaller on tablet
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0F172A),
-                  ),
-                ),
-                SizedBox(height: isMobile ? 4 : isTablet ? 6 : 8), // Reduced spacing on tablet
-                Flexible(
-                  child: Text(
-                    description,
-                    style: TextStyle(
-                      fontSize: isMobile ? 14 : isTablet ? 14 : 16, // Smaller on tablet
-                      color: const Color(0xFF374151),
-                      height: 1.4,
+                Row(
+                  children: [
+                    Icon(
+                      icon,
+                      size: isMobile ? 28 : isTablet ? 32 : 32,
+                      color: const Color(0xFF1E293B),
                     ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                    SizedBox(width: isMobile ? 8 : 12),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 16 : isTablet ? 17 : 18),
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF0F172A),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: isMobile ? 6 : 8),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 12 : isTablet ? 13 : 14),
+                    color: const Color(0xFF374151),
+                    height: 1.3,
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+}
+
+class BusinessUnitCard extends StatefulWidget {
+  final BuildContext context;
+  final IconData icon;
+  final String title;
+  final String description;
+  final String route;
+  final Color color;
+  final Color hoverColor;
+  final bool isMobile;
+  final bool isTablet;
+  final double screenWidth;
+  final double screenHeight;
+
+  const BusinessUnitCard({
+    super.key,
+    required this.context,
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.route,
+    required this.color,
+    required this.hoverColor,
+    required this.isMobile,
+    required this.isTablet,
+    required this.screenWidth,
+    required this.screenHeight,
+  });
+
+  @override
+  State<BusinessUnitCard> createState() => _BusinessUnitCardState();
+}
+
+class _BusinessUnitCardState extends State<BusinessUnitCard> {
+  bool isHovered = false;
+
+  double _getResponsiveFontSize(double screenWidth, {double baseSize = 16}) {
+    return baseSize * (screenWidth / 600).clamp(0.8, 1.2);
+  }
+
+  double _getResponsiveIconSize(double cardHeight, {double baseSize = 32}) {
+    return baseSize * (cardHeight / 250).clamp(0.7, 1.0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardHeight = constraints.maxHeight;
+        return card.CustomCard(
+          hoverEffect: true,
+          clipBehavior: Clip.hardEdge,
+          content: MouseRegion(
+            onEnter: (_) => setState(() => isHovered = true),
+            onExit: (_) => setState(() => isHovered = false),
+            child: InkWell(
+              onTap: () {
+                try {
+                  Navigator.pushNamed(context, widget.route).then((_) {
+                    developer.log('BusinessUnits: Successfully navigated to ${widget.route}', name: 'BusinessUnitsPage');
+                  }).catchError((error) {
+                    developer.log('BusinessUnits: Navigation failed to ${widget.route}: $error', name: 'BusinessUnitsPage');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Unable to open ${widget.title} page. Please try again.'),
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  });
+                } catch (e) {
+                  developer.log('BusinessUnits: Exception during navigation to ${widget.route}: $e', name: 'BusinessUnitsPage');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error opening ${widget.title} page'),
+                      backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
+              },
+              splashColor: Colors.grey.withOpacity(0.2),
+              hoverColor: widget.hoverColor,
+              borderRadius: BorderRadius.circular(12),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                transform: isHovered ? Matrix4.identity().scaled(1.02) : Matrix4.identity(),
+                decoration: BoxDecoration(
+                  color: isHovered ? widget.hoverColor : widget.color,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(isHovered ? 0.3 : 0.1),
+                      blurRadius: isHovered ? 12 : 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.all(widget.isMobile ? 10 : widget.isTablet ? 12 : 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      widget.icon,
+                      size: _getResponsiveIconSize(cardHeight, baseSize: widget.isMobile ? 28 : 32),
+                      color: const Color(0xFF1E293B),
+                    ),
+                    SizedBox(height: widget.isMobile ? 6 : 8),
+                    Text(
+                      widget.title,
+                      style: TextStyle(
+                        fontSize: _getResponsiveFontSize(widget.screenWidth, baseSize: widget.isMobile ? 16 : widget.isTablet ? 17 : 18),
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF0F172A),
+                      ),
+                    ),
+                    SizedBox(height: widget.isMobile ? 6 : 8),
+                    Text(
+                      widget.description,
+                      style: TextStyle(
+                        fontSize: _getResponsiveFontSize(widget.screenWidth, baseSize: widget.isMobile ? 12 : widget.isTablet ? 13 : 14),
+                        color: const Color(0xFF374151),
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

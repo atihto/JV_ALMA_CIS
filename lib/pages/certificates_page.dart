@@ -12,21 +12,6 @@ class CertificatesPage extends StatefulWidget {
 }
 
 class _CertificatesPageState extends State<CertificatesPage> {
-  late ScrollController _scrollController;
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -34,33 +19,7 @@ class _CertificatesPageState extends State<CertificatesPage> {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
 
-
-    void showImageDialog(String imagePath) {
-      showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: SizedBox(
-            width: screenWidth * 0.8,
-            height: screenHeight * 0.8,
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => const Center(
-                child: Text('Failed to load image'),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: const Drawer(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: Header(onMenuPressed: () => scaffoldKey.currentState?.openDrawer()),
-      ),
+    return AppScaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
@@ -141,235 +100,29 @@ class _CertificatesPageState extends State<CertificatesPage> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.03),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(LucideIcons.chevronLeft, color: Colors.blue, size: isMobile ? 24 : 32),
-                              onPressed: () {
-                                _scrollController.animateTo(
-                                  _scrollController.offset - 300,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
-                            ),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                controller: _scrollController,
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (var i = 0; i < 11; i++)
-                                      Padding(
-                                        padding: EdgeInsets.only(right: screenWidth * 0.02),
-                                        child: _CertificateCard(
-                                          title: i == 0
-                                              ? 'JV Certificate'
-                                              : i == 1
-                                                  ? 'Business Permit'
-                                                  : i == 2
-                                                      ? 'KRA Certificate'
-                                                      : i == 3
-                                                          ? 'NCA Building Certificate'
-                                                          : i == 4
-                                                              ? 'NCA Mechanical Certificate'
-                                                              : i == 5
-                                                                  ? 'NCA Water Certificate'
-                                                                  : i == 6
-                                                                      ? 'Building Works Certificate (2026)'
-                                                                      : i == 7
-                                                                          ? 'Water Works Certificate (2026)'
-                                                                          : i == 8
-                                                                              ? 'Mechanical Service Certificate (2026)'
-                                                                              : i == 9
-                                                                                  ? 'Water Works Certificate (2028)'
-                                                                                  : i == 10
-                                                                                      ? 'Mechanical Service Certificate (2028)'
-                                                                                      : 'Other Certificate',
-                                          certificateNo: i == 0
-                                              ? 'JV-CERT-2023'
-                                              : i == 1
-                                                  ? 'BUS-PERMIT-2023'
-                                                  : i == 2
-                                                      ? 'KRA-CERT-2023'
-                                                      : i == 3
-                                                          ? 'NCA-BUILD-2023'
-                                                          : i == 4
-                                                              ? 'NCA-MECH-2023'
-                                                              : i == 5
-                                                                  ? 'NCA-WATER-2023'
-                                                                  : i == 6
-                                                                      ? '61515/B/0920'
-                                                                      : i == 7
-                                                                          ? '61515/W/0920'
-                                                                          : i == 8
-                                                                              ? '61515/M/0920'
-                                                                              : i == 9
-                                                                                  ? '61515/W/0920'
-                                                                                  : i == 10
-                                                                                      ? '61515/M/0920'
-                                                                                      : 'PENDING',
-                                          description: i == 0
-                                              ? 'Joint Venture Certification'
-                                              : i == 1
-                                                  ? 'Business Operating Permit'
-                                                  : i == 2
-                                                      ? 'Kenya Revenue Authority Certificate'
-                                                      : i == 3
-                                                          ? 'NCA Building Compliance'
-                                                          : i == 4
-                                                              ? 'NCA Mechanical Compliance'
-                                                              : i == 5
-                                                                  ? 'NCA Water Compliance'
-                                                                  : i == 6
-                                                                      ? 'Building Works Contractor Certificate'
-                                                                      : i == 7
-                                                                          ? 'Water Works Contractor Certificate'
-                                                                          : i == 8
-                                                                              ? 'Mechanical Service Contractor Certificate'
-                                                                              : i == 9
-                                                                                  ? 'Water Works Contractor Certificate (2028)'
-                                                                                  : i == 10
-                                                                                      ? 'Mechanical Service Contractor Certificate (2028)'
-                                                                                      : 'Pending certificate',
-                                          issuer: i == 0
-                                              ? 'JV Authority'
-                                              : i == 1
-                                                  ? 'Local Government'
-                                                  : i == 2
-                                                      ? 'KRA'
-                                                      : i == 3
-                                                          ? 'NCA'
-                                                          : i == 4
-                                                              ? 'NCA'
-                                                              : i == 5
-                                                                  ? 'NCA'
-                                                                  : i == 6
-                                                                      ? 'NCA'
-                                                                      : i == 7
-                                                                          ? 'NCA'
-                                                                          : i == 8
-                                                                              ? 'NCA'
-                                                                              : i == 9
-                                                                                  ? 'NCA'
-                                                                                  : i == 10
-                                                                                      ? 'NCA'
-                                                                                      : null,
-                                          issueDate: i == 0
-                                              ? '2023-01-01'
-                                              : i == 1
-                                                  ? '2023-02-01'
-                                                  : i == 2
-                                                      ? '2023-03-01'
-                                                      : i == 3
-                                                          ? '2023-04-01'
-                                                          : i == 4
-                                                              ? '2023-05-01'
-                                                              : i == 5
-                                                                  ? '2023-06-01'
-                                                                  : i == 6
-                                                                      ? '2025-08-09'
-                                                                      : i == 7
-                                                                          ? '2025-08-09'
-                                                                          : i == 8
-                                                                              ? '2025-08-09'
-                                                                              : i == 9
-                                                                                  ? '2025-08-09'
-                                                                                  : i == 10
-                                                                                      ? '2025-08-09'
-                                                                                      : null,
-                                          expiryDate: i == 0
-                                              ? '2026-01-01'
-                                              : i == 1
-                                                  ? '2026-02-01'
-                                                  : i == 2
-                                                      ? '2026-03-01'
-                                                  : i == 3
-                                                      ? '2026-04-01'
-                                                      : i == 4
-                                                          ? '2026-05-01'
-                                                          : i == 5
-                                                              ? '2026-06-01'
-                                                              : i == 6
-                                                                  ? '2026-07-31'
-                                                                  : i == 7
-                                                                      ? '2026-07-31'
-                                                                      : i == 8
-                                                                          ? '2026-07-31'
-                                                                          : i == 9
-                                                                              ? '2028-07-31'
-                                                                              : i == 10
-                                                                                  ? '2028-07-31'
-                                                                                  : null,
-                                          filePath: i == 0
-                                              ? 'assets/certificates/jv_certificate.jpg'
-                                              : i == 1
-                                                  ? 'assets/certificates/business_permit.jpg'
-                                                  : i == 2
-                                                      ? 'assets/certificates/kra_certificate.jpg'
-                                                      : i == 3
-                                                          ? 'assets/certificates/nca_building_certificate.jpg'
-                                                          : i == 4
-                                                              ? 'assets/certificates/nca_mechanical_certificate.jpg'
-                                                              : i == 5
-                                                                  ? 'assets/certificates/nca_water_certificate.jpg'
-                                                                  : i == 6
-                                                                      ? 'assets/certificates/Building_Works_Certificate 2026.jpg'
-                                                                      : i == 7
-                                                                          ? 'assets/certificates/Water_Works_Certificate%202026.jpg'
-                                                                          : i == 8
-                                                                              ? 'assets/certificates/Mechanical_Service_Certificate 2026.jpg'
-                                                                          : i == 9
-                                                                              ? 'assets/certificates/Water_Works_Certificate%202028.jpg'
-                                                                              : i == 10
-                                                                                  ? 'assets/certificates/Mechanical_Service_Certificate 2028.jpg'
-                                                                                  : null,
-                                          isImage: true,
-                                          isMobile: isMobile,
-                                          isTablet: isTablet,
-                                          onImageTap: i <= 10
-                                              ? () => showImageDialog(i == 0
-                                                  ? 'assets/certificates/jv_certificate.jpg'
-                                                  : i == 1
-                                                      ? 'assets/certificates/business_permit.jpg'
-                                                      : i == 2
-                                                          ? 'assets/certificates/kra_certificate.jpg'
-                                                          : i == 3
-                                                              ? 'assets/certificates/nca_building_certificate.jpg'
-                                                              : i == 4
-                                                                  ? 'assets/certificates/nca_mechanical_certificate.jpg'
-                                                                  : i == 5
-                                                                      ? 'assets/certificates/nca_water_certificate.jpg'
-                                                                      : i == 6
-                                                                          ? 'assets/certificates/Building_Works_Certificate 2026.jpg'
-                                                                          : i == 7
-                                                                              ? 'assets/certificates/Water_Works_Certificate%202026.jpg'
-                                                                              : i == 8
-                                                                                  ? 'assets/certificates/Mechanical_Service_Certificate 2026.jpg'
-                                                                                  : i == 9
-                                                                                      ? 'assets/certificates/Water_Works_Certificate%202028.jpg'
-                                                                                      : 'assets/certificates/Mechanical_Service_Certificate 2028.jpg')
-                                              : null,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(LucideIcons.chevronRight, color: Colors.blue, size: isMobile ? 24 : 32),
-                              onPressed: () {
-                                _scrollController.animateTo(
-                                  _scrollController.offset + 300,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
-                            ),
-                          ],
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: isMobile ? 1 : isTablet ? 2 : 3,
+                        childAspectRatio: isMobile ? 0.8 : isTablet ? 1.0 : 1.2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: certificates.length,
+                      itemBuilder: (context, index) {
+                        final cert = certificates[index];
+                        return _CertificateCard(
+                          title: cert['title'],
+                          certificateNo: cert['certificateNo'],
+                          description: cert['description'],
+                          issuer: cert['issuer'],
+                          issueDate: cert['issueDate'],
+                          expiryDate: cert['expiryDate'],
+                          filePath: cert['filePath'],
+                          isMobile: isMobile,
+                          isTablet: isTablet,
+                          onTap: () => showImageDialog(context, index),
                         );
                       },
                     ),
@@ -377,73 +130,70 @@ class _CertificatesPageState extends State<CertificatesPage> {
                 ),
               ),
             ),
-            Container(
-              color: const Color(0xFFF9FAFB),
+            Padding(
               padding: EdgeInsets.symmetric(
                 vertical: screenHeight * 0.03,
                 horizontal: screenWidth * 0.04,
               ),
               child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 896),
-                child: CustomCard(
-                  content: Padding(
-                    padding: EdgeInsets.all(isMobile ? 12 : 16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
+                child: Column(
+                  children: [
+                    Text(
+                      'Compliance Commitments',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontSize: isMobile ? 20 : 24,
+                            color: const Color(0xFF111827),
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: screenHeight * 0.015),
+                    Text(
+                      'Our commitment to standards',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: isMobile ? 14 : 16,
+                            color: const Color(0xFF4B5563),
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          'Our Commitment to Compliance',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                fontSize: isMobile ? 20 : 24,
-                                color: const Color(0xFF111827),
-                                fontWeight: FontWeight.bold,
-                              ),
-                          textAlign: TextAlign.center,
+                        Expanded(
+                          child: _CommitmentCard(
+                            icon: LucideIcons.award,
+                            title: 'Quality Assured',
+                            description: 'ISO 9001:2015 Certified.',
+                            iconColor: const Color(0xFF2563EB),
+                            fontSize: isMobile ? 12 : 14,
+                            isMobile: isMobile,
+                          ),
                         ),
-                        SizedBox(height: screenHeight * 0.015),
-                        Text(
-                          'Dedicated to compliance, quality, and certification.',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontSize: isMobile ? 14 : 16,
-                                color: const Color(0xFF4B5563),
-                              ),
-                          textAlign: TextAlign.center,
+                        Expanded(
+                          child: _CommitmentCard(
+                            icon: LucideIcons.checkCircle,
+                            title: 'Fully Compliant',
+                            description: 'Requirements met.',
+                            iconColor: const Color(0xFF2563EB),
+                            fontSize: isMobile ? 12 : 14,
+                            isMobile: isMobile,
+                          ),
                         ),
-                        SizedBox(height: screenHeight * 0.02),
-                        Wrap(
-                          spacing: screenWidth * 0.03,
-                          runSpacing: screenHeight * 0.015,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            _CommitmentCard(
-                              icon: LucideIcons.award,
-                              title: 'Quality Assured',
-                              description: 'ISO 9001:2015 certified.',
-                              iconColor: const Color(0xFF2563EB),
-                              fontSize: isMobile ? 12 : 14,
-                              isMobile: isMobile,
-                            ),
-                            _CommitmentCard(
-                              icon: LucideIcons.checkCircle,
-                              title: 'Fully Compliant',
-                              description: 'Requirements met.',
-                              iconColor: const Color(0xFF2563EB),
-                              fontSize: isMobile ? 12 : 14,
-                              isMobile: isMobile,
-                            ),
-                            _CommitmentCard(
-                              icon: LucideIcons.globe,
-                              title: 'Internationally Recognized',
-                              description: 'Global operations.',
-                              iconColor: const Color(0xFF2563EB),
-                              fontSize: isMobile ? 12 : 14,
-                              isMobile: isMobile,
-                            ),
-                          ],
+                        Expanded(
+                          child: _CommitmentCard(
+                            icon: LucideIcons.globe,
+                            title: 'Internationally Recognized',
+                            description: 'Global operations.',
+                            iconColor: const Color(0xFF2563EB),
+                            fontSize: isMobile ? 12 : 14,
+                            isMobile: isMobile,
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -454,9 +204,19 @@ class _CertificatesPageState extends State<CertificatesPage> {
       ),
     );
   }
+
+  void showImageDialog(BuildContext context, int initialIndex) {
+    showDialog(
+      context: context,
+      builder: (context) => CertificateImageDialog(
+        certificates: certificates,
+        initialIndex: initialIndex,
+      ),
+    );
+  }
 }
 
-class _CertificateCard extends StatelessWidget {
+class _CertificateCard extends StatefulWidget {
   final String title;
   final String certificateNo;
   final String description;
@@ -464,10 +224,9 @@ class _CertificateCard extends StatelessWidget {
   final String? issueDate;
   final String? expiryDate;
   final String? filePath;
-  final bool isImage;
   final bool isMobile;
   final bool isTablet;
-  final VoidCallback? onImageTap;
+  final VoidCallback onTap;
 
   const _CertificateCard({
     required this.title,
@@ -477,117 +236,315 @@ class _CertificateCard extends StatelessWidget {
     this.issueDate,
     this.expiryDate,
     this.filePath,
-    required this.isImage,
     required this.isMobile,
     required this.isTablet,
-    this.onImageTap,
+    required this.onTap,
   });
+
+  @override
+  State<_CertificateCard> createState() => _CertificateCardState();
+}
+
+class _CertificateCardState extends State<_CertificateCard> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return MouseRegion(
+          onEnter: (_) => setState(() => isHovered = true),
+          onExit: (_) => setState(() => isHovered = false),
+          child: InkWell(
+            onTap: widget.onTap,
+            hoverColor: const Color(0xFFDBEAFE),
+            splashColor: Colors.grey.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              transform: isHovered ? Matrix4.identity().scaled(1.02) : Matrix4.identity(),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEFF6FF),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(isHovered ? 0.3 : 0.1),
+                    blurRadius: isHovered ? 12 : 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: Colors.grey[200],
+                      ),
+                      child: widget.filePath != null
+                          ? Image.asset(
+                              widget.filePath!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => const Center(
+                                child: Icon(LucideIcons.alertTriangle, color: Colors.red),
+                              ),
+                            )
+                          : const Center(
+                              child: Text(
+                                'Pending',
+                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.title,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF1F2937),
+                          fontSize: widget.isMobile ? 14 : 16,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'No: ${widget.certificateNo}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: const Color(0xFF4B5563),
+                          fontSize: widget.isMobile ? 12 : 14,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    widget.description,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: const Color(0xFF4B5563),
+                          fontSize: widget.isMobile ? 12 : 14,
+                        ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (widget.issuer != null)
+                    Text(
+                      'Issuer: ${widget.issuer}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: const Color(0xFF4B5563),
+                            fontSize: widget.isMobile ? 10 : 12,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (widget.issueDate != null)
+                    Text(
+                      'Issue: ${widget.issueDate}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: const Color(0xFF4B5563),
+                            fontSize: widget.isMobile ? 10 : 12,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (widget.expiryDate != null)
+                    Text(
+                      'Expiry: ${widget.expiryDate}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: const Color(0xFF4B5563),
+                            fontSize: widget.isMobile ? 10 : 12,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class CertificateImageDialog extends StatefulWidget {
+  final List<Map<String, dynamic>> certificates;
+  final int initialIndex;
+
+  const CertificateImageDialog({
+    super.key,
+    required this.certificates,
+    required this.initialIndex,
+  });
+
+  @override
+  State<CertificateImageDialog> createState() => _CertificateImageDialogState();
+}
+
+class _CertificateImageDialogState extends State<CertificateImageDialog> {
+  late int currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
+
+  void _previousImage() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--;
+      });
+    }
+  }
+
+  void _nextImage() {
+    if (currentIndex < widget.certificates.length - 1) {
+      setState(() {
+        currentIndex++;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final isMobile = screenWidth < 600;
+    final cert = widget.certificates[currentIndex];
 
-    return CustomCard(
-      content: Container(
-        width: isMobile ? screenWidth * 0.9 : 300,
-        padding: const EdgeInsets.all(6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+    return Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: isMobile ? screenWidth * 0.9 : screenWidth * 0.8,
+          maxHeight: isMobile ? screenHeight * 0.8 : screenHeight * 0.7,
+        ),
+        child: Stack(
           children: [
-            if (filePath != null)
-              GestureDetector(
-                onTap: onImageTap,
-                child: Container(
-                  height: isMobile ? 25 : 50,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(filePath!),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Image.asset(
+                      cert['filePath'] ?? '',
                       fit: BoxFit.contain,
-                      alignment: Alignment.center,
+                      errorBuilder: (context, error, stackTrace) => const Center(
+                        child: Text('Failed to load image', style: TextStyle(color: Colors.red)),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(6),
                   ),
                 ),
-              )
-            else
-              Container(
-                height: isMobile ? 25 : 50,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Center(
-                  child: Text(
-                    'Pending',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
-                          fontSize: isMobile ? 8 : 10,
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cert['title'],
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: isMobile ? 14 : 16,
+                                color: const Color(0xFF1F2937),
+                              ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'No: ${cert['certificateNo']}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                fontSize: isMobile ? 12 : 14,
+                                color: const Color(0xFF4B5563),
+                              ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          cert['description'],
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                fontSize: isMobile ? 12 : 14,
+                                color: const Color(0xFF4B5563),
+                              ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (cert['issuer'] != null)
+                          Text(
+                            'Issuer: ${cert['issuer']}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  fontSize: isMobile ? 10 : 12,
+                                  color: const Color(0xFF4B5563),
+                                ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        if (cert['issueDate'] != null)
+                          Text(
+                            'Issue: ${cert['issueDate']}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  fontSize: isMobile ? 10 : 12,
+                                  color: const Color(0xFF4B5563),
+                                ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        if (cert['expiryDate'] != null)
+                          Text(
+                            'Expiry: ${cert['expiryDate']}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  fontSize: isMobile ? 10 : 12,
+                                  color: const Color(0xFF4B5563),
+                                ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            SizedBox(height: screenHeight * 0.01),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1F2937),
-                    fontSize: isMobile ? 10 : 12,
-                  ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              ],
             ),
-            SizedBox(height: screenHeight * 0.01),
-            Text(
-              'No: $certificateNo',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF6B7280),
-                    fontSize: isMobile ? 6 : 8,
-                  ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                icon: const Icon(LucideIcons.x, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
             ),
-            Text(
-              description,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF4B5563),
-                    fontSize: isMobile ? 8 : 10,
-                  ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Positioned(
+              left: 8,
+              top: screenHeight * 0.3,
+              child: IconButton(
+                icon: Icon(
+                  LucideIcons.chevronLeft,
+                  color: currentIndex > 0 ? Colors.black : Colors.grey,
+                  size: isMobile ? 24 : 32,
+                ),
+                onPressed: currentIndex > 0 ? _previousImage : null,
+              ),
             ),
-            if (issuer != null)
-              Text(
-                'Issuer: $issuer',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF6B7280),
-                      fontSize: isMobile ? 6 : 8,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            Positioned(
+              right: 8,
+              top: screenHeight * 0.3,
+              child: IconButton(
+                icon: Icon(
+                  LucideIcons.chevronRight,
+                  color: currentIndex < widget.certificates.length - 1 ? Colors.black : Colors.grey,
+                  size: isMobile ? 24 : 32,
+                ),
+                onPressed: currentIndex < widget.certificates.length - 1 ? _nextImage : null,
               ),
-            if (issueDate != null)
-              Text(
-                'Issue: $issueDate',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF6B7280),
-                      fontSize: isMobile ? 6 : 8,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            if (expiryDate != null)
-              Text(
-                'Expiry: $expiryDate',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF6B7280),
-                      fontSize: isMobile ? 6 : 8,
-                    ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+            ),
           ],
         ),
       ),
@@ -650,3 +607,60 @@ class _CommitmentCard extends StatelessWidget {
     );
   }
 }
+
+final List<Map<String, dynamic>> certificates = [
+  {
+    'title': 'JV Certificate',
+    'certificateNo': 'JV ALMA C.I.S',
+    'description': 'Incorporation',
+    'filePath': 'assets/certificates/jv_certificate.jpg',
+  },
+  {
+    'title': 'KRA Certificate',
+    'certificateNo': 'KRA',
+    'description': 'Tax Compliance',
+    'filePath': 'assets/certificates/kra_certificate.jpg',
+  },
+  {
+    'title': 'Business Permit',
+    'certificateNo': 'Business Permit',
+    'description': 'Valid',
+    'filePath': 'assets/certificates/business_permit.jpg',
+  },
+  {
+    'title': 'Building Works Certificate',
+    'certificateNo': 'Building Works Contractor',
+    'description': 'Construction',
+    'filePath': 'assets/certificates/Building_Works_Certificate_2026.jpg',
+  },
+  {
+    'title': 'Mechanical Service Certificate',
+    'certificateNo': 'Mechanical Service Contractor',
+    'description': 'Mechanical',
+    'filePath': 'assets/certificates/Mechanical_Service_Certificate_2026.jpg',
+  },
+  {
+    'title': 'Water Works Certificate',
+    'certificateNo': 'Water Works Contractor',
+    'description': 'Water Management',
+    'filePath': 'assets/certificates/Water_Works_Certificate_2026.jpg',
+  },
+  /*{
+    'title': 'Building Works Certificate',
+    'certificateNo': 'Building Works Contractor',
+    'description': 'Construction',
+    'filePath': 'assets/certificates/Building_Works_Certificate_2028.jpg',
+  },*/
+  {
+    'title': 'Mechanical Service Certificate',
+    'certificateNo': 'Mechanical Service Contractor',
+    'description': 'Mechanical',
+    'filePath': 'assets/certificates/Mechanical_Service_Certificate_2028.jpg',
+  },
+  {
+    'title': 'Water Works Certificate',
+    'certificateNo': 'Water Works Contractor',
+    'description': 'Water Management',
+    'filePath': 'assets/certificates/Water_Works_Certificate_2028.jpg',
+  },
+];
