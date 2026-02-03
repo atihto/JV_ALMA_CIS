@@ -210,7 +210,7 @@ class ConstructionDetail extends StatelessWidget {
         'client': 'Embassy of Portugal',
         'period': 'Mar 2025 – Aug 2025',
         'description': 'Adaptive renovation to transform an existing structure into a modern consular section for the Portuguese Embassy. The project involves full conversion of former spaces into biometric enrollment, visa production, and reception offices.',
-        'testimonial': '"JV ALMA C.I.S. demonstrated exceptional professionalism and delivered thorough documentation, ensuring smooth collaboration throughout the project. Their commitment to excellence was integral to the success of the renovation." — Miguel Antonio Luis ',
+        'testimonial': '"Thank you for all the thorough documentation and the great partnership throughout. Your support and professionalism have been truly appreciated, and it’s been a pleasure working with you." — Miguel Antonio Luis ',
         'imagePaths': [
           'assets/images/construction/portugese_embassy_1.jpg',
           'assets/images/construction/portugese_embassy_2.jpg',
@@ -219,9 +219,9 @@ class ConstructionDetail extends StatelessWidget {
       {
         'title': 'Swedish Ambassador\'s Residence Renov, Nairobi.',
         'client': 'Embassy of Sweden',
-        'period': 'July 2025 – September 2025',
+        'period': 'May 2025 – October 2025',
         'description': 'Overhaul of the electrical systems at the Swedish Ambassador’s residence, including upgrades to key electrical infrastructure to enhance system performance, improve energy efficiency, and ensure the reliability of the residence’s electrical operations.',
-        'testimonial': '“JV ALMA C.I.S. displayed exceptional professionalism in upgrading the electrical systems at the Swedish Ambassador’s residence, ensuring efficient execution and minimal disruption to daily operations.” — Julius Miano',
+        'testimonial': '',
         'imagePaths': [
           'assets/images/construction/swedish_embassy.jpg',
         ],

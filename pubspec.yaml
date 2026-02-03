@@ -28,6 +28,8 @@ dependencies:
   visibility_detector: ^0.4.0+2
   google_fonts: ^6.1.0
   path_provider: ^2.1.5
+  webview_flutter_wkwebview: ^3.23.5
+  webview_flutter_android: ^4.10.11
  
   
 dev_dependencies:

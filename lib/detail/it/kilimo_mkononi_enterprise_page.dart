@@ -5,8 +5,8 @@ import '../../widgets/header.dart';
 import '../../widgets/footer.dart';
 import '../../widgets/responsive_utils.dart';
 
-class KilimoMkononiPage extends StatelessWidget {
-  const KilimoMkononiPage({super.key});
+class KilimoMkononiEnterprisePage extends StatelessWidget {
+  const KilimoMkononiEnterprisePage({super.key});
 
   static const List<Map<String, String>> _features = [
     {
@@ -39,22 +39,9 @@ class KilimoMkononiPage extends StatelessWidget {
     },
   ];
 
-  static const List<Map<String, String>> _media = [
-    {
-      'type': 'image',
-      'path': 'assets/apk/kilimo_mobile_view.jpg',
-      'description': 'Kilimo Mkononi mobile app view.',
-    },
-    {
-      'type': 'image',
-      'path': 'assets/apk/kilimo_dashboard.jpg',
-      'description': 'Kilimo Mkononi dashboard interface.',
-    },
-  ];
-
   Future<void> _openPlayStore(BuildContext context) async {
     try {
-      debugPrint('KilimoMkononiPage: Opening Google Play Store');
+      debugPrint('KilimoMkononiEnterprisePage: Opening Google Play Store');
       
       showDialog(
         context: context,
@@ -103,7 +90,7 @@ class KilimoMkononiPage extends StatelessWidget {
         }
       }
     } catch (e) {
-      debugPrint('KilimoMkononiPage: Play Store redirect error: $e');
+      debugPrint('KilimoMkononiEnterprisePage: Play Store redirect error: $e');
       
       if (context.mounted) {
         Navigator.of(context).pop();
@@ -124,7 +111,7 @@ class KilimoMkononiPage extends StatelessWidget {
     final isMobile = screenWidth < ResponsiveUtils.mobileBreakpoint;
     final isTablet = screenWidth >= ResponsiveUtils.mobileBreakpoint &&
         screenWidth <= ResponsiveUtils.tabletBreakpoint;
-    debugPrint('KilimoMkononiPage: Building with screenWidth=$screenWidth');
+    debugPrint('KilimoMkononiEnterprisePage: Building with screenWidth=$screenWidth');
 
     return AppScaffold(
       body: SingleChildScrollView(
@@ -136,8 +123,8 @@ class KilimoMkononiPage extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Color(0xFF0F172A),
-                    Color(0xFF1E293B),
+                    Color(0xFF065F46),
+                    Color(0xFF047857),
                   ],
                 ),
               ),
@@ -156,7 +143,7 @@ class KilimoMkononiPage extends StatelessWidget {
                         size: isMobile ? 20 : 24,
                       ),
                       onPressed: () {
-                        debugPrint('KilimoMkononiPage: Navigating back');
+                        debugPrint('KilimoMkononiEnterprisePage: Navigating back');
                         Navigator.pop(context);
                       },
                       tooltip: 'Back',
@@ -167,7 +154,7 @@ class KilimoMkononiPage extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Kilimo Mkononi',
+                              'Kilimo Mkononi Enterprise',
                               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                     fontSize: isMobile ? 24 : 32,
                                     color: Colors.white,
@@ -176,10 +163,10 @@ class KilimoMkononiPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Farming in the Palm of your Hand',
+                              'Professional Farming Solutions for Farmers & Enterprises',
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontSize: isMobile ? 14 : 16,
-                                    color: const Color(0xFFBFDBFE),
+                                    color: const Color(0xFFD1FAE5),
                                   ),
                               textAlign: TextAlign.center,
                             ),
@@ -216,8 +203,8 @@ class KilimoMkononiPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: screenWidth,
-          height: 80,
+          width: screenWidth * 0.95,
+          height: 100,
           decoration: BoxDecoration(
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
@@ -226,7 +213,7 @@ class KilimoMkononiPage extends StatelessWidget {
             children: [
               Center(
                 child: Icon(
-                  LucideIcons.smartphone,
+                  LucideIcons.wheat,
                   size: 40,
                   color: Colors.grey[400],
                 ),
@@ -235,11 +222,11 @@ class KilimoMkononiPage extends StatelessWidget {
                 top: 4,
                 left: 4,
                 child: Chip(
-                  label: const Text('IT Division'),
+                  label: const Text('Enterprise Edition'),
                   backgroundColor: Colors.green[50],
                   labelStyle: TextStyle(
                     color: Colors.green[700],
-                    fontSize: 8,
+                    fontSize: 10,
                   ),
                 ),
               ),
@@ -269,7 +256,7 @@ class KilimoMkononiPage extends StatelessWidget {
               children: [
                 Center(
                   child: Icon(
-                    LucideIcons.smartphone,
+                    LucideIcons.wheat,
                     size: isTablet ? 40 : 48,
                     color: Colors.grey[400],
                   ),
@@ -278,7 +265,7 @@ class KilimoMkononiPage extends StatelessWidget {
                   top: 4,
                   left: 4,
                   child: Chip(
-                    label: const Text('IT Division'),
+                    label: const Text('Enterprise Edition'),
                     backgroundColor: Colors.green[50],
                     labelStyle: TextStyle(
                       color: Colors.green[700],
@@ -309,7 +296,7 @@ class KilimoMkononiPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Kilimo Mkononi',
+          'Kilimo Mkononi Enterprise',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontSize: isMobile ? 20 : 24,
                 color: const Color(0xFF1F2937),
@@ -317,7 +304,7 @@ class KilimoMkononiPage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'As a result of hands-on work with farming communities and real-world feedback, KilimoMkononi was developed to provide farmers with accessible, actionable tools directly on their mobile phones. KilimoMkononi helps farmers growing Beans, Maize, Carrots, Tomatoes, Onions, Courgettes, and Green Peppers to Grow, Protect, and Prosper.',
+          'Developed through hands-on work with farming communities and real-world feedback, Kilimo Mkononi Enterprise provides farmers with accessible, actionable tools directly on their mobile phones. Designed for professional farmers and agricultural enterprises growing Beans, Maize, Carrots, Tomatoes, Onions, Courgettes, and Green Peppers to Grow, Protect, and Prosper.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
@@ -342,7 +329,7 @@ class KilimoMkononiPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(
-                    Icons.check,
+                    Icons.check_circle,
                     size: 14,
                     color: Color(0xFF16A34A),
                   ),
@@ -383,7 +370,7 @@ class KilimoMkononiPage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'KilimoMkononi enables smarter, more resilient farming by combining on-the-ground experience with cutting-edge digital tools. It enhances income, strengthens communities, and contributes to a more sustainable agricultural future.',
+          'Kilimo Mkononi Enterprise enables smarter, more resilient farming by combining on-the-ground experience with cutting-edge digital tools. It enhances income, strengthens communities, and contributes to a more sustainable agricultural future.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
@@ -407,7 +394,7 @@ class KilimoMkononiPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'Get Kilimo Mkononi',
+                'Get Kilimo Mkononi Enterprise',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontSize: isMobile ? 16 : 18,
                       color: Colors.green[800],
@@ -417,7 +404,7 @@ class KilimoMkononiPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Download Kilimo Mkononi from Google Play Store and start farming smarter today!',
+                'Download Kilimo Mkononi Enterprise from Google Play Store and start farming smarter today!',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: isMobile ? 12 : 14,
                       color: Colors.green[700],

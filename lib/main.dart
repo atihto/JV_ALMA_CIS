@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart'; // Add Firebase Core
 import 'firebase_options.dart'; // Import generated Firebase options
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'pages/home_page.dart';
 import 'pages/about_page.dart';
@@ -19,8 +20,11 @@ import 'detail/agribusiness/agribusiness_detail.dart';
 import 'detail/oil/oil_gas_services_detail.dart';
 import 'detail/it/it_division_detail.dart';
 import 'detail/it/cmms_page.dart';
+import 'detail/it/alma_works_page.dart';
 import 'detail/it/coffee_core_page.dart';
-import 'detail/it/kilimo_mkononi_page.dart';
+import 'detail/it/kilimo_mkononi_landing_page.dart';
+import 'detail/it/kilimo_mkononi_enterprise_page.dart';
+import 'detail/it/kilimo_mkononi_education_page.dart';
 import 'dart:developer' as developer;
 
 void main() async {
@@ -80,7 +84,7 @@ class MyApp extends StatelessWidget {
           ),
           titleLarge: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
             color: Color(0xFF1E293B),
           ),
           titleMedium: TextStyle(
@@ -94,75 +98,26 @@ class MyApp extends StatelessWidget {
             color: Color(0xFF1E293B),
           ),
           bodyLarge: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.normal,
+            fontSize: 14,
             color: Color(0xFF374151),
           ),
           bodyMedium: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-            color: Color(0xFF374151),
+            fontSize: 13,
+            color: Color(0xFF4B5563),
           ),
           bodySmall: TextStyle(
             fontSize: 12,
-            fontWeight: FontWeight.normal,
             color: Color(0xFF6B7280),
           ),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF1E293B),
-            foregroundColor: Colors.white,
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: const Color(0xFF1E293B),
-            side: const BorderSide(color: Color(0xFF1E293B), width: 2),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        cardTheme: CardThemeData(
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          color: Colors.white,
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Color(0xFF1E293B),
-          elevation: 0,
-          centerTitle: false,
+        scaffoldBackgroundColor: Colors.white,
+        cardTheme: const CardThemeData(  // no const needed if you have dynamic values, but const is fine here
+  color: Colors.white,
         ),
       ),
-      initialRoute: '/',
       onGenerateRoute: (settings) {
-        developer.log('Navigating to: ${settings.name}', name: 'MyApp');
-
-        // Parse the route name and query parameters
-        final uri = Uri.parse(settings.name ?? '/');
-        final path = uri.path.isEmpty ? '/' : uri.path;
-        final queryParams = uri.queryParameters;
-
-        // If fbclid is present, redirect to the same path without query parameters
-        if (queryParams.containsKey('fbclid')) {
-          developer.log('fbclid detected, redirecting to: $path', name: 'MyApp');
-          // Redirect to the clean path
-          return MaterialPageRoute(
-            builder: (_) => _buildPageForRoute(path),
-            settings: RouteSettings(name: path),
-          );
-        }
-
-        // Handle routes as before
-        switch (path) {
+        developer.log('MyApp: Generating route for ${settings.name}', name: 'MyApp');
+        switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (_) => const HomePage());
           case '/about':
@@ -197,10 +152,16 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const ITDivisionDetail());
           case '/cmms':
             return MaterialPageRoute(builder: (_) => const CmmsPage());
+          case '/alma-works':
+            return MaterialPageRoute(builder: (_) => const AlmaWorksPage());
           case '/coffee-core':
             return MaterialPageRoute(builder: (_) => const CoffeeCorePage());
           case '/kilimo-mkononi':
-            return MaterialPageRoute(builder: (_) => const KilimoMkononiPage());
+            return MaterialPageRoute(builder: (_) => const KilimoMkononiLandingPage());
+          case '/kilimo-mkononi-enterprise':
+            return MaterialPageRoute(builder: (_) => const KilimoMkononiEnterprisePage());
+          case '/kilimo-mkononi-education':
+            return MaterialPageRoute(builder: (_) => const KilimoMkononiEducationPage());
           default:
             developer.log('Unknown route: ${settings.name}', name: 'MyApp');
             return MaterialPageRoute(
@@ -214,56 +175,5 @@ class MyApp extends StatelessWidget {
         }
       },
     );
-  }
-
-  // Helper function to build page for clean route
-  Widget _buildPageForRoute(String path) {
-    switch (path) {
-      case '/':
-        return const HomePage();
-      case '/about':
-        return const AboutPage();
-      case '/business-units':
-        return const BusinessUnitsPage();
-      case '/contact':
-        return const ContactPage();
-      case '/news':
-        return const NewsPage();
-      /*case '/projects':
-        return const ProjectsPage();
-      case '/references':
-        return const ReferencesPage();*/
-      case '/careers':
-        return const CareersPage();
-      case '/certificates':
-        return const CertificatesPage();
-      case '/privacy-policy':
-        return const PrivacyPolicyPage();
-      case '/cookies':
-        return const CookiesPage();
-      case '/map':
-        return const MapPage(address: '');
-      case '/construction-detail':
-        return const ConstructionDetail();
-      case '/agribusiness':
-        return const AgribusinessDetail();
-      case '/oil-gas':
-        return const OilAndGasServicesDetail();
-      case '/it-division':
-        return const ITDivisionDetail();
-      case '/cmms':
-        return const CmmsPage();
-      case '/coffee-core':
-        return const CoffeeCorePage();
-      case '/kilimo-mkononi':
-        return const KilimoMkononiPage();
-      default:
-        return Scaffold(
-          appBar: AppBar(title: const Text('Page Not Found')),
-          body: const Center(
-            child: Text('404 - Page Not Found'),
-          ),
-        );
-    }
   }
 }

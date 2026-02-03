@@ -22,7 +22,7 @@ class CustomCard extends StatelessWidget {
         color: Colors.white,
         child: InkWell(
           onTap: hoverEffect ? () {} : null,
-          hoverColor: hoverEffect ? Colors.grey.withOpacity(0.1) : null,
+          hoverColor: hoverEffect ? const Color(0x199E9E9E) : null,
           child: content,
         ),
       ),

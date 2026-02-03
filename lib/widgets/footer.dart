@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jv_alma_cis/config.dart';
+import 'package:jv_alma_cis/config.dart' as app_config;
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -213,16 +213,16 @@ class _FooterState extends State<Footer> {
                               const SizedBox(height: 16),
                               _buildContactInfo(
                                 icon: LucideIcons.phone,
-                                text: 'Call us on\n${Config.companyPhone}',
-                                uri: 'tel:${Config.companyPhone.replaceAll(' ', '')}',
+                                text: 'Call us on\n${app_config.Config.companyPhone}',
+                                uri: 'tel:${app_config.Config.companyPhone.replaceAll(' ', '')}',
                                 isMobile: isMobile,
                                 buttonKey: 'phone',
                               ),
                               const SizedBox(height: 12),
                               _buildContactInfo(
                                 icon: LucideIcons.mail,
-                                text: 'Email us on\n${Config.companyEmail}',
-                                uri: 'mailto:${Config.companyEmail}',
+                                text: 'Email us on\n${app_config.Config.companyEmail}',
+                                uri: 'mailto:${app_config.Config.companyEmail}',
                                 isMobile: isMobile,
                                 buttonKey: 'email',
                               ),
@@ -388,7 +388,7 @@ class _FooterState extends State<Footer> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B).withOpacity(0.9),
+                  color: const Color(0xE51E293B),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(

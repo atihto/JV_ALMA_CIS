@@ -42,6 +42,18 @@ class AgribusinessDetail extends StatelessWidget {
         {'path': 'assets/images/agribusiness/makueni_2.jpg', 'caption': ''},
       ],
     },
+    {
+      'title': 'ENI - Provision of Technical Services & Operations Support',
+      'client': 'ENI',
+      'period': '',
+      'description': 'JV ALMA C.I.S provided comprehensive technical services and operations support for ENI\'s projects, ensuring seamless execution through expert coordination, technical oversight, and operational efficiency. Our team delivered specialized support that enhanced project performance and maintained the highest standards of quality and safety.',
+      'testimonial': '',
+      'imagePaths': [
+        {'path': 'assets/images/agribusiness/eni_1.jpg', 'caption': ''},
+        {'path': 'assets/images/agribusiness/eni_2.jpg', 'caption': ''},
+        {'path': 'assets/images/agribusiness/eni_3.jpg', 'caption': ''},
+      ],
+    },
   ];
 
   static final Map<String, dynamic> _content = {
@@ -270,7 +282,7 @@ class AgribusinessDetail extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'Infrastructure',
+                'Technical Services',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontSize: isMobile ? 20 : 24,
                       color: const Color(0xFF1F2937),
@@ -291,7 +303,7 @@ class AgribusinessDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "JV ALMA C.I.S Kenya's infrastructure programs empower rural communities through targeted development and sustainable solutions.",
+          "JV ALMA C.I.S Kenya's technical services programs empower rural communities through targeted development and sustainable solutions.",
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
@@ -299,7 +311,7 @@ class AgribusinessDetail extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'Projects',
+          'projects & Project Management',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontSize: isMobile ? 14 : 16,
                 color: const Color(0xFF1F2937),
@@ -625,7 +637,7 @@ class AgribusinessDetail extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'KilimoMkononi Mobile Application',
+                            'KilimoMkononi Platform',
                             style: TextStyle(
                               fontSize: isMobile ? 12 : 14,
                               fontWeight: FontWeight.bold,
@@ -634,7 +646,7 @@ class AgribusinessDetail extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Grow, Protect, Prosper\nKilimoMkononi empowers smallholder farmers by delivering crop-specific advice, market price forecasts, 5-day weather updates, soil health recommendations, pest/disease management, and financial tracking tools—all via a user-friendly mobile interface. It supports better decision-making and higher yields for crops like maize, beans, carrots, and tomatoes.',
+                            'Grow, Protect, Prosper\n\nKilimoMkononi delivers comprehensive agricultural solutions through two specialized editions:\n\n• Enterprise Edition: Empowers professional farmers and agricultural businesses with crop-specific advice, real-time market prices, 5-day weather forecasts, soil health management, pest/disease control, and financial tracking for crops like maize, beans, carrots, and tomatoes.\n\n• Education Edition: Interactive learning platform for schools featuring quizzes, farm simulations, and a three-tier safety approval system (JV Admin → Headteachers → Teachers → Students), making agricultural education safe, engaging, and accessible.',
                             style: TextStyle(
                               fontSize: isMobile ? 12 : 14,
                               color: const Color(0xFF4B5563),

@@ -13,8 +13,6 @@ class OilAndGasServicesDetail extends StatelessWidget {
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
         final isMobile = screenWidth < 600;
-        final isTablet = screenWidth >= 600 && screenWidth <= 896;
-        final isDesktop = screenWidth > 896;
 
         return AppScaffold(
           body: SingleChildScrollView(

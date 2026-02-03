@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/footer.dart';
@@ -82,7 +84,7 @@ class BusinessUnitsPage extends StatelessWidget {
                 'Delivering innovative solutions across construction, agribusiness, oil & gas, and information technology.',
                 style: TextStyle(
                   fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 16 : isTablet ? 18 : 20),
-                  color: Colors.white.withOpacity(0.9),
+                  color: const Color(0xE5FFFFFF),
                   height: 1.6,
                 ),
                 textAlign: TextAlign.center,
@@ -107,7 +109,7 @@ class BusinessUnitsPage extends StatelessWidget {
       {
         'icon': LucideIcons.sprout,
         'title': 'Agribusiness',
-        'description': 'Our agribusiness division empowers farmers with modern agricultural solutions, infrastructure, training and smart digital farming tools like CoffeeCore and KilimoMkononi, promoting sustainable agriculture and food security.',
+        'description': 'Our agribusiness division empowers farmers with modern agricultural solutions, technical services, training and smart digital farming tools like CoffeeCore and KilimoMkononi, promoting sustainable agriculture and food security.',
         'route': '/agribusiness',
         'color': const Color(0xFFD1FAE5),
         'hoverColor': const Color(0xFFA7F3D0),
@@ -297,7 +299,6 @@ class BusinessUnitsPage extends StatelessWidget {
   }) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final cardHeight = constraints.maxHeight;
         return card.CustomCard(
           hoverEffect: false,
           clipBehavior: Clip.hardEdge,
@@ -425,7 +426,7 @@ class _BusinessUnitCardState extends State<BusinessUnitCard> {
                   );
                 }
               },
-              splashColor: Colors.grey.withOpacity(0.2),
+              splashColor: const Color(0x339E9E9E),
               hoverColor: widget.hoverColor,
               borderRadius: BorderRadius.circular(12),
               child: AnimatedContainer(
@@ -436,7 +437,7 @@ class _BusinessUnitCardState extends State<BusinessUnitCard> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(isHovered ? 0.3 : 0.1),
+                      color: isHovered ? const Color(0x4D9E9E9E) : const Color(0x1A9E9E9E),
                       blurRadius: isHovered ? 12 : 8,
                       offset: const Offset(0, 4),
                     ),

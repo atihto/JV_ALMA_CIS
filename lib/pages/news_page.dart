@@ -13,7 +13,6 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-
   @override
   void initState() {
     super.initState();
@@ -23,8 +22,6 @@ class _NewsPageState extends State<NewsPage> {
       }
     });
   }
-
-
 
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
@@ -39,20 +36,75 @@ class _NewsPageState extends State<NewsPage> {
     }
   }
 
-  void _showImageDialog(String imageUrl) {
+  void _showImageDialog(String imageUrl, String title) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.8,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(imageUrl),
-                fit: BoxFit.contain,
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: [
+              Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Flexible(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
+                        ),
+                        child: Image.asset(
+                          imageUrl,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) => Container(
+                            height: 200,
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: Icon(LucideIcons.imageOff, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: IconButton(
+                  icon: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Icon(LucideIcons.x, color: Colors.black),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -66,6 +118,41 @@ class _NewsPageState extends State<NewsPage> {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
 
+    final newsItems = [
+      {
+        'image': 'assets/news/news_2.jpg',
+        'title': 'Pastoralists in West Pokot reap big from seed maize farming',
+        'excerpt': 'Transforming lives through agricultural innovation in West Pokot region',
+        'date': 'Project Highlight',
+        'category': 'Agriculture',
+        'color': const Color(0xFF059669),
+      },
+      {
+        'image': 'assets/news/wei_wei_project.jpg',
+        'title': 'Wei Wei irrigation scheme to be handed over to pastoralists',
+        'excerpt': 'Empowering communities with sustainable irrigation infrastructure',
+        'date': 'Infrastructure',
+        'category': 'Development',
+        'color': const Color(0xFF2563EB),
+      },
+      {
+        'image': 'assets/news/italy_project.jpg',
+        'title': 'Italian "giardiniera" helps Kenyan farmers',
+        'excerpt': 'International collaboration bringing expertise to local agriculture',
+        'date': 'Partnership',
+        'category': 'Collaboration',
+        'color': const Color(0xFFDC2626),
+      },
+      {
+        'image': 'assets/news/news_3.jpg',
+        'title': 'Pastoralists in Baringo Kapluk benefit from seed maize farming',
+        'excerpt': 'Continued success stories from our agricultural development programs',
+        'date': 'Impact Story',
+        'category': 'Agriculture',
+        'color': const Color(0xFF7C3AED),
+      },
+    ];
+
     return AppScaffold(
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -73,229 +160,196 @@ class _NewsPageState extends State<NewsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Hero Section
-            ClipRRect(
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFF0F172A),
-                      Color(0xFF1E293B),
-                    ],
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: screenHeight * 0.06,
-                  horizontal: screenWidth * 0.04,
-                ),
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'News & Updates',
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                fontSize: isMobile ? 24 : 32,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        Text(
-                          'Stay informed about JV ALMA C.I.S\'s latest achievements, project milestones, and industry insights',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontSize: isMobile ? 14 : 16,
-                                color: const Color(0xFFBFDBFE),
-                              ),
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // News Section
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.06,
-                horizontal: screenWidth * 0.04,
-              ),
-              child: Container(
-                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1280),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () => _showImageDialog('assets/news/news_2.jpg'),
-                      child: Image.asset(
-                        'assets/news/news_2.jpg',
-                        width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                          height: 200,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Pastoralists in West Pokot reap big from seed maize farming',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    GestureDetector(
-                      onTap: () => _showImageDialog('assets/news/wei_wei_project.jpg'),
-                      child: Image.asset(
-                        'assets/news/wei_wei_project.jpg',
-                        width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                          height: 200,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Wei Wei irrigation scheme to be handed over to pastoralists',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    GestureDetector(
-                      onTap: () => _showImageDialog('assets/news/italy_project.jpg'),
-                      child: Image.asset(
-                        'assets/news/italy_project.jpg',
-                        width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                          height: 200,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Italian "giardiniera" helps Kenyan farmers',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    GestureDetector(
-                      onTap: () => _showImageDialog('assets/news/news_3.jpg'),
-                      child: Image.asset(
-                        'assets/news/news_3.jpg',
-                        width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: isMobile ? screenWidth * 0.9 : isTablet ? screenWidth * 0.7 : 800,
-                          height: 200,
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(LucideIcons.imageOff, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Pastoralists in Baringo Kapluk reap big from seed maize farming (continued)',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 14 : 16,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF0F172A),
+                    Color(0xFF1E293B),
                   ],
                 ),
               ),
-            ),
-            // Stay Updated Section
-            Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFFF9FAFB),
-              ),
               padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.06,
-                horizontal: screenWidth * 0.04,
+                vertical: isMobile ? 32 : 48,
+                horizontal: isMobile ? 16 : 24,
+              ),
+              child: Center(
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LucideIcons.newspaper,
+                        size: isMobile ? 40 : 56,
+                        color: const Color(0xFFF97316),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'News & Updates',
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                              fontSize: isMobile ? 28 : 40,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: isMobile ? 12 : 16),
+                      Text(
+                        'Stay informed about JV ALMA C.I.S\'s latest achievements, project milestones, and industry insights',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontSize: isMobile ? 14 : 16,
+                              color: const Color(0xFFBFDBFE),
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // News Grid Section
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: isMobile ? 32 : 48,
+                horizontal: isMobile ? 16 : 24,
               ),
               child: Container(
                 constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 1200),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Stay Updated',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            fontSize: isMobile ? 20 : 24,
+                      'Latest Stories',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontSize: isMobile ? 24 : 32,
                             color: const Color(0xFF111827),
                             fontWeight: FontWeight.bold,
                           ),
                       textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: screenHeight * 0.02),
+                    const SizedBox(height: 8),
                     Text(
-                      'Follow us on our social media pages to stay updated with the latest news and updates from JV ALMA C.I.S',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: isMobile ? 12 : 14,
+                      'Highlights from our recent projects and initiatives',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: isMobile ? 13 : 15,
                             color: const Color(0xFF6B7280),
                           ),
                       textAlign: TextAlign.center,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: screenHeight * 0.02),
+                    SizedBox(height: isMobile ? 24 : 40),
+                    
+                    // News Cards Grid
+                    Wrap(
+                      spacing: 24,
+                      runSpacing: 24,
+                      children: newsItems.map((item) {
+                        return SizedBox(
+                          width: isMobile
+                              ? double.infinity
+                              : isTablet
+                                  ? (screenWidth - 64) / 2
+                                  : (screenWidth - 96) / 2,
+                          child: _buildNewsCard(
+                            context,
+                            isMobile,
+                            item['image'] as String,
+                            item['title'] as String,
+                            item['excerpt'] as String,
+                            item['date'] as String,
+                            item['category'] as String,
+                            item['color'] as Color,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Stay Updated Section
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFFFF7ED),
+                    Color(0xFFFFEDD5),
+                  ],
+                ),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: isMobile ? 40 : 56,
+                horizontal: isMobile ? 16 : 24,
+              ),
+              child: Container(
+                constraints: BoxConstraints(maxWidth: isMobile ? screenWidth * 0.95 : 800),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x33F97316),
+                            blurRadius: 12,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        LucideIcons.bell,
+                        size: isMobile ? 32 : 40,
+                        color: const Color(0xFFF97316),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Stay Connected',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontSize: isMobile ? 24 : 32,
+                            color: const Color(0xFF111827),
+                            fontWeight: FontWeight.bold,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Follow us on social media for real-time updates, behind-the-scenes content, and more stories from JV ALMA C.I.S',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: isMobile ? 14 : 16,
+                            color: const Color(0xFF6B7280),
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          icon: Icon(LucideIcons.linkedin, color: const Color(0xFFF97316), size: isMobile ? 24 : 32),
-                          onPressed: () => _launchUrl('https://www.linkedin.com/company/jvalmacis/'),
+                        _buildSocialButton(
+                          context,
+                          isMobile,
+                          LucideIcons.linkedin,
+                          'LinkedIn',
+                          const Color(0xFF0A66C2),
+                          () => _launchUrl('https://www.linkedin.com/company/jvalmacis/'),
                         ),
                         const SizedBox(width: 16),
-                        IconButton(
-                          icon: Icon(LucideIcons.instagram, color: const Color(0xFFF97316), size: isMobile ? 24 : 32),
-                          onPressed: () => _launchUrl('https://www.instagram.com/jvalmacis/'),
+                        _buildSocialButton(
+                          context,
+                          isMobile,
+                          LucideIcons.instagram,
+                          'Instagram',
+                          const Color(0xFFE4405F),
+                          () => _launchUrl('https://www.instagram.com/jvalmacis/'),
                         ),
                       ],
                     ),
@@ -303,10 +357,190 @@ class _NewsPageState extends State<NewsPage> {
                 ),
               ),
             ),
+
             SizedBox(height: screenHeight * 0.03),
             const Footer(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildNewsCard(
+    BuildContext context,
+    bool isMobile,
+    String imageUrl,
+    String title,
+    String excerpt,
+    String date,
+    String category,
+    Color categoryColor,
+  ) {
+    return GestureDetector(
+      onTap: () => _showImageDialog(imageUrl, title),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x14000000),
+              blurRadius: 20,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image Section
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                  child: Image.asset(
+                    imageUrl,
+                    width: double.infinity,
+                    height: isMobile ? 200 : 240,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: double.infinity,
+                      height: isMobile ? 200 : 240,
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: Icon(LucideIcons.imageOff, color: Colors.grey, size: 48),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 12,
+                  left: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: categoryColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      category,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            
+            // Content Section
+            Padding(
+              padding: EdgeInsets.all(isMobile ? 16 : 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        LucideIcons.tag,
+                        size: 14,
+                        color: Color(0xFF9CA3AF),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        date,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontSize: 12,
+                              color: const Color(0xFF9CA3AF),
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontSize: isMobile ? 16 : 18,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF111827),
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    excerpt,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: isMobile ? 13 : 14,
+                          color: const Color(0xFF6B7280),
+                          height: 1.5,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Text(
+                        'View Article',
+                        style: TextStyle(
+                          fontSize: isMobile ? 13 : 14,
+                          color: categoryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        LucideIcons.arrowRight,
+                        size: 16,
+                        color: categoryColor,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialButton(
+    BuildContext context,
+    bool isMobile,
+    IconData icon,
+    String label,
+    Color color,
+    VoidCallback onPressed,
+  ) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, size: isMobile ? 20 : 24),
+      label: Text(
+        label,
+        style: TextStyle(
+          fontSize: isMobile ? 14 : 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 20 : 28,
+          vertical: isMobile ? 12 : 16,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 4,
       ),
     );
   }

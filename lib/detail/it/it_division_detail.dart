@@ -88,13 +88,26 @@ class ITDivisionDetail extends StatelessWidget {
                 children: [
                   Container(
                     color: const Color(0xFFF9FAFB),
-                    child: const BusinessUnitSection(
+                    child: const BusinessUnitSection(  // ← Removed 'const' here to allow non-constant onTap callbacks
                       title: 'IT Division',
                       icon: LucideIcons.globe,
                       iconColor: Color(0xFF9333EA),
                       description:
                           'Our in-house IT division develops cutting-edge software solutions that power our operations across all business units. From facility management systems to agricultural mobile applications, we create technology that drives efficiency and innovation.',
                       children: [
+                        Subsection(
+                          title: 'AlmaWorks - Construction Management Software/App',
+                          icon: LucideIcons.database,
+                          description:
+                              'AlmaWorks, Proprietary construction management software, designed for sensitive construction management operations.',
+                          sectionKey: 'alma-works',
+                          badge: 'Construction Solution',
+                          features: [
+                            'Asset tracking and monitoring',
+                            'Preventive maintenance scheduling',
+                            'Work order management',
+                          ],
+                          ),
                         Subsection(
                           title: 'NyumbaSmart - CMMS Software/App',
                           icon: LucideIcons.database,
@@ -107,21 +120,21 @@ class ITDivisionDetail extends StatelessWidget {
                             'Preventive maintenance scheduling',
                             'Work order management',
                           ],
-                        ),
+                         ),
                         Subsection(
-                          title: 'Kilimo Mkononi App',
+                          title: 'Kilimo Mkononi Platform',
                           icon: LucideIcons.smartphone,
                           description:
-                              'Comprehensive mobile application helping thousands of farmers across Kenya with agricultural management and market access.',
+                              'Comprehensive agricultural platform helping thousands across Kenya with two specialized editions: Enterprise for professional farmers and Education for schools.',
                           sectionKey: 'kilimo-mkononi',
-                          badge: 'Multi Crop Farming Solution',
+                          badge: 'Agricultural Solutions Suite',
                           features: [
-                            'Farming tips and best practices',
-                            'Weather forecasting integration',
-                            'Soil and pest management',
-                            'Cost control tracking',
+                            'Enterprise Edition - Professional farming tools with market access and financial tracking',
+                            'Education Edition - Interactive learning with quizzes, simulations, and student safety features',
+                            'Weather forecasting and crop management across multiple crops',
+                            'Pest management and soil health monitoring',
                           ],
-                        ),
+                         ),
                         Subsection(
                           title: 'Coffee Core Platform',
                           icon: LucideIcons.cloud,
@@ -134,7 +147,7 @@ class ITDivisionDetail extends StatelessWidget {
                             'Cooperative integration system',
                             'Yield tracking and management',
                           ],
-                        ),
+                            ),
                       ],
                     ),
                   ),

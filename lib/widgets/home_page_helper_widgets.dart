@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jv_alma_cis/widgets/custom_widgets.dart';
 import 'package:jv_alma_cis/widgets/custom_card.dart' as card;
 import 'dart:developer' as developer;
 
@@ -33,90 +32,67 @@ class HomePageHelperWidgets {
         return card.CustomCard(
           hoverEffect: true,
           clipBehavior: Clip.hardEdge,
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              bool isHovered = false;
-
-              return MouseRegion(
-                onEnter: (_) {
+          content: InkWell(
+            onTap: () {
+              developer.log('businessUnitCard: Tapped $route', name: 'HomePageHelperWidgets');
+              if (context.mounted) {
+                Navigator.pushNamed(context, route).catchError((e) {
+                  developer.log('businessUnitCard: Navigation error to $route: $e', name: 'HomePageHelperWidgets');
                   if (context.mounted) {
-                    setState(() => isHovered = true);
-                    developer.log('businessUnitCard: Hover enter $name', name: 'HomePageHelperWidgets');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Navigation error: ${e.toString()}')),
+                    );
                   }
-                },
-                onExit: (_) {
-                  if (context.mounted) {
-                    setState(() => isHovered = false);
-                    developer.log('businessUnitCard: Hover exit $name', name: 'HomePageHelperWidgets');
-                  }
-                },
-                cursor: SystemMouseCursors.click,
-                child: InkWell(
-                  onTap: () {
-                    developer.log('businessUnitCard: Tapped $route', name: 'HomePageHelperWidgets');
-                    if (context.mounted) {
-                      Navigator.pushNamed(context, route).catchError((e) {
-                        developer.log('businessUnitCard: Navigation error to $route: $e', name: 'HomePageHelperWidgets');
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Navigation error: ${e.toString()}')),
-                          );
-                        }
-                        return null;
-                      });
-                    }
-                  },
-                  splashColor: Colors.grey.withOpacity(0.2),
-                  hoverColor: hoverBgColor,
-                  borderRadius: BorderRadius.circular(12),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    transform: isHovered ? Matrix4.identity().scaled(1.02) : Matrix4.identity(),
-                    decoration: BoxDecoration(
-                      color: isHovered ? hoverBgColor : bgColor,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(isHovered ? 0.3 : 0.1),
-                          blurRadius: isHovered ? 12 : 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    padding: EdgeInsets.all(isMobile ? 10 : isTablet ? 12 : 12),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          icon,
-                          size: _getResponsiveIconSize(cardHeight, baseSize: isMobile ? 28 : 32),
-                          color: iconColor,
-                        ),
-                        SizedBox(height: isMobile ? 6 : 8),
-                        Text(
-                          title,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 16 : isTablet ? 17 : 18),
-                                color: const Color(0xFF1F2937),
-                              ),
-                        ),
-                        SizedBox(height: isMobile ? 6 : 8),
-                        Text(
-                          description,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 12 : isTablet ? 13 : 14),
-                                color: const Color(0xFF4B5563),
-                                height: 1.3,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+                  return null;
+                });
+              }
             },
+            splashColor: const Color(0x339E9E9E), // Colors.grey with 0.2 opacity
+            hoverColor: hoverBgColor,
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x1A9E9E9E), // 10% opacity
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.all(isMobile ? 10 : isTablet ? 12 : 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    icon,
+                    size: _getResponsiveIconSize(cardHeight, baseSize: isMobile ? 28 : 32),
+                    color: iconColor,
+                  ),
+                  SizedBox(height: isMobile ? 6 : 8),
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 16 : isTablet ? 17 : 18),
+                          color: const Color(0xFF1F2937),
+                        ),
+                  ),
+                  SizedBox(height: isMobile ? 6 : 8),
+                  Text(
+                    description,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 12 : isTablet ? 13 : 14),
+                          color: const Color(0xFF4B5563),
+                          height: 1.3,
+                        ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -167,7 +143,7 @@ class HomePageHelperWidgets {
                     description,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: _getResponsiveFontSize(screenWidth, baseSize: isMobile ? 12 : isTablet ? 13 : 14),
-                          color: Colors.white.withValues(alpha: 0.9),
+                          color: const Color(0xE6FFFFFF), // Colors.white with 0.9 opacity
                           height: 1.3,
                         ),
                   ),

@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
       {'image': 'assets/images/clients/portugal.jpg', 'text': null},
       {'image': 'assets/images/clients/iadc.jpg', 'text': null},
       {'image': 'assets/images/clients/total.jpg', 'text': null},
+      {'image': 'assets/images/clients/eni.jpg', 'text': null},
     ];
 
     final List<Map<String, dynamic>> businessUnits = [
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               child: Container(
-                color: Colors.black.withOpacity(0.6),
+                color: const Color(0x99000000),
                 padding: EdgeInsets.symmetric(
                   vertical: isMobile ? 16.0 : 24.0,
                   horizontal: isMobile ? screenWidth * 0.05 : screenWidth * 0.03,

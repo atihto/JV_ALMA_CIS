@@ -105,7 +105,7 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
                 'Building partnerships, delivering excellence, and creating sustainable solutions across East Africa.',
                 style: TextStyle(
                   fontSize: isMobile ? 16 : isTablet ? 18 : 20,
-                  color: Colors.white.withOpacity(0.9),
+                  color: const Color(0xE6FFFFFF), // Colors.white with 0.9 opacity
                   height: 1.6,
                 ),
                 textAlign: TextAlign.center,
@@ -300,11 +300,11 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Color(0x199E9E9E),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -353,11 +353,11 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Color(0x199E9E9E),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -928,11 +928,11 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Color(0x199E9E9E),
             blurRadius: 8,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),
@@ -1013,11 +1013,11 @@ class _AboutPageState extends State<AboutPage> with TickerProviderStateMixin {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Color(0x199E9E9E),
             blurRadius: 8,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),

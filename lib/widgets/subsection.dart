@@ -13,6 +13,7 @@ const Map<String, String> sectionRoutes = {
   'oil-partners': '/oil-partners',
   'cmms': '/cmms',
   'coffee-core': '/coffee-core',
+  'alma-works': '/alma-works',
 };
 
 class Subsection extends StatelessWidget {
@@ -330,74 +331,4 @@ class Partnership {
     required this.name,
     required this.details,
   });
-}
-
-class CmmsFeatures extends StatelessWidget {
-  const CmmsFeatures({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-    final isTablet = screenWidth >= 600 && screenWidth < 1024;
-
-    const featuresList = [
-      'Work order management',
-      'Asset tracking and monitoring',
-      'Preventive maintenance scheduling',
-      'Inventory management',
-      'Reporting and analytics',
-      'Mobile accessibility',
-    ];
-
-    return Container(
-      margin: const EdgeInsets.only(top: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'CMMS Software Features',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: isMobile ? 16 : 18,
-                  color: const Color(0xFF1E293B),
-                ),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: isMobile ? 12 : 20,
-            runSpacing: 12,
-            children: featuresList
-                .map((feature) => SizedBox(
-                      width: isMobile ? screenWidth * 0.8 : isTablet ? screenWidth * 0.4 : screenWidth * 0.25,
-                      child: Row(
-                        children: [
-                          const Icon(Icons.check_circle_outline, size: 16, color: Color(0xFF22C55E)),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              feature,
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: isMobile ? 14 : 16,
-                                color: const Color(0xFF374151),
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ))
-                .toList(),
-          ),
-        ],
-      ),
-    );
-  }
 }
