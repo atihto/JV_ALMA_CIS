@@ -88,29 +88,16 @@ class CoffeeCorePage extends StatelessWidget {
       'description': 'Tailored forecasts to protect coffee crops.'
     },
     {
-      'title': 'Soil Health',
+      'title': 'Field Data Input',
       'description': 'Soil management for sustainable coffee farming.'
     },
     {
-      'title': 'Pest Control',
+      'title': 'Pest and Disease Management',
       'description': 'Solutions for coffee-specific pests like berry borers.'
     },
     {
-      'title': 'Loan Management',
+      'title': 'Farm and Loan Management',
       'description': 'Track your cooperative loans and repayment schedules.'
-    },
-  ];
-
-  static const List<Map<String, String>> _media = [
-    {
-      'type': 'image',
-      'path': 'assets/apk/coffee_mobile_view.jpg',
-      'description': 'Coffee Core mobile app interface.',
-    },
-    {
-      'type': 'image',
-      'path': 'assets/apk/coffee_dashboard.jpg',
-      'description': 'Coffee Core dashboard overview.',
     },
   ];
 
@@ -306,22 +293,96 @@ class CoffeeCorePage extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'Coffee Core features a comprehensive role-based management system to ensure efficient operations:',
+          'Coffee Core features a comprehensive role-based management system:',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: isMobile ? 12 : 14,
                 color: const Color(0xFF4B5563),
               ),
         ),
         const SizedBox(height: 16),
-        ..._adminRoles.map((role) => _buildAdminRoleCard(
-          context,
-          role: role['role'] as String,
-          icon: role['icon'] as IconData,
-          color: role['color'] as Color,
-          responsibilities: role['responsibilities'] as List<String>,
-          isMobile: isMobile,
-          isTablet: isTablet,
-        )),
+        
+        // Admin Role Cards - True side-by-side layout
+        if (isMobile)
+          // Mobile: Stack vertically
+          Column(
+            children: _adminRoles.map((role) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildAdminRoleCard(
+                context,
+                role: role['role'] as String,
+                icon: role['icon'] as IconData,
+                color: role['color'] as Color,
+                responsibilities: role['responsibilities'] as List<String>,
+                isMobile: isMobile,
+                isTablet: isTablet,
+              ),
+            )).toList(),
+          )
+        else
+          // Desktop/Tablet: True side-by-side (2 rows of 2 cards each)
+          Column(
+            children: [
+              // Row 1: JV Admin + Cooperative Admin
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _buildAdminRoleCard(
+                      context,
+                      role: _adminRoles[0]['role'] as String,
+                      icon: _adminRoles[0]['icon'] as IconData,
+                      color: _adminRoles[0]['color'] as Color,
+                      responsibilities: _adminRoles[0]['responsibilities'] as List<String>,
+                      isMobile: isMobile,
+                      isTablet: isTablet,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildAdminRoleCard(
+                      context,
+                      role: _adminRoles[1]['role'] as String,
+                      icon: _adminRoles[1]['icon'] as IconData,
+                      color: _adminRoles[1]['color'] as Color,
+                      responsibilities: _adminRoles[1]['responsibilities'] as List<String>,
+                      isMobile: isMobile,
+                      isTablet: isTablet,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              // Row 2: Market Manager + Loan Manager
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _buildAdminRoleCard(
+                      context,
+                      role: _adminRoles[2]['role'] as String,
+                      icon: _adminRoles[2]['icon'] as IconData,
+                      color: _adminRoles[2]['color'] as Color,
+                      responsibilities: _adminRoles[2]['responsibilities'] as List<String>,
+                      isMobile: isMobile,
+                      isTablet: isTablet,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildAdminRoleCard(
+                      context,
+                      role: _adminRoles[3]['role'] as String,
+                      icon: _adminRoles[3]['icon'] as IconData,
+                      color: _adminRoles[3]['color'] as Color,
+                      responsibilities: _adminRoles[3]['responsibilities'] as List<String>,
+                      isMobile: isMobile,
+                      isTablet: isTablet,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         const SizedBox(height: 24),
 
         // Farmer Benefits Section
@@ -334,60 +395,44 @@ class CoffeeCorePage extends StatelessWidget {
               ),
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: isMobile ? 8 : 12,
-          runSpacing: 12,
-          children: _farmerBenefits.map((benefit) {
-            return SizedBox(
-              width: isMobile ? screenWidth * 0.9 : screenWidth * (isTablet ? 0.45 : 0.4),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.green[50],
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.green[200]!),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          LucideIcons.checkCircle,
-                          size: 20,
-                          color: Colors.green[700],
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            benefit['title']!,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: isMobile ? 12 : 14,
-                                  color: Colors.green[900],
-                                ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      benefit['description']!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 11 : 13,
-                            color: Colors.green[800],
-                            height: 1.4,
-                          ),
-                    ),
-                  ],
-                ),
+        
+        // Farmer Benefit Cards - True side-by-side layout
+        if (isMobile)
+          // Mobile: Stack vertically
+          Column(
+            children: _farmerBenefits.map((benefit) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildBenefitCard(context, benefit, isMobile),
+            )).toList(),
+          )
+        else
+          // Desktop/Tablet: True side-by-side (2 rows of 2 cards each)
+          Column(
+            children: [
+              // Row 1
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _buildBenefitCard(context, _farmerBenefits[0], isMobile)),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildBenefitCard(context, _farmerBenefits[1], isMobile)),
+                ],
               ),
-            );
-          }).toList(),
-        ),
+              const SizedBox(height: 12),
+              // Row 2
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _buildBenefitCard(context, _farmerBenefits[2], isMobile)),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildBenefitCard(context, _farmerBenefits[3], isMobile)),
+                ],
+              ),
+            ],
+          ),
         const SizedBox(height: 24),
 
-        // Key Features Section
+        // Key Features Section - Compact
         Text(
           'Key Features',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -398,36 +443,41 @@ class CoffeeCorePage extends StatelessWidget {
         const SizedBox(height: 8),
         Wrap(
           spacing: isMobile ? 8 : 12,
-          runSpacing: 12,
+          runSpacing: 8,
           children: _features.map((feature) {
-            return SizedBox(
-              width: isMobile ? screenWidth * 0.9 : screenWidth * (isTablet ? 0.45 : 0.25),
+            return Container(
+              width: isMobile ? screenWidth * 0.9 : (screenWidth / (isTablet ? 2 : 3)) - 24,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.brown[50],
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: Colors.brown[200]!),
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.check,
-                    size: 14,
-                    color: Color(0xFF16A34A),
-                  ),
-                  const SizedBox(width: 8),
+                  Icon(Icons.check, size: 14, color: Colors.brown[700]),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           feature['title']!,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: isMobile ? 12 : 14,
-                              ),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: isMobile ? 11 : 12,
+                            color: Colors.brown[900],
+                          ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 2),
                         Text(
                           feature['description']!,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontSize: isMobile ? 12 : 14,
-                              ),
+                          style: TextStyle(
+                            fontSize: isMobile ? 10 : 11,
+                            color: Colors.brown[700],
+                            height: 1.3,
+                          ),
                         ),
                       ],
                     ),
@@ -437,124 +487,74 @@ class CoffeeCorePage extends StatelessWidget {
             );
           }).toList(),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
 
-        // How It Works Section
-        _buildHowItWorksSection(context, isMobile, isTablet),
-        const SizedBox(height: 24),
-
-        // Media Section
-        Text(
-          'Media',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: isMobile ? 14 : 16,
-                color: const Color(0xFF1F2937),
-              ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: isMobile ? 12 : 16,
-          runSpacing: 12,
-          alignment: WrapAlignment.center,
-          children: _media.map((media) {
-            return SizedBox(
-              width: isMobile ? screenWidth * 0.9 : screenWidth * (isTablet ? 0.45 : 0.3),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (media['type'] == 'image')
-                    Semantics(
-                      image: true,
-                      label: media['description'],
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: SizedBox(
-                          height: isMobile ? 200 : 300,
-                          child: Image.asset(
-                            media['path']!,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              color: Colors.grey[200],
-                              child: const Center(
-                                child: Icon(LucideIcons.imageOff, color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      media['description']!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: isMobile ? 12 : 14,
-                            color: const Color(0xFF4B5563),
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 16),
-
-        // Download Section
+        // Download Section - Prominent
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.brown[50],
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.brown[600]!,
+                Colors.brown[800]!,
+              ],
+            ),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.brown[200]!),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.brown.withValues(alpha: 0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Column(
             children: [
-              Icon(
+              const Icon(
                 LucideIcons.coffee,
                 size: 48,
-                color: Colors.brown[700],
+                color: Colors.white,
               ),
               const SizedBox(height: 12),
               Text(
                 'Get Coffee Core',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontSize: isMobile ? 16 : 18,
-                      color: Colors.brown[800],
+                      fontSize: isMobile ? 18 : 22,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                'Download Coffee Core from Google Play Store and revolutionize your coffee farming experience!',
+                'Download from Google Play Store and revolutionize your coffee farming!',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: isMobile ? 12 : 14,
-                      color: Colors.brown[700],
+                      fontSize: isMobile ? 13 : 15,
+                      color: const Color(0xE6FFFFFF),
                     ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               SizedBox(
-                width: double.infinity,
+                width: isMobile ? double.infinity : 300,
                 child: ElevatedButton.icon(
                   onPressed: () => _openPlayStore(context),
                   icon: const Icon(LucideIcons.download, size: 20),
                   label: Text(
                     'Get from Play Store',
                     style: TextStyle(
-                      fontSize: isMobile ? 14 : 16,
+                      fontSize: isMobile ? 15 : 17,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.brown[800],
                     padding: EdgeInsets.symmetric(
-                      vertical: isMobile ? 12 : 16,
+                      vertical: isMobile ? 14 : 18,
                       horizontal: 24,
                     ),
                     shape: RoundedRectangleBorder(
@@ -580,39 +580,39 @@ class CoffeeCorePage extends StatelessWidget {
     required bool isTablet,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: color.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.1),
-            blurRadius: 8,
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: color, size: isMobile ? 20 : 24),
+                child: Icon(icon, color: color, size: isMobile ? 18 : 20),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   role,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontSize: isMobile ? 14 : 16,
+                        fontSize: isMobile ? 13 : 15,
                         fontWeight: FontWeight.bold,
                         color: color,
                       ),
@@ -620,25 +620,21 @@ class CoffeeCorePage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           ...responsibilities.map((responsibility) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.only(bottom: 6),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      LucideIcons.checkCircle2,
-                      size: 16,
-                      color: color,
-                    ),
-                    const SizedBox(width: 8),
+                    Icon(LucideIcons.checkCircle2, size: 14, color: color),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         responsibility,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: isMobile ? 11 : 13,
+                              fontSize: isMobile ? 10 : 12,
                               color: const Color(0xFF4B5563),
-                              height: 1.4,
+                              height: 1.3,
                             ),
                       ),
                     ),
@@ -650,121 +646,42 @@ class CoffeeCorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildHowItWorksSection(BuildContext context, bool isMobile, bool isTablet) {
+  Widget _buildBenefitCard(BuildContext context, Map<String, String> benefit, bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.blue[200]!),
+        color: Colors.green[50],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.green[200]!),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              Icon(LucideIcons.info, color: Colors.blue[700], size: isMobile ? 20 : 24),
+              Icon(LucideIcons.checkCircle, size: 18, color: Colors.green[700]),
               const SizedBox(width: 8),
-              Text(
-                'How It Works',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontSize: isMobile ? 14 : 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue[900],
-                    ),
+              Expanded(
+                child: Text(
+                  benefit['title']!,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: isMobile ? 12 : 13,
+                        color: Colors.green[900],
+                      ),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          _buildHowItWorksStep(
-            context,
-            step: '1',
-            title: 'Cooperative Registration',
-            description: 'JV Admin approves Cooperative Admins who register their cooperative names on the platform.',
-            isMobile: isMobile,
-          ),
-          _buildHowItWorksStep(
-            context,
-            step: '2',
-            title: 'Farmer Onboarding',
-            description: 'Farmers register and select their cooperative from the list, ensuring they receive tailored information.',
-            isMobile: isMobile,
-          ),
-          _buildHowItWorksStep(
-            context,
-            step: '3',
-            title: 'Role Assignment',
-            description: 'Cooperative Admin assigns Market Manager (for prices) and Loan Manager (for credit facilities).',
-            isMobile: isMobile,
-          ),
-          _buildHowItWorksStep(
-            context,
-            step: '4',
-            title: 'Filtered Information',
-            description: 'Farmers only see market prices and loan options from their cooperative, eliminating confusion.',
-            isMobile: isMobile,
-            isLast: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHowItWorksStep(
-    BuildContext context, {
-    required String step,
-    required String title,
-    required String description,
-    required bool isMobile,
-    bool isLast = false,
-  }) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: isMobile ? 28 : 32,
-            height: isMobile ? 28 : 32,
-            decoration: BoxDecoration(
-              color: Colors.blue[700],
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                step,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: isMobile ? 12 : 14,
+          const SizedBox(height: 8),
+          Text(
+            benefit['description']!,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: isMobile ? 10 : 12,
+                  color: Colors.green[800],
+                  height: 1.3,
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: isMobile ? 12 : 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue[900],
-                      ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: isMobile ? 11 : 13,
-                        color: Colors.blue[800],
-                        height: 1.4,
-                      ),
-                ),
-              ],
-            ),
           ),
         ],
       ),
