@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart'; // Add Firebase Core
-import 'firebase_options.dart'; // Import generated Firebase options
+import 'package:firebase_core/firebase_core.dart'; 
+import 'firebase_options.dart'; 
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -14,6 +14,7 @@ import 'pages/careers_page.dart';
 import 'pages/certificates_page.dart';
 import 'pages/privacy_policy_page.dart';
 import 'pages/cookies_page.dart';
+import 'pages/terms_page.dart';
 import 'pages/map_page.dart';
 import 'detail/construction/construction_detail.dart';
 import 'detail/agribusiness/agribusiness_detail.dart';
@@ -129,9 +130,7 @@ class MyApp extends StatelessWidget {
           case '/news':
             return MaterialPageRoute(builder: (_) => const NewsPage());
           /*case '/projects':
-            return MaterialPageRoute(builder: (_) => const ProjectsPage());
-          case '/references':
-            return MaterialPageRoute(builder: (_) => const ReferencesPage());*/
+            return MaterialPageRoute(builder: (_) => const ProjectsPage());*/
           case '/careers':
             return MaterialPageRoute(builder: (_) => const CareersPage());
           case '/certificates':
@@ -140,6 +139,8 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => const PrivacyPolicyPage());
           case '/cookies':
             return MaterialPageRoute(builder: (_) => const CookiesPage());
+            case '/terms':
+            return MaterialPageRoute(builder: (_) => const TermsPage());
           case '/map':
             return MaterialPageRoute(builder: (_) => const MapPage(address: ''));
           case '/construction-detail':

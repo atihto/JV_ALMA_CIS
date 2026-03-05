@@ -330,6 +330,13 @@ class _FooterState extends State<Footer> {
                                   isMobile: isMobile,
                                   buttonKey: 'cookiesPolicy',
                                 ),
+                                _buildFooterLink(
+                                  context,
+                                  text: 'Terms of Service',
+                                  route: '/terms',
+                                  isMobile: isMobile,
+                                  buttonKey: 'termsOfService',
+                                ),
                               ],
                             ),
                           ] else
@@ -358,6 +365,13 @@ class _FooterState extends State<Footer> {
                                   route: '/cookies',
                                   isMobile: isMobile,
                                   buttonKey: 'cookiesPolicy',
+                                ),
+                                _buildFooterLink(
+                                  context,
+                                  text: 'Terms of Service',
+                                  route: '/terms',
+                                  isMobile: isMobile,
+                                  buttonKey: 'termsOfService',
                                 ),
                                 IconButton(
                                   icon: const Icon(LucideIcons.arrowUp, color: Colors.white, size: 20),
