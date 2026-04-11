@@ -2,8 +2,8 @@ import 'dart:developer' as developer;
 
 class Config {
   static const String appName = 'JV Alma CIS Kenya';
-  static const String companyEmail = 'infojvalmacis@gmail.com';
-  static const String companyPhone = '+254 712174516';
+  static const String companyEmail = 'support@jvalmacis.co.ke';
+  static const String companyPhone = '+254 795 802 020';
   static const String companyAddress = 'Nairobi, Kenya';
   
   // API Endpoints (if needed in future)

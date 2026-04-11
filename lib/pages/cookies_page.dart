@@ -259,7 +259,7 @@ class CookiesPage extends StatelessWidget {
                           'The App uses Google Firebase for authentication and database services. Firebase may '
                           'use its own technical identifiers (not marketing cookies) to maintain your authenticated '
                           'session, operating under Google\'s Privacy Policy.\n\n'
-                          'Weather data within KilimoMkononi is provided via the OpenWeather API. Only your '
+                          'Weather data within KilimoMkononi and CoffeeCore is provided via the OpenWeather API. Only your '
                           'approximate county-level location is used — no personally identifiable data is '
                           'transmitted to the weather provider.',
                   ),
@@ -297,8 +297,8 @@ class CookiesPage extends StatelessWidget {
                     title: 'Contact Us',
                     body: 'If you have questions about this Cookies Policy or our use of cookies, please contact us:',
                     contacts: [
-                      const _Contact(LucideIcons.mail,   'Email: infojvalmacis@gmail.com'),
-                      const _Contact(LucideIcons.phone,  'Phone: +254 712 174 516'),
+                      const _Contact(LucideIcons.mail,   'Email: support@jvalmacis.co.ke'),
+                      const _Contact(LucideIcons.phone,  'Phone: +254 795 802 020'),
                       const _Contact(LucideIcons.mapPin, 'Address: Kin\'gara Heights PQ66+2FM Junction, James Gichuru Rd, P.O. Box 12345-00100, Nairobi, Kenya'),
                     ],
                   ),

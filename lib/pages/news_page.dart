@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/header.dart';
@@ -151,6 +153,26 @@ class _NewsPageState extends State<NewsPage> {
         'category': 'Agriculture',
         'color': const Color(0xFF7C3AED),
       },
+      {
+        'image': 'assets/news/gourmet_article.jpg',
+        'title': 'From Abruzzo to Kenya: The Digital Revolution Transforming African Agriculture',
+        'excerpt': 'Technology, training and sustainable agriculture: the story of an Italian company building a development model in East Africa where innovation and social impact grow together.',
+        'date': 'March 6, 2026',
+        'category': 'Press',
+        'color': const Color(0xFF059669),
+        'url': 'https://www.gourmetandtravelmagazine.com/2026/03/06/dallabruzzo-al-kenya-la-rivoluzione-digitale-che-sta-cambiando-lagricoltura-africana/',
+        'source': 'Gourmet & Travel Magazine',
+      },
+      {
+        'image': 'assets/news/ilpescara_article.jpg',
+        'title': 'With JV Almacis, Pescara Native Di Carmine is Leading Agriculture 2.0 in Kenya, Combining Business and Social Development',
+        'excerpt': 'How a Pescara entrepreneur built a digital agribusiness model in Kenya, blending technology, sustainability, and social impact across East Africa.',
+        'date': 'March 2026',
+        'category': 'Press',
+        'color': const Color(0xFF2563EB),
+        'url': 'https://www.ilpescara.it/attualita/piergiorgio-di-carmine-jv-almacis-kenya-agricoltura-digitale.html',
+        'source': 'Il Pescara',
+      },
     ];
 
     return AppScaffold(
@@ -261,6 +283,8 @@ class _NewsPageState extends State<NewsPage> {
                             item['date'] as String,
                             item['category'] as String,
                             item['color'] as Color,
+                            externalUrl: item['url'] as String?,
+                            source: item['source'] as String?,
                           ),
                         );
                       }).toList(),
@@ -374,10 +398,19 @@ class _NewsPageState extends State<NewsPage> {
     String excerpt,
     String date,
     String category,
-    Color categoryColor,
-  ) {
+    Color categoryColor, {
+    String? externalUrl,
+    String? source,
+  }) {
+    final bool isExternal = externalUrl != null && externalUrl.isNotEmpty;
     return GestureDetector(
-      onTap: () => _showImageDialog(imageUrl, title),
+      onTap: () {
+        if (isExternal) {
+          _launchUrl(externalUrl);
+        } else {
+          _showImageDialog(imageUrl, title);
+        }
+      },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -435,6 +468,33 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                   ),
                 ),
+                if (isExternal)
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(LucideIcons.externalLink, size: 12, color: categoryColor),
+                          const SizedBox(width: 4),
+                          Text(
+                            'External',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: categoryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             ),
             
@@ -488,7 +548,7 @@ class _NewsPageState extends State<NewsPage> {
                   Row(
                     children: [
                       Text(
-                        'View Article',
+                        isExternal ? 'Read Article' : 'View Article',
                         style: TextStyle(
                           fontSize: isMobile ? 13 : 14,
                           color: categoryColor,
@@ -497,7 +557,7 @@ class _NewsPageState extends State<NewsPage> {
                       ),
                       const SizedBox(width: 4),
                       Icon(
-                        LucideIcons.arrowRight,
+                        isExternal ? LucideIcons.externalLink : LucideIcons.arrowRight,
                         size: 16,
                         color: categoryColor,
                       ),

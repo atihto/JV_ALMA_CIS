@@ -134,7 +134,7 @@ class _ContactPageState extends State<ContactPage> {
       // Fallback email if Config.companyEmail is invalid
       final email = Config.companyEmail.isNotEmpty && Config.companyEmail.contains('@')
           ? Config.companyEmail
-          : 'info@jvalmacis.com'; // Fallback email
+          : 'support@jvalmacis.co.ke'; // Fallback email
       if (email.isEmpty || !email.contains('@')) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

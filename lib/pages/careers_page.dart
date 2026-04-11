@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:jv_alma_cis/widgets/header.dart';
@@ -218,7 +220,7 @@ class _CareersPageState extends State<CareersPage> {
                 ),
               ),
             ),
-            // Open Positions (unchanged, but remove form)
+            // Open Positions
             Padding(
               padding: EdgeInsets.symmetric(
                 vertical: screenHeight * 0.06,
@@ -237,66 +239,69 @@ class _CareersPageState extends State<CareersPage> {
                           ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Text(
-                      "We're always looking for talent",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: const Color(0xFF4B5563),
-                            fontSize: isMobile ? 14 : 16,
-                          ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
                     SizedBox(height: screenHeight * 0.03),
-                    CustomCard(
-                      hoverEffect: false,
-                      content: Padding(
-                        padding: EdgeInsets.all(isMobile ? screenWidth * 0.06 : screenWidth * 0.04),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2)),
-                                ],
-                              ),
-                              child: const Icon(
-                                LucideIcons.users,
-                                size: 40,
-                                color: Color(0xFF2563EB),
-                              ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: isMobile ? screenHeight * 0.05 : screenHeight * 0.06,
+                        horizontal: screenWidth * 0.06,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF9FAFB),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                      ),
+                      child: Column(
+                        children: [
+                          const Icon(
+                            LucideIcons.briefcase,
+                            size: 48,
+                            color: Color(0xFFD1D5DB),
+                          ),
+                          SizedBox(height: screenHeight * 0.02),
+                          Text(
+                            'No Open Positions at This Time',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: const Color(0xFF111827),
+                                  fontSize: isMobile ? 16 : 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: screenHeight * 0.01),
+                          Text(
+                            'We currently have no open vacancies. Please check back later or send your CV to us — we\'d love to hear from you when positions become available.',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: const Color(0xFF6B7280),
+                                  fontSize: isMobile ? 13 : 14,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: screenHeight * 0.025),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: const Color(0xFFE5E7EB)),
                             ),
-                            SizedBox(height: screenHeight * 0.015),
-                            Text(
-                              'No Current Openings',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(LucideIcons.mail, size: 15, color: Color(0xFF6B7280)),
+                                const SizedBox(width: 10),
+                                SelectableText(
+                                  'support@jvalmacis.co.ke',
+                                  style: TextStyle(
+                                    fontSize: isMobile ? 13 : 14,
+                                    color: const Color(0xFF2563EB),
                                     fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1F2937),
-                                    fontSize: isMobile ? 14 : 16,
                                   ),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
                             ),
-                            SizedBox(height: screenHeight * 0.01),
-                            Text(
-                              'Send your resume for future opportunities.',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: const Color(0xFF4B5563),
-                                    fontSize: isMobile ? 12 : 14,
-                                  ),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

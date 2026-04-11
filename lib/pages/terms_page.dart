@@ -249,7 +249,7 @@ class TermsPage extends StatelessWidget {
                     bullets: [
                       'You must provide accurate, complete, and current information at registration on all platforms.',
                       'You are responsible for maintaining the confidentiality of your login credentials. Do not share your password.',
-                      'Notify us immediately at infojvalmacis@gmail.com if you suspect unauthorised access to your account.',
+                      'Notify us immediately at support@jvalmacis.co.ke if you suspect unauthorised access to your account.',
                       'JV reserves the right to suspend or terminate accounts that provide false information or violate these Terms.',
                     ],
                   ),
@@ -284,7 +284,7 @@ class TermsPage extends StatelessWidget {
                       'Ensure all student accounts are for genuine enrolled students only.',
                       'Obtain written parental or guardian consent for each minor student before creating their account.',
                       'Notify JV immediately if a student leaves the institution so the account can be deactivated.',
-                      'Report any concern, complaint, or incident relating to a minor user\'s safety or data to JV immediately at infojvalmacis@gmail.com.',
+                      'Report any concern, complaint, or incident relating to a minor user\'s safety or data to JV immediately at support@jvalmacis.co.ke.',
                       'Ensure no direct communication is facilitated between minor students and adult users outside the defined teacher-student class structure.',
                     ],
                   ),
@@ -380,7 +380,7 @@ class TermsPage extends StatelessWidget {
                       'Breach the minor user protection requirements for KilimoMkononi Education.',
                     ],
                     footer: 'Upon termination, your personal data will be handled in accordance with our Privacy Policy. '
-                            'You may request deletion of your account at any time by contacting infojvalmacis@gmail.com.',
+                            'You may request deletion of your account at any time by contacting support@jvalmacis.co.ke.',
                   ),
 
                   _sec(context, mob,
@@ -405,8 +405,8 @@ class TermsPage extends StatelessWidget {
                     title: '17.  Contact Us',
                     body: 'For questions about these Terms or to exercise your rights:',
                     contacts: [
-                      const _Contact(LucideIcons.mail,   'Email: infojvalmacis@gmail.com'),
-                      const _Contact(LucideIcons.phone,  'Phone: +254 712 174 516'),
+                      const _Contact(LucideIcons.mail,   'Email: support@jvalmacis.co.ke'),
+                      const _Contact(LucideIcons.phone,  'Phone: +254 795 802 020'),
                       const _Contact(LucideIcons.mapPin, 'Address: Kin\'gara Heights PQ66+2FM Junction, James Gichuru Rd, P.O. Box 12345-00100, Nairobi, Kenya'),
                     ],
                   ),

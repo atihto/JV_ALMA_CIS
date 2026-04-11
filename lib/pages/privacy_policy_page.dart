@@ -44,7 +44,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                             'IT Division business units.\n\n'
                             'JV is the Data Controller for all personal data collected through these '
                             'platforms, in accordance with the Kenya Data Protection Act, 2019 (DPA).\n\n'
-                            'Data Controller Contact: infojvalmacis@gmail.com',
+                            'Data Controller Contact: support@jvalmacis.co.ke',
                     ),
 
                     _section(context, isMobile,
@@ -138,7 +138,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                       ],
                       footer: 'We have procedures to address suspected data breaches and will notify you and any '
                               'applicable regulator as required by law. If you believe your account has been '
-                              'compromised, contact us immediately at info@jvalmacis.com.',
+                              'compromised, contact us immediately at support@jvalmacis.co.ke.',
                     ),
 
                     _section(context, isMobile,
@@ -168,7 +168,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                         'Withdraw consent at any time (e.g. unsubscribe from newsletters).',
                         'Lodge a complaint with the ODPC: info@odpc.go.ke  |  www.odpc.go.ke',
                       ],
-                      footer: 'To exercise any right, contact us at infojvalmacis@gmail.com. We will respond within 21 days.',
+                      footer: 'To exercise any right, contact us at support@jvalmacis.co.ke. We will respond within 21 days.',
                     ),
 
                     _section(context, isMobile,
@@ -184,8 +184,8 @@ class PrivacyPolicyPage extends StatelessWidget {
                       title: 'Contact Us',
                       body: 'For questions, data requests, or to exercise your rights:',
                       contacts: [
-                        const _ContactData(LucideIcons.mail,   'Email: infojvalmacis@gmail.com'),
-                        const _ContactData(LucideIcons.phone,  'Phone: +254 712 174 516'),
+                        const _ContactData(LucideIcons.mail,   'Email: support@jvalmacis.co.ke'),
+                        const _ContactData(LucideIcons.phone,  'Phone: +254 795 802 020'),
                         const _ContactData(LucideIcons.mapPin,
                             'Address: Kin\'gara Heights PQ66+2FM Junction, James Gichuru Rd, P.O. Box 12345-00100, Nairobi, Kenya'),
                       ],
@@ -193,7 +193,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                     ),
 
                   ],
-                ),
+                )
               ),
             ),
 

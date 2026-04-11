@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'custom_widgets.dart';
 import 'dart:developer' as developer;
+import 'website_chat_widget.dart';
 
 class AppScaffold extends StatelessWidget {
   final Widget body;
@@ -29,6 +30,7 @@ class AppScaffold extends StatelessWidget {
         ),
         endDrawer: AppDrawer(scaffoldKey: _scaffoldKey),
         body: body,
+        floatingActionButton: const WebsiteChatFab(),
         endDrawerEnableOpenDragGesture: true,
       ),
     );
